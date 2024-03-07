@@ -29,7 +29,7 @@ void *malloc(size_t sz) {
         exit(EXIT_FAILURE);
     }
 
-    int *ptr = mmap(NULL, size,
+    int *ptr = mmap(NULL, sz,
                     PROT_READ | PROT_WRITE, MAP_SHARED,
                     fd, offset);
     if(ptr == MAP_FAILED)
