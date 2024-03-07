@@ -14,6 +14,7 @@
 //static size_t HEAP_SIZE = 1024 * 1024 * 1024;
 
 void *malloc(size_t sz) {
+    printf("here");
     int fd = open
             (FILENAME, O_RDWR | O_CREAT, 0600);
     if (fd < 0) {
