@@ -170,7 +170,7 @@ static inline void *MALLOCCONTIGOUS(size_t size)
         exit(EXIT_FAILURE);
     }
 
-    *ptr = size;
+    // *ptr = size;
 
     return ptr;
     // void *ptr = malloc(size);
