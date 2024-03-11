@@ -147,7 +147,7 @@ void parse_args(int argc, char **argv)
 void generate_points(int **pts, int size)
 {
 
-    printf("here outer loop");
+     dprintf("outer loop\n");
     int i, j;
 
     for (i=0; i<size; i++)
@@ -286,6 +286,7 @@ int main(int argc, char **argv)
         points[i] = (int *)malloc(sizeof(int) * dim);
     }
     dprintf("Generating points\n");
+    dprintf("here\n");
     generate_points(points, num_points);
 
     means = (int **)malloc(sizeof(int *) * num_means);
