@@ -147,7 +147,7 @@ void parse_args(int argc, char **argv)
 void generate_points(int **pts, int size)
 {
 
-     dprintf("outer loop\n");
+    dprintf("outer loop\n");
     int i, j;
 
     for (i=0; i<size; i++)
@@ -155,7 +155,7 @@ void generate_points(int **pts, int size)
         for (j=0; j<dim; j++)
         {
             dprintf("inner loop\n");
-            dprintf(pts[i][j]);
+            dprintf(&pts[i][j]);
             pts[i][j] = rand() % grid_size;
         }
     }
