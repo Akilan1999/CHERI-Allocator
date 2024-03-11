@@ -139,7 +139,7 @@ static inline void get_time (struct timeval *t)
 #endif
 }
 
-static inline void *MALLOCCONTIGOUS(size_t size)
+inline void *MALLOCCONTIGOUS(size_t size)
 {
 //    void * temp = malloc(size);
 //    assert(temp);
