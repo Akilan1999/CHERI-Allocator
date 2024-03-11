@@ -154,7 +154,7 @@ void generate_points(int **pts, int size)
     {
         for (j=0; j<dim; j++)
         {
-            printf("here");
+            dprintf("inner loop\n");
             pts[i][j] = rand() % grid_size;
         }
     }
