@@ -57,15 +57,15 @@
       assert ((a) == 0);                                     \
    }
 
-static inline void *MALLOC(size_t size)
-{
-//    void * temp = malloc(size);
-//    assert(temp);
-//    return temp;
+// static inline void *MALLOC(size_t size)
+// {
+// //    void * temp = malloc(size);
+// //    assert(temp);
+// //    return temp;
 
-// Ensuring malloc this is mmap and phyiscally contigous
-  return MALLOCCONTIGOUS(size);
-}
+// // Ensuring malloc this is mmap and phyiscally contigous
+//   return MALLOCCONTIGOUS(size);
+// }
 
 static inline void *CALLOC(size_t num, size_t size)
 {
@@ -139,7 +139,7 @@ static inline void get_time (struct timeval *t)
 #endif
 }
 
-inline void *MALLOCCONTIGOUS(size_t size)
+static inline void *MALLOCCONTIGOUS(size_t size)
 {
 //    void * temp = malloc(size);
 //    assert(temp);

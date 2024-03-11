@@ -39,7 +39,7 @@
 
 #include "coz.h"
 
-#define malloc      MALLOC 
+#define malloc      MALLOCCONTIGOUS 
 #define free        FREE
 
 // #include "prof.h"
