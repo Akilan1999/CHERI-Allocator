@@ -44,10 +44,19 @@
 
 // #include "prof.h"
 
-#define DEF_NUM_POINTS 100000
-#define DEF_NUM_MEANS 100
+// default settings
+// #define DEF_NUM_POINTS 100000
+// #define DEF_NUM_MEANS 100
+// #define DEF_DIM 3
+// #define DEF_GRID_SIZE 1000
+
+// setting smaller parameters 
+// to detect root cause
+#define DEF_NUM_POINTS 1000
+#define DEF_NUM_MEANS 10
 #define DEF_DIM 3
-#define DEF_GRID_SIZE 1000
+#define DEF_GRID_SIZE 10
+
 
 #define false 0
 #define true 1
