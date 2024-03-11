@@ -146,6 +146,8 @@ void parse_args(int argc, char **argv)
  */
 void generate_points(int **pts, int size)
 {
+
+    printf("here outer loop");
     int i, j;
 
     for (i=0; i<size; i++)
