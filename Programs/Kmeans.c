@@ -39,6 +39,9 @@
 
 #include "coz.h"
 
+#define malloc      MALLOC 
+#define free        FREE
+
 // #include "prof.h"
 
 #define DEF_NUM_POINTS 100000
