@@ -281,25 +281,26 @@ int main(int argc, char **argv)
 
     // PROF_START();
 
-    points = (int **)malloc(4 * num_points);
+    points = (int **)malloc(sizeof(int *) * num_points);
     for (i=0; i<num_points; i++)
     {
-        points[i] = (int *)malloc(4 * dim);
+        points[i] = (int *)malloc(sizeof(int) * dim);
+        dprintf(points[i]);
     }
     dprintf("Generating points\n");
     dprintf("here\n");
     generate_points(points, num_points);
 
-    means = (int **)malloc(4 * num_means);
+    means = (int **)malloc(sizeof(int *) * num_means);
     for (i=0; i<num_means; i++)
     {
-        means[i] = (int *)malloc(4 * dim);
+        means[i] = (int *)malloc(sizeof(int) * dim);
     }
     dprintf("Generating means\n");
     generate_points(means, num_means);
 
-    clusters = (int *)malloc(4 * num_points);
-    memset(clusters, -1, 4 * num_points);
+    clusters = (int *)malloc(sizeof(int) * num_points);
+    memset(clusters, -1, sizeof(int) * num_points);
 
 
     pthread_attr_init(&attr);
