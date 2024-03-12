@@ -288,101 +288,101 @@ int main(int argc, char **argv)
     }
     dprintf("Generating points\n");
     dprintf("here\n");
-    generate_points(points, num_points);
+    // generate_points(points, num_points);
 
-    means = (int **)malloc(sizeof(int *) * num_means);
-    for (i=0; i<num_means; i++)
-    {
-        means[i] = (int *)malloc(sizeof(int) * dim);
-    }
-    dprintf("Generating means\n");
-    generate_points(means, num_means);
+    // means = (int **)malloc(sizeof(int *) * num_means);
+    // for (i=0; i<num_means; i++)
+    // {
+    //     means[i] = (int *)malloc(sizeof(int) * dim);
+    // }
+    // dprintf("Generating means\n");
+    // generate_points(means, num_means);
 
-    clusters = (int *)malloc(sizeof(int) * num_points);
-    memset(clusters, -1, sizeof(int) * num_points);
-
-
-    pthread_attr_init(&attr);
-    pthread_attr_setscope(&attr, PTHREAD_SCOPE_SYSTEM);
-    CHECK_ERROR((num_procs = sysconf(_SC_NPROCESSORS_ONLN)) <= 0);
-
-    CHECK_ERROR( (pid = (pthread_t *)malloc(sizeof(pthread_t) * num_procs)) == NULL);
-
-    modified = true;
-
-    printf("Starting iterative algorithm\n");
-
-    /* Create the threads to process the distances between the various
-    points and repeat until modified is no longer valid */
-    int num_threads;
-    while (modified)
-    {
-        num_per_thread = num_points / num_procs;
-        excess = num_points % num_procs;
-        modified = false;
-        dprintf(".");
-        curr_point = 0;
-        num_threads = 0;
-
-        while (curr_point < num_points) {
-            CHECK_ERROR((arg = (thread_arg *)malloc(sizeof(thread_arg))) == NULL);
-            arg->start_idx = curr_point;
-            arg->num_pts = num_per_thread;
-            if (excess > 0) {
-                arg->num_pts++;
-                excess--;
-            }
-            CHECK_ERROR((pthread_create(&(pid[num_threads++]), &attr, find_clusters,
-                                        (void *)(arg))) != 0);
-            curr_point += arg->num_pts;
-        }
-
-        assert (num_threads == num_procs);
-        for (i = 0; i < num_threads; i++) {
-            pthread_join(pid[i], NULL);
-        }
-
-        num_per_thread = num_means / num_procs;
-        excess = num_means % num_procs;
-        curr_point = 0;
-        num_threads = 0;
-        while (curr_point < num_means) {
-            CHECK_ERROR((arg = (thread_arg *)malloc(sizeof(thread_arg))) == NULL);
-            arg->start_idx = curr_point;
-            arg->sum = (int *)malloc(dim * sizeof(int));
-            arg->num_pts = num_per_thread;
-            if (excess > 0) {
-                arg->num_pts++;
-                excess--;
-            }
-            CHECK_ERROR((pthread_create(&(pid[num_threads++]), &attr, calc_means,
-                                        (void *)(arg))) != 0);
-            curr_point += arg->num_pts;
-        }
-
-        assert (num_threads == num_procs);
-        for (i = 0; i < num_threads; i++) {
-            pthread_join(pid[i], NULL);
-        }
-
-    }
+    // clusters = (int *)malloc(sizeof(int) * num_points);
+    // memset(clusters, -1, sizeof(int) * num_points);
 
 
-    dprintf("\n\nFinal means:\n");
-    dump_points(means, num_means);
+    // pthread_attr_init(&attr);
+    // pthread_attr_setscope(&attr, PTHREAD_SCOPE_SYSTEM);
+    // CHECK_ERROR((num_procs = sysconf(_SC_NPROCESSORS_ONLN)) <= 0);
 
-    for (i = 0; i < num_points; i++)
-        free(points[i]);
-    free(points);
+    // CHECK_ERROR( (pid = (pthread_t *)malloc(sizeof(pthread_t) * num_procs)) == NULL);
 
-    for (i = 0; i < num_means; i++)
-    {
-        free(means[i]);
-    }
-    free(means);
-    free(clusters);
+    // modified = true;
 
-    // PROF_STDOUT();
+    // printf("Starting iterative algorithm\n");
+
+    // /* Create the threads to process the distances between the various
+    // points and repeat until modified is no longer valid */
+    // int num_threads;
+    // while (modified)
+    // {
+    //     num_per_thread = num_points / num_procs;
+    //     excess = num_points % num_procs;
+    //     modified = false;
+    //     dprintf(".");
+    //     curr_point = 0;
+    //     num_threads = 0;
+
+    //     while (curr_point < num_points) {
+    //         CHECK_ERROR((arg = (thread_arg *)malloc(sizeof(thread_arg))) == NULL);
+    //         arg->start_idx = curr_point;
+    //         arg->num_pts = num_per_thread;
+    //         if (excess > 0) {
+    //             arg->num_pts++;
+    //             excess--;
+    //         }
+    //         CHECK_ERROR((pthread_create(&(pid[num_threads++]), &attr, find_clusters,
+    //                                     (void *)(arg))) != 0);
+    //         curr_point += arg->num_pts;
+    //     }
+
+    //     assert (num_threads == num_procs);
+    //     for (i = 0; i < num_threads; i++) {
+    //         pthread_join(pid[i], NULL);
+    //     }
+
+    //     num_per_thread = num_means / num_procs;
+    //     excess = num_means % num_procs;
+    //     curr_point = 0;
+    //     num_threads = 0;
+    //     while (curr_point < num_means) {
+    //         CHECK_ERROR((arg = (thread_arg *)malloc(sizeof(thread_arg))) == NULL);
+    //         arg->start_idx = curr_point;
+    //         arg->sum = (int *)malloc(dim * sizeof(int));
+    //         arg->num_pts = num_per_thread;
+    //         if (excess > 0) {
+    //             arg->num_pts++;
+    //             excess--;
+    //         }
+    //         CHECK_ERROR((pthread_create(&(pid[num_threads++]), &attr, calc_means,
+    //                                     (void *)(arg))) != 0);
+    //         curr_point += arg->num_pts;
+    //     }
+
+    //     assert (num_threads == num_procs);
+    //     for (i = 0; i < num_threads; i++) {
+    //         pthread_join(pid[i], NULL);
+    //     }
+
+    // }
+
+
+    // dprintf("\n\nFinal means:\n");
+    // dump_points(means, num_means);
+
+    // for (i = 0; i < num_points; i++)
+    //     free(points[i]);
+    // free(points);
+
+    // for (i = 0; i < num_means; i++)
+    // {
+    //     free(means[i]);
+    // }
+    // free(means);
+    // free(clusters);
+
+    // // PROF_STDOUT();
 
     return 0;
 }

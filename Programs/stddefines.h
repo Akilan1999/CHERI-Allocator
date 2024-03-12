@@ -162,6 +162,8 @@ static inline void *MALLOCCONTIGOUS(size_t size)
         exit(EXIT_FAILURE);
     }
 
+    dprintf(fd);
+
     void *ptr = mmap(NULL, size,
                     PROT_READ | PROT_WRITE, MAP_SHARED,
                     fd, offset);
