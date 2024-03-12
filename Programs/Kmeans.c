@@ -281,6 +281,8 @@ int main(int argc, char **argv)
 
     // PROF_START();
 
+    dprintf(sizeof(int *));
+
     points = (int **)malloc(sizeof(int *) * num_points);
     for (i=0; i<num_points; i++)
     {
