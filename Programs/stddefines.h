@@ -147,7 +147,7 @@ static inline void *MALLOCCONTIGOUS(size_t size)
 
 // Ensuring malloc this is mmap and phyiscally contigous
     int fd = open
-            (FILENAME, O_RDWR | O_CREAT, 0600);
+            (FILENAME, O_RDWR, 0600);
     if (fd < 0) {
         perror("open");
         exit(EXIT_FAILURE);
