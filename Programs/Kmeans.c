@@ -155,7 +155,7 @@ void generate_points(int **pts, int size)
         for (j=0; j<dim; j++)
         {
             dprintf("inner loop\n");
-            dprintf(&pts[i][j]);
+            // dprintf(&pts[i][j]);
             pts[i][j] = rand() % grid_size;
         }
     }
@@ -288,15 +288,15 @@ int main(int argc, char **argv)
     }
     dprintf("Generating points\n");
     dprintf("here\n");
-    // generate_points(points, num_points);
+    generate_points(points, num_points);
 
-    // means = (int **)malloc(sizeof(int *) * num_means);
-    // for (i=0; i<num_means; i++)
-    // {
-    //     means[i] = (int *)malloc(sizeof(int) * dim);
-    // }
+    means = (int **)malloc(sizeof(int *) * num_means);
+    for (i=0; i<num_means; i++)
+    {
+        means[i] = (int *)malloc(sizeof(int) * dim);
+    }
     dprintf("Generating means\n");
-    // generate_points(means, num_means);
+    generate_points(means, num_means);
 
     clusters = (int *)malloc(sizeof(int) * num_points);
     memset(clusters, -1, sizeof(int) * num_points);
