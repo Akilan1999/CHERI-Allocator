@@ -162,7 +162,7 @@ static inline void *MALLOCCONTIGOUS(size_t size)
     }
 
     void *ptr = mmap(NULL, size,
-                    PROT_READ | PROT_WRITE, MAP_PRIVATE,
+                    PROT_READ | PROT_WRITE, MAP_SHARED,
                     fd, offset);
     if(ptr == MAP_FAILED)
     {
