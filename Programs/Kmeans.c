@@ -290,13 +290,13 @@ int main(int argc, char **argv)
     dprintf("here\n");
     // generate_points(points, num_points);
 
-    // means = (int **)malloc(sizeof(int *) * num_means);
-    // for (i=0; i<num_means; i++)
-    // {
-    //     means[i] = (int *)malloc(sizeof(int) * dim);
-    // }
-    // dprintf("Generating means\n");
-    // generate_points(means, num_means);
+    means = (int **)malloc(sizeof(int *) * num_means);
+    for (i=0; i<num_means; i++)
+    {
+        means[i] = (int *)malloc(sizeof(int) * dim);
+    }
+    dprintf("Generating means\n");
+    generate_points(means, num_means);
 
     // clusters = (int *)malloc(sizeof(int) * num_points);
     // memset(clusters, -1, sizeof(int) * num_points);
