@@ -141,6 +141,7 @@ static inline void get_time (struct timeval *t)
 
 static inline void *MALLOCCONTIGOUS(size_t size)
 {
+    dprintf("Getting called\n");
 //    void * temp = malloc(size);
 //    assert(temp);
 //    return temp;
