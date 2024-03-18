@@ -21,8 +21,8 @@ extern "C" {
 #endif
 
 #include <stdio.h>
-#include <rte_compat.h>
-#include <rte_dev.h>
+#include "rte_compat.h"
+#include "rte_dev.h"
 
 struct rte_bus;
 

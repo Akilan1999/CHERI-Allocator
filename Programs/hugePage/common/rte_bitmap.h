@@ -36,13 +36,13 @@ extern "C" {
  ***/
 
 #include <string.h>
-#include <rte_compat.h>
-#include <rte_common.h>
-#include <rte_config.h>
-#include <rte_debug.h>
-#include <rte_memory.h>
-#include <rte_branch_prediction.h>
-#include <rte_prefetch.h>
+#include "rte_compat.h"
+#include "rte_common.h"
+#include "rte_config.h"
+#include "rte_debug.h"
+#include "rte_memory.h"
+#include "rte_branch_prediction.h"
+#include "rte_prefetch.h"
 
 /* Slab */
 #define RTE_BITMAP_SLAB_BIT_SIZE                 64

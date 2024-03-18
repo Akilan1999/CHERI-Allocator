@@ -5,7 +5,7 @@
 #ifndef _RTE_PREFETCH_H_
 #define _RTE_PREFETCH_H_
 
-#include <rte_compat.h>
+#include "rte_compat.h"
 
 /**
  * @file

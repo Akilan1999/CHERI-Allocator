@@ -23,13 +23,13 @@ extern "C" {
 #include <stdbool.h>
 #include <stdio.h>
 
-#include <rte_branch_prediction.h>
-#include <rte_common.h>
-#include <rte_compat.h>
-#include <rte_cycles.h>
-#include <rte_per_lcore.h>
-#include <rte_string_fns.h>
-#include <rte_uuid.h>
+#include "rte_branch_prediction.h"
+#include "rte_common.h"
+#include "rte_compat.h"
+#include "rte_cycles.h"
+#include "rte_per_lcore.h"
+#include "rte_string_fns.h"
+#include "rte_uuid.h"
 
 /** The tracepoint object. */
 typedef uint64_t rte_trace_point_t;

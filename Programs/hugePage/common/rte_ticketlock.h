@@ -22,9 +22,9 @@
 extern "C" {
 #endif
 
-#include <rte_common.h>
-#include <rte_lcore.h>
-#include <rte_pause.h>
+#include "rte_common.h"
+#include "rte_lcore.h"
+#include "rte_pause.h"
 
 /**
  * The rte_ticketlock_t type.

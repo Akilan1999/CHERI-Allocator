@@ -16,7 +16,7 @@ extern "C" {
 
 #include <string.h>
 #include <stdio.h>
-#include <rte_compat.h>
+#include "rte_compat.h"
 
 /**
  * Macro to compute a version number usable for comparisons

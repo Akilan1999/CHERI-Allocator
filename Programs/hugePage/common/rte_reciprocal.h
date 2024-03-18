@@ -27,7 +27,7 @@
 
 #include <stdint.h>
 
-#include <rte_common.h>
+#include "rte_common.h"
 
 #ifdef __cplusplus
 extern "C" {

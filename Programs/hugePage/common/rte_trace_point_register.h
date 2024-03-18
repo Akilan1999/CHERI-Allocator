@@ -10,11 +10,11 @@ extern "C" {
 #endif
 
 #ifdef _RTE_TRACE_POINT_H_
-#error for registration, include this file first before <rte_trace_point.h>
+#error for registration, include this file first before "rte_trace_point.h>
 #endif
 
-#include <rte_per_lcore.h>
-#include <rte_trace_point.h>
+#include "rte_per_lcore.h"
+#include "rte_trace_point.h"
 
 RTE_DECLARE_PER_LCORE(volatile int, trace_point_sz);
 

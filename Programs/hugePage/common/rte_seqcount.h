@@ -23,9 +23,9 @@ extern "C" {
 #include <stdbool.h>
 #include <stdint.h>
 
-#include <rte_atomic.h>
-#include <rte_branch_prediction.h>
-#include <rte_compat.h>
+#include "rte_atomic.h"
+#include "rte_branch_prediction.h"
+#include "rte_compat.h"
 
 /**
  * The RTE seqcount type.

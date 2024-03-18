@@ -90,11 +90,11 @@ extern "C" {
 #include <stdbool.h>
 #include <stdint.h>
 
-#include <rte_atomic.h>
-#include <rte_branch_prediction.h>
-#include <rte_compat.h>
-#include <rte_seqcount.h>
-#include <rte_spinlock.h>
+#include "rte_atomic.h"
+#include "rte_branch_prediction.h"
+#include "rte_compat.h"
+#include "rte_seqcount.h"
+#include "rte_spinlock.h"
 
 /**
  * The RTE seqlock type.

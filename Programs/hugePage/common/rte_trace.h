@@ -23,8 +23,8 @@ extern "C" {
 #include <stdbool.h>
 #include <stdio.h>
 
-#include <rte_common.h>
-#include <rte_compat.h>
+#include "rte_common.h"
+#include "rte_compat.h"
 
 /**
  *  Test if trace is enabled.

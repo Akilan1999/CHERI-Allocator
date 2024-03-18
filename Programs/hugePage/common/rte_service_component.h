@@ -14,7 +14,7 @@
 extern "C" {
 #endif
 
-#include <rte_service.h>
+#include "rte_service.h"
 
 /**
  * Signature of callback function to run a service.

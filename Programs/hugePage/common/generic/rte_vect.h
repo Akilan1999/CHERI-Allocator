@@ -15,7 +15,7 @@
 
 #include <stdint.h>
 
-#include <rte_compat.h>
+#include "rte_compat.h"
 
 /* Unsigned vector types */
 

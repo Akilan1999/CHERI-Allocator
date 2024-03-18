@@ -15,8 +15,8 @@
 extern "C" {
 #endif
 
-#include <rte_config.h>
-#include <rte_memory.h>
+#include "rte_config.h"
+#include "rte_memory.h"
 
 #ifndef RTE_KEEPALIVE_MAXCORES
 /**

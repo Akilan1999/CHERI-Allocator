@@ -5,7 +5,7 @@
 
 #ifndef _RTE_FUNCTION_VERSIONING_H_
 #define _RTE_FUNCTION_VERSIONING_H_
-#include <rte_common.h>
+#include "rte_common.h"
 
 #ifndef RTE_USE_FUNCTION_VERSIONING
 #error Use of function versioning disabled, is "use_function_versioning=true" in meson.build?

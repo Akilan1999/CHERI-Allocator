@@ -17,7 +17,7 @@ extern "C" {
 
 #include <stdint.h>
 
-#include <rte_compat.h>
+#include "rte_compat.h"
 
 /**
  * Seed the pseudo-random generator.

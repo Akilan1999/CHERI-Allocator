@@ -15,9 +15,9 @@
 extern "C" {
 #endif
 
-#include <rte_alarm.h>
-#include <rte_interrupts.h>
-#include <rte_trace_point.h>
+#include "rte_alarm.h"
+#include "rte_interrupts.h"
+#include "rte_trace_point.h"
 
 #include "eal_interrupts.h"
 

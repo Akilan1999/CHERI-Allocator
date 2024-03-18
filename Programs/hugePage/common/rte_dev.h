@@ -19,10 +19,10 @@ extern "C" {
 
 #include <stdio.h>
 
-#include <rte_config.h>
-#include <rte_common.h>
-#include <rte_compat.h>
-#include <rte_log.h>
+#include "rte_config.h"
+#include "rte_common.h"
+#include "rte_compat.h"
+#include "rte_log.h"
 
 struct rte_bus;
 struct rte_devargs;

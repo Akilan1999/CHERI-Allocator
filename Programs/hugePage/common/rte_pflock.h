@@ -31,9 +31,9 @@
 extern "C" {
 #endif
 
-#include <rte_compat.h>
-#include <rte_common.h>
-#include <rte_pause.h>
+#include "rte_compat.h"
+#include "rte_common.h"
+#include "rte_pause.h"
 
 /**
  * The rte_pflock_t type.

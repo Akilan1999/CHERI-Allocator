@@ -5,7 +5,7 @@
 #ifndef _RTE_TEST_H_
 #define _RTE_TEST_H_
 
-#include <rte_log.h>
+#include "rte_log.h"
 
 /* Before including rte_test.h file you can define
  * RTE_TEST_TRACE_FAILURE(_file, _line, _func) macro to better trace/debug test

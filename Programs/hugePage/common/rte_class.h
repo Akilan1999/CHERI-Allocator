@@ -22,8 +22,8 @@
 extern "C" {
 #endif
 
-#include <rte_compat.h>
-#include <rte_dev.h>
+#include "rte_compat.h"
+#include "rte_dev.h"
 
 /** Double linked list of classes */
 RTE_TAILQ_HEAD(rte_class_list, rte_class);

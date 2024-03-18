@@ -20,7 +20,7 @@ extern "C" {
 
 #include <stdio.h>
 
-#include <rte_eal.h>
+#include "rte_eal.h"
 
 struct rte_bus;
 struct rte_device;

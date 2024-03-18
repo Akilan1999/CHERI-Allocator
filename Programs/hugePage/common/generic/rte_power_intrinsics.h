@@ -7,8 +7,8 @@
 
 #include <inttypes.h>
 
-#include <rte_compat.h>
-#include <rte_spinlock.h>
+#include "rte_compat.h"
+#include "rte_spinlock.h"
 
 /**
  * @file

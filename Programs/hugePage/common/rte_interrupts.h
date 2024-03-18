@@ -7,10 +7,10 @@
 
 #include <stdbool.h>
 
-#include <rte_bitops.h>
-#include <rte_common.h>
-#include <rte_compat.h>
-#include <rte_epoll.h>
+#include "rte_bitops.h"
+#include "rte_common.h"
+#include "rte_compat.h"
+#include "rte_epoll.h"
 
 /**
  * @file
