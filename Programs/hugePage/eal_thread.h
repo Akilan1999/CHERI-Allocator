@@ -49,8 +49,8 @@ unsigned eal_cpu_socket_id(unsigned cpu_id);
  * @return
  *   0 for success, -1 if truncation happens.
  */
-int
-eal_thread_dump_affinity(rte_cpuset_t *cpuset, char *str, unsigned int size);
+// int
+// eal_thread_dump_affinity(rte_cpuset_t *cpuset, char *str, unsigned int size);
 
 /**
  * Dump the current thread cpuset.

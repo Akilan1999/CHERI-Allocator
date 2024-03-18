@@ -16,6 +16,11 @@
 
 #include "eal_thread.h"
 
+// custom edited cache size 
+// value might be incorrect 
+// source: https://github.com/spdk-morello/dpdk/blob/ce4377c576ca4bc2e9fb370c93bdccc68bd961fe/config/arm/meson.build#L194
+#define RTE_MAX_NUMA_NODES 4
+
 #if defined(RTE_ARCH_ARM)
 #define MAX_HUGEPAGE_SIZES 4  /**< support up to 4 page sizes */
 #else
@@ -96,7 +101,7 @@ struct internal_config {
 	unsigned num_hugepage_sizes;      /**< how many sizes on this system */
 	struct hugepage_info hugepage_info[MAX_HUGEPAGE_SIZES];
 	enum rte_iova_mode iova_mode ;    /**< Set IOVA mode on this system  */
-	rte_cpuset_t ctrl_cpuset;         /**< cpuset for ctrl threads */
+	// rte_cpuset_t ctrl_cpuset;         /**< cpuset for ctrl threads */
 	volatile unsigned int init_complete;
 	/**< indicates whether EAL has completed initialization */
 	unsigned int no_telemetry; /**< true to disable Telemetry */
