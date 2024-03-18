@@ -12,7 +12,7 @@
 #ifndef _RTE_CONFIG_H_
 #define _RTE_CONFIG_H_
 
-#include <rte_build_config.h>
+#include rte_build_config.h
 
 /* legacy defines */
 #ifdef RTE_EXEC_ENV_LINUX
