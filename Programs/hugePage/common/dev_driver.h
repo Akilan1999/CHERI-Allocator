@@ -25,7 +25,7 @@ struct rte_driver {
  * A structure describing a generic device.
  */
 struct rte_device {
-	struct rte_device next; /**< Next device */
+	struct rte_device *next; /**< Next device */
 	const char *name;             /**< Device name */
 	const char *bus_info;         /**< Device bus specific information */
 	const struct rte_driver *driver; /**< Driver assigned after probing */
