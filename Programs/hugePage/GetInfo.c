@@ -5,6 +5,7 @@
 #include <sys/sysctl.h>
 #include <sys/mman.h>
 #include <string.h>
+#include<stdio.h>
 
 // #include "common/rte_log.h"
 #include <fcntl.h>
