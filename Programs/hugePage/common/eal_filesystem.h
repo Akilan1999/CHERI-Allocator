@@ -18,7 +18,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-#include "common/rte_string_fns.h"
+#include "rte_string_fns.h"
 #include "eal_internal_cfg.h"
 
 /* sets up platform-specific runtime data dir */

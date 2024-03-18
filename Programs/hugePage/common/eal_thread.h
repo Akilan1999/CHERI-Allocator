@@ -5,8 +5,8 @@
 #ifndef EAL_THREAD_H
 #define EAL_THREAD_H
 
-#include "common/rte_common.h"
-#include "common/rte_lcore.h"
+#include "rte_common.h"
+#include "rte_lcore.h"
 
 /**
  * Basic loop of EAL thread, called for each worker thread by rte_eal_init().
@@ -14,7 +14,7 @@
  * @param arg
  *   The lcore_id (passed as an integer) of this worker thread.
  */
-__rte_noreturn uint32_t eal_thread_loop(void *arg);
+__rte_noreturn void *eal_thread_loop(void *arg);
 
 /**
  * Get the NUMA socket id from cpu id.
@@ -49,8 +49,8 @@ unsigned eal_cpu_socket_id(unsigned cpu_id);
  * @return
  *   0 for success, -1 if truncation happens.
  */
-// int
-// eal_thread_dump_affinity(rte_cpuset_t *cpuset, char *str, unsigned int size);
+int
+eal_thread_dump_affinity(rte_cpuset_t *cpuset, char *str, unsigned int size);
 
 /**
  * Dump the current thread cpuset.
