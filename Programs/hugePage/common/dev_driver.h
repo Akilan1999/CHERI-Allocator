@@ -16,7 +16,7 @@ extern "C" {
  * A structure describing a device driver.
  */
 struct rte_driver {
-	RTE_TAILQ_ENTRY(rte_driver) next; /**< Next in list. */
+	rte_driver next; /**< Next in list. */
 	const char *name;                   /**< Driver name. */
 	const char *alias;              /**< Driver alias. */
 };
