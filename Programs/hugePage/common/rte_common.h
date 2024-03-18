@@ -425,13 +425,13 @@ rte_is_aligned(const void * const __rte_restrict ptr, const unsigned int align)
 #define RTE_CACHE_LINE_ROUNDUP(size) RTE_ALIGN_CEIL(size, RTE_CACHE_LINE_SIZE)
 
 /** Cache line size in terms of log2 */
-#if RTE_CACHE_LINE_SIZE == 64
-#define RTE_CACHE_LINE_SIZE_LOG2 6
-#elif RTE_CACHE_LINE_SIZE == 128
-#define RTE_CACHE_LINE_SIZE_LOG2 7
-#else
-#error "Unsupported cache line size"
-#endif
+// #if RTE_CACHE_LINE_SIZE == 64
+// #define RTE_CACHE_LINE_SIZE_LOG2 6
+// #elif RTE_CACHE_LINE_SIZE == 128
+// #define RTE_CACHE_LINE_SIZE_LOG2 7
+// #else
+// #error "Unsupported cache line size"
+// #endif
 
 /** Minimum Cache line size. */
 #define RTE_CACHE_LINE_MIN_SIZE 64
