@@ -19,7 +19,7 @@ extern "C" {
 #include <stdint.h>
 #include <limits.h>
 
-#include <rte_config.h>
+#include "rte_config.h"
 
 /* OS specific include */
 #include <rte_os.h>
