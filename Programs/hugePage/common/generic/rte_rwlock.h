@@ -30,7 +30,7 @@ extern "C" {
 
 #include "../rte_branch_prediction.h"
 #include "../rte_common.h"
-#include "../rte_pause.h"
+#include "rte_pause.h"
 
 /**
  * The rte_rwlock_t type.
