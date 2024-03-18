@@ -178,4 +178,13 @@ static inline void *MALLOCCONTIGOUS(size_t size)
     // return ptr;
 }
 
+
+static inline void REGULARMMAP(size_t size)
+{
+    dprintf("Regular mmap\n");
+
+    void *ptr = mmap(NULL, size,
+                    PROT_READ | PROT_WRITE, MAP_SHARED,
+                    -1, 0);
+}
 #endif // STDDEFINES_H_
