@@ -16,7 +16,7 @@ extern "C" {
  * A structure describing a device driver.
  */
 struct rte_driver {
-	struct rte_driver next; /**< Next in list. */
+	struct rte_driver *next; /**< Next in list. */
 	const char *name;                   /**< Driver name. */
 	const char *alias;              /**< Driver alias. */
 };
