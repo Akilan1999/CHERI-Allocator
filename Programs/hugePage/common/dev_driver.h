@@ -16,7 +16,7 @@ extern "C" {
  * A structure describing a device driver.
  */
 struct rte_driver {
-	rte_driver next; /**< Next in list. */
+	struct rte_driver next; /**< Next in list. */
 	const char *name;                   /**< Driver name. */
 	const char *alias;              /**< Driver alias. */
 };
@@ -25,7 +25,7 @@ struct rte_driver {
  * A structure describing a generic device.
  */
 struct rte_device {
-	RTE_TAILQ_ENTRY(rte_device) next; /**< Next device */
+	struct rte_device next; /**< Next device */
 	const char *name;             /**< Device name */
 	const char *bus_info;         /**< Device bus specific information */
 	const struct rte_driver *driver; /**< Driver assigned after probing */
