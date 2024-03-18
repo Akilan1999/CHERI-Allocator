@@ -6,7 +6,7 @@
 #include <sys/mman.h>
 #include <string.h>
 
-#include <rte_log.h>
+#include "common/rte_log.h"
 #include <fcntl.h>
 
 #include "eal_private.h"
