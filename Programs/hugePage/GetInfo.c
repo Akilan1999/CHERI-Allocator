@@ -9,10 +9,10 @@
 #include "common/rte_log.h"
 #include <fcntl.h>
 
-#include "eal/eal_private.h"
-#include "eal/eal_hugepages.h"
-#include "eal/eal_internal_cfg.h"
-#include "eal/eal_filesystem.h"
+#include "common/eal_private.h"
+#include "common/eal_hugepages.h"
+#include "common/eal_internal_cfg.h"
+#include "common/eal_filesystem.h"
 
 #define CONTIGMEM_DEV "/dev/contigmem"
 
