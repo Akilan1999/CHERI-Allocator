@@ -16,6 +16,9 @@
 
 #define CONTIGMEM_DEV "/dev/contigmem"
 
+/* Debug printf */
+#define dprintf(...) fprintf(stdout, __VA_ARGS__)
+
 /*
  * Uses mmap to create a shared memory area for storage of data
  * Used in this file to store the hugepage file map on disk
@@ -74,6 +77,7 @@ eal_hugepage_info_init(void)
 
 			// printf(num_buffers);
 			// printf(sysctl_size);
+			dprintf(&num_buffers);
 
 	if (error != 0) {
 		// RTE_LOG(ERR, EAL, "could not read sysctl hw.contigmem.num_buffers\n");
