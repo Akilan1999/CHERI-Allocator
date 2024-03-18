@@ -72,8 +72,8 @@ eal_hugepage_info_init(void)
 	error = sysctlbyname("hw.contigmem.num_buffers", &num_buffers,
 			&sysctl_size, NULL, 0);
 
-			printf(num_buffers);
-			printf(sysctl_size);
+			// printf(num_buffers);
+			// printf(sysctl_size);
 
 	if (error != 0) {
 		// RTE_LOG(ERR, EAL, "could not read sysctl hw.contigmem.num_buffers\n");
