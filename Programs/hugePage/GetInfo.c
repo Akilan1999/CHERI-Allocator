@@ -170,9 +170,9 @@ eal_hugepage_info_read(void)
 int main(int argc, char const *argv[])
 {
 
-	eal_hugepage_info_init()
+	eal_hugepage_info_init();
 
-	eal_hugepage_info_read()
+	eal_hugepage_info_read();
 
 	/* code */
 	return 0;
