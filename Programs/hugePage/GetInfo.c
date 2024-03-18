@@ -68,6 +68,7 @@ eal_hugepage_info_init(void)
 	// internal_conf->num_hugepage_sizes = 1;
 
 	sysctl_size = sizeof(num_buffers);
+	printf(num_buffers);
 	error = sysctlbyname("hw.contigmem.num_buffers", &num_buffers,
 			&sysctl_size, NULL, 0);
 
