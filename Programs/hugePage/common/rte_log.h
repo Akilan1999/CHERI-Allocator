@@ -22,7 +22,7 @@ extern "C" {
 #include <stdarg.h>
 #include <stdbool.h>
 
-#include <rte_common.h>
+#include "rte_common.h"
 #include <rte_config.h>
 
 /* SDK log type */
