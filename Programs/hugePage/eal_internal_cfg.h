@@ -14,7 +14,7 @@
 // #include "common/rte_os_shim.h"
 #include "common/rte_pci_dev_feature_defs.h"
 
-#include "common/eal_thread.h"
+#include "eal_thread.h"
 
 #if defined(RTE_ARCH_ARM)
 #define MAX_HUGEPAGE_SIZES 4  /**< support up to 4 page sizes */
