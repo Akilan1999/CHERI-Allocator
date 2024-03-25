@@ -79,7 +79,7 @@ eal_hugepage_info_init(void)
 			// printf(num_buffers);
 			// printf(sysctl_size);
 
-	int buffers = num_buffers
+	int buffers = num_buffers;
 
 	dprintf(*buffers);
 
