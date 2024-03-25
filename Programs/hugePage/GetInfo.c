@@ -59,7 +59,7 @@ int
 eal_hugepage_info_init(void)
 {
 	size_t sysctl_size;
-	int num_buffers, fd, error;
+	int* num_buffers, fd, error;
 	int64_t buffer_size;
 	// struct internal_config *internal_conf =
 	// 	eal_get_internal_configuration();
