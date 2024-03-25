@@ -81,7 +81,7 @@ eal_hugepage_info_init(void)
 
 	int buffers = num_buffers;
 
-	dprintf(*buffers);
+	dprintf(buffers);
 
 	if (error != 0) {
 		// RTE_LOG(ERR, EAL, "could not read sysctl hw.contigmem.num_buffers\n");
