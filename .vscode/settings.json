@@ -1,0 +1,19 @@
+{
+    "files.associations": {
+        "eal_internal_cfg.h": "c",
+        "rte_eal.h": "c",
+        "rte_compat.h": "c",
+        "rte_pci_dev_feature_defs.h": "c",
+        "rte_config.h": "c",
+        "eal_hugepages.h": "c",
+        "eal_filesystem.h": "c",
+        "memory_resource": "c",
+        "iterator": "c",
+        "locale": "c",
+        "__config": "c",
+        "vector": "c",
+        "rte_pause.h": "c",
+        "rte_common.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "disabled"
+}
