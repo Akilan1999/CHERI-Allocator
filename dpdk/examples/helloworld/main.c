@@ -49,7 +49,7 @@ main(int argc, char **argv)
 	// lcore_hello(NULL);
 	/* >8 End of launching the function on each lcore. */
 
-	rte_eal_mp_wait_lcore();
+	// rte_eal_mp_wait_lcore();
 
 	/* clean up the EAL */
 	rte_eal_cleanup();
