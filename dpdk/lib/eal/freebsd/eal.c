@@ -291,7 +291,7 @@ static int
 rte_config_init(void)
 {
 
-	printf("===== Called init function =====\n\n");
+	RTE_LOG(ERR, EAL, "Inside init function\n");
 
 	struct rte_config *config = rte_eal_get_configuration();
 	const struct internal_config *internal_conf =
