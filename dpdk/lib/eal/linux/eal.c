@@ -374,40 +374,40 @@ eal_proc_type_detect(void)
 static int
 rte_config_init(void)
 {
-	struct rte_config *config = rte_eal_get_configuration();
-	const struct internal_config *internal_conf =
-		eal_get_internal_configuration();
+	// struct rte_config *config = rte_eal_get_configuration();
+	// const struct internal_config *internal_conf =
+	// 	eal_get_internal_configuration();
 
-	config->process_type = internal_conf->process_type;
+	// config->process_type = internal_conf->process_type;
 
-	switch (config->process_type) {
-	case RTE_PROC_PRIMARY:
-		if (rte_eal_config_create() < 0)
-			return -1;
-		eal_mcfg_update_from_internal();
-		break;
-	case RTE_PROC_SECONDARY:
-		if (rte_eal_config_attach() < 0)
-			return -1;
-		eal_mcfg_wait_complete();
-		if (eal_mcfg_check_version() < 0) {
-			RTE_LOG(ERR, EAL, "Primary and secondary process DPDK version mismatch\n");
-			return -1;
-		}
-		if (rte_eal_config_reattach() < 0)
-			return -1;
-		if (!__rte_mp_enable()) {
-			RTE_LOG(ERR, EAL, "Primary process refused secondary attachment\n");
-			return -1;
-		}
-		eal_mcfg_update_internal();
-		break;
-	case RTE_PROC_AUTO:
-	case RTE_PROC_INVALID:
-		RTE_LOG(ERR, EAL, "Invalid process type %d\n",
-			config->process_type);
-		return -1;
-	}
+	// switch (config->process_type) {
+	// case RTE_PROC_PRIMARY:
+	// 	if (rte_eal_config_create() < 0)
+	// 		return -1;
+	// 	eal_mcfg_update_from_internal();
+	// 	break;
+	// case RTE_PROC_SECONDARY:
+	// 	if (rte_eal_config_attach() < 0)
+	// 		return -1;
+	// 	eal_mcfg_wait_complete();
+	// 	if (eal_mcfg_check_version() < 0) {
+	// 		RTE_LOG(ERR, EAL, "Primary and secondary process DPDK version mismatch\n");
+	// 		return -1;
+	// 	}
+	// 	if (rte_eal_config_reattach() < 0)
+	// 		return -1;
+	// 	if (!__rte_mp_enable()) {
+	// 		RTE_LOG(ERR, EAL, "Primary process refused secondary attachment\n");
+	// 		return -1;
+	// 	}
+	// 	eal_mcfg_update_internal();
+	// 	break;
+	// case RTE_PROC_AUTO:
+	// case RTE_PROC_INVALID:
+	// 	RTE_LOG(ERR, EAL, "Invalid process type %d\n",
+	// 		config->process_type);
+	// 	return -1;
+	// }
 
 	return 0;
 }
