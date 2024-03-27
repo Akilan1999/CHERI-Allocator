@@ -583,7 +583,7 @@ int
 rte_eal_init(int argc, char **argv)
 {
 
-	fprintf("inside here");
+	print("inside here");
 
 	int i, fctret, ret;
 	static uint32_t run_once;
