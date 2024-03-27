@@ -30,12 +30,12 @@ lcore_hello(__rte_unused void *arg)
 int
 main(int argc, char **argv)
 {
-	int ret;
-	unsigned lcore_id;
+	// int ret;
+	// unsigned lcore_id;
 
-	ret = rte_eal_init(argc, argv);
-	if (ret < 0)
-		rte_panic("Cannot init EAL\n");
+	// ret = rte_eal_init(argc, argv);
+	// if (ret < 0)
+	// 	rte_panic("Cannot init EAL\n");
 	/* >8 End of initialization of Environment Abstraction Layer */
 
 	/* Launches the function on each lcore. 8< */
