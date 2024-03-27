@@ -582,6 +582,9 @@ static void rte_eal_init_alert(const char *msg)
 int
 rte_eal_init(int argc, char **argv)
 {
+
+	fprintf("inside here");
+
 	int i, fctret, ret;
 	static uint32_t run_once;
 	uint32_t has_run = 0;
