@@ -51,8 +51,6 @@ main(int argc, char **argv)
 
 	// rte_eal_mp_wait_lcore();
 
-	printf("hello world");
-
 	/* clean up the EAL */
 	rte_eal_cleanup();
 

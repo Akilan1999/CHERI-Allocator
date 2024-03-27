@@ -290,6 +290,9 @@ eal_proc_type_detect(void)
 static int
 rte_config_init(void)
 {
+
+	printf("===== Called init function =====\n\n");
+
 	struct rte_config *config = rte_eal_get_configuration();
 	const struct internal_config *internal_conf =
 		eal_get_internal_configuration();
