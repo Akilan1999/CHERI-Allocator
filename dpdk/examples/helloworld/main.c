@@ -39,14 +39,14 @@ main(int argc, char **argv)
 	/* >8 End of initialization of Environment Abstraction Layer */
 
 	/* Launches the function on each lcore. 8< */
-	RTE_LCORE_FOREACH_WORKER(lcore_id) {
-		/* Simpler equivalent. 8< */
-		rte_eal_remote_launch(lcore_hello, NULL, lcore_id);
-		/* >8 End of simpler equivalent. */
-	}
+	// RTE_LCORE_FOREACH_WORKER(lcore_id) {
+	// 	/* Simpler equivalent. 8< */
+	// 	rte_eal_remote_launch(lcore_hello, NULL, lcore_id);
+	// 	/* >8 End of simpler equivalent. */
+	// }
 
 	/* call it on main lcore too */
-	lcore_hello(NULL);
+	// lcore_hello(NULL);
 	/* >8 End of launching the function on each lcore. */
 
 	rte_eal_mp_wait_lcore();
