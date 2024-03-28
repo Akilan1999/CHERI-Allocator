@@ -39,7 +39,7 @@ main(int argc, char **argv)
 
 	printf("reading huge pages information");
 
-	eal_hugepage_info_read()
+	eal_hugepage_info_read();
 	/* >8 End of initialization of Environment Abstraction Layer */
 
 	/* Launches the function on each lcore. 8< */
