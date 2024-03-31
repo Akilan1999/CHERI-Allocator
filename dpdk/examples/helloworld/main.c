@@ -40,6 +40,12 @@ main(int argc, char **argv)
 	printf("reading huge pages information \n");
 
 	eal_hugepage_info_read();
+
+    char *ptr;
+	ptr = TestMalloc(3);
+	ptr[0] = '1';
+
+	TestFree(&ptr)
 	/* >8 End of initialization of Environment Abstraction Layer */
 
 	/* Launches the function on each lcore. 8< */
