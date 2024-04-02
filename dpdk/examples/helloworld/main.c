@@ -33,19 +33,19 @@ main(int argc, char **argv)
 	int ret;
 	unsigned lcore_id;
 
-	// ret = rte_eal_init(argc, argv);
-	// if (ret < 0)
-	// 	rte_panic("Cannot init EAL\n");
+	ret = rte_eal_init(argc, argv);
+	if (ret < 0)
+		rte_panic("Cannot init EAL\n");
 
 	printf("reading huge pages information \n");
 
-	eal_hugepage_info_read();
+	// eal_hugepage_info_read();
 
-    char *ptr;
-	ptr = TestMalloc(3);
-	ptr[0] = '1';
+    // char *ptr;
+	// ptr = TestMalloc(3);
+	// ptr[0] = '1';
 
-	TestFree(&ptr);
+	// TestFree(&ptr);
 	/* >8 End of initialization of Environment Abstraction Layer */
 
 	/* Launches the function on each lcore. 8< */
