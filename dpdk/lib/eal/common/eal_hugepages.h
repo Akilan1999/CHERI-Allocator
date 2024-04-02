@@ -41,6 +41,6 @@ int eal_hugepage_info_read(void);
 
 void *TestMalloc(size_t sz);
 
-void TestFree(void *ptr)
+void TestFree(void *ptr);
 
 #endif /* EAL_HUGEPAGES_H */
