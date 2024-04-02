@@ -39,8 +39,8 @@ int eal_hugepage_info_read(void);
 
 // Export test Malloc and Free function
 
-void *TestMalloc(size_t sz);
+// void *TestMalloc(size_t sz);
 
-void TestFree(void *ptr);
+// void TestFree(void *ptr);
 
 #endif /* EAL_HUGEPAGES_H */
