@@ -151,6 +151,8 @@ eal_hugepage_info_read(void)
 
 	internal_conf->num_hugepage_sizes = 1;
 
+	printf("-------------- printing huge pages path ----------------");
+
 	printf("%s",eal_hugepage_info_path());
 
 	tmp_hpi = open_shared_memory(eal_hugepage_info_path(),
