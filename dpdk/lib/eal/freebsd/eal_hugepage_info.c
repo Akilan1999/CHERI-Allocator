@@ -158,7 +158,7 @@ eal_hugepage_info_read(void)
 		return -1;
 	}
 
-		printf(internal_conf->hugepage_dir);
+	    printf("%c", internal_conf->hugepage_dir);
 
 	memcpy(hpi, tmp_hpi, sizeof(internal_conf->hugepage_info));
 
