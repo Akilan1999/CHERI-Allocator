@@ -143,7 +143,6 @@ eal_hugepage_info_init(void)
 int
 eal_hugepage_info_read(void)
 {
-	printf("here \n");
 	struct internal_config *internal_conf =
 		eal_get_internal_configuration();
 
@@ -158,6 +157,8 @@ eal_hugepage_info_read(void)
 		RTE_LOG(ERR, EAL, "Failed to open shared memory!\n");
 		return -1;
 	}
+
+		printf(internal_conf->hugepage_dir);
 
 	memcpy(hpi, tmp_hpi, sizeof(internal_conf->hugepage_info));
 
