@@ -170,38 +170,38 @@ eal_hugepage_info_read(void)
 
 // allocate memory using huge pages FreeBSD
 // sample Malloc implementationhttps://www.reddit.com/r/TempleOS_Official/comments/17sd6kn/templeos_cloud_holyc_playground_demo_the_holyc/
-void *TestMalloc(size_t sz) {
+// void *TestMalloc(size_t sz) {
   
-  // Get Huge pages meta-data
-  struct internal_config *internal_conf =
-		eal_get_internal_configuration();
+//   // Get Huge pages meta-data
+//   struct internal_config *internal_conf =
+// 		eal_get_internal_configuration();
 
-	struct hugepage_info *hpi = &internal_conf->hugepage_info[0];
-	struct hugepage_info *tmp_hpi;
+// 	struct hugepage_info *hpi = &internal_conf->hugepage_info[0];
+// 	struct hugepage_info *tmp_hpi;
 
-	internal_conf->num_hugepage_sizes = 1;
+// 	internal_conf->num_hugepage_sizes = 1;
 
-	tmp_hpi = open_shared_memory(eal_hugepage_info_path(),
-				  sz);
-	if (tmp_hpi == NULL) {
-		RTE_LOG(ERR, EAL, "Failed to open shared memory!\n");
-		return -1;
-	}
+// 	tmp_hpi = open_shared_memory(eal_hugepage_info_path(),
+// 				  sz);
+// 	if (tmp_hpi == NULL) {
+// 		RTE_LOG(ERR, EAL, "Failed to open shared memory!\n");
+// 		return -1;
+// 	}
 
-	return tmp_hpi
+// 	return tmp_hpi
 
-}
+// }
 
 // sample free implementation
-void TestFree(void *ptr) { 
-	// Get Huge pages meta-data
-  struct internal_config *internal_conf =
-		eal_get_internal_configuration();
+// void TestFree(void *ptr) { 
+// 	// Get Huge pages meta-data
+//   struct internal_config *internal_conf =
+// 		eal_get_internal_configuration();
 
 
-   if (munmap(tmp_hpi, sizeof(internal_conf->hugepage_info)) < 0) {
-		RTE_LOG(ERR, EAL, "Failed to unmap shared memory!\n");
-		return -1;
-	}
-}
+//    if (munmap(tmp_hpi, sizeof(internal_conf->hugepage_info)) < 0) {
+// 		RTE_LOG(ERR, EAL, "Failed to unmap shared memory!\n");
+// 		return -1;
+// 	}
+// }
 
