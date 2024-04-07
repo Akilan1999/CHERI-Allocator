@@ -37,7 +37,7 @@ main(int argc, char **argv)
 	if (ret < 0)
 		rte_panic("Cannot init EAL\n");
 
-	printf("reading huge pages information \n");
+	printf("reading huge pages information 1 \n");
 
 	eal_hugepage_info_read();
 
