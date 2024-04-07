@@ -158,7 +158,7 @@ eal_hugepage_info_read(void)
 		return -1;
 	}
 
-	printf("%s \n", hpi->hugedir);
+	printf("%s \n", eal_hugepage_info_path());
 
 	// printf("%s\n", internal_conf->hugepage_dir);
 
