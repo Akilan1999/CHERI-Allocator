@@ -143,6 +143,7 @@ eal_hugepage_info_init(void)
 int
 eal_hugepage_info_read(void)
 {
+	printf("here");
 	struct internal_config *internal_conf =
 		eal_get_internal_configuration();
 
