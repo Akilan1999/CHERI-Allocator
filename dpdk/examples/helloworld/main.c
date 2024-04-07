@@ -39,7 +39,7 @@ main(int argc, char **argv)
 
 	printf("reading huge pages information 1 \n");
 
-	eal_hugepage_info_read();
+	// eal_hugepage_info_read();
 
     // char *ptr;
 	// ptr = TestMalloc(3);
