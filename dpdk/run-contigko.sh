@@ -1,6 +1,9 @@
 # pull changes
 git pull origin main
 
+# remove freebsd build directory to force build
+rm -rf /home/akilan/CHERI-Allocator/dpdk/build-hybrid/kernel/freebsd
+
 # build the changes
 ninja -j4 -C build-hybrid
 
