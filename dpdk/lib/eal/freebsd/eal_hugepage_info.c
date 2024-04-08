@@ -60,7 +60,7 @@ int SampleAllocations(void) {
 	internal_conf->num_hugepage_sizes = 1;
     
 	// allocate for int pointer
-	ptr = (int*)open_shared_memory(eal_hugepage_info_path(),
+	ptr = (int*)create_shared_memory(eal_hugepage_info_path(),
 				  sizeof(internal_conf->hugepage_info));
     
 	printf("running sample pointer operations \n");
