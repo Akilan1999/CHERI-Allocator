@@ -31,6 +31,10 @@ __FBSDID("$FreeBSD$");
 #include <vm/vm_pager.h>
 #include <vm/vm_phys.h>
 
+// added to print uint 
+// 64
+#include <inttypes.h>
+
 struct contigmem_buffer {
 	void           *addr;
 	int             refcnt;
@@ -116,7 +120,8 @@ contigmem_load()
 
 	// get page size 
 	printf("%d page size \n",PAGE_SIZE);
-	printf("%d buffer size \n",contigmem_buffer_size);
+
+	printf(" buffer size %" PRIu64 "\n", contigmem_buffer_size);
 
 	char index_string[8], description[32];
 	int  i, error = 0;
