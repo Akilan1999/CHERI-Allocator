@@ -219,6 +219,8 @@ contigmem_open(struct cdev *cdev, int fflags, int devtype,
 		struct thread *td)
 {
 
+	printf("Contigmem opened");
+
 	atomic_add_int(&contigmem_refcnt, 1);
 
 	return 0;
@@ -335,6 +337,10 @@ static int
 contigmem_mmap_single(struct cdev *cdev, vm_ooffset_t *offset, vm_size_t size,
 		struct vm_object **obj, int nprot)
 {
+
+	// Testing if this is called when file is opened
+	printf("contigmem_mmap_single called");
+
 	struct contigmem_vm_handle *vmh;
 	uint64_t buffer_index;
 

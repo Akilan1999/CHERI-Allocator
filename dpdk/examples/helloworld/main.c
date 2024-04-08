@@ -61,6 +61,9 @@ main(int argc, char **argv)
 
 	// rte_eal_mp_wait_lcore();
 
+	// Linux Huge pages benchmark
+	// (https://www.mcs.anl.gov/~kazutomo/hugepage-old/huge-mmap.c)
+
 	/* clean up the EAL */
 	rte_eal_cleanup();
 
