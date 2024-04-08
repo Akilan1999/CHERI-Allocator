@@ -45,6 +45,10 @@ open_shared_memory(const char *filename, const size_t mem_size);
 static void * 
 create_shared_memory(const char *filename, const size_t mem_size);
 
+/* Introduced sample allocations for testing reasons */
+static void * 
+SampleAllocations();
+
 
 // Export test Malloc and Free function
 

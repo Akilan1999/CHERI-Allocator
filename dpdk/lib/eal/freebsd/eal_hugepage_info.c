@@ -48,6 +48,38 @@ create_shared_memory(const char *filename, const size_t mem_size)
 	return map_shared_memory(filename, mem_size, O_RDWR | O_CREAT);
 }
 
+// Sample memory allocator to check 
+// if the mmap calls mmap single
+// internally
+static void * SampleAllocations() {
+   int* ptr;
+
+   struct internal_config *internal_conf =
+		eal_get_internal_configuration();
+    
+	internal_conf->num_hugepage_sizes = 1;
+    
+	// allocate for int pointer
+	ptr = (int*)open_shared_memory(eal_hugepage_info_path(),
+				  sizeof(internal_conf->hugepage_info));
+    
+	printf("running sample pointer operations \n")
+	ptr[0] = 1;
+	ptr[2] = 2;
+    
+	printf("%d printing p[0] \n", ptr[0]);
+
+	// Free int pointer 
+
+	if (munmap(ptr, sizeof(internal_conf->hugepage_info)) < 0) {
+        printf("munmap not successful \n");
+		return -1;
+	}
+
+}
+
+
+
 /*
  * No hugepage support on freebsd, but we dummy it, using contigmem driver
  */
