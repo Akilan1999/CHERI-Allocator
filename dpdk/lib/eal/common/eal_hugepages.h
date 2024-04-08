@@ -46,7 +46,7 @@ static void *
 create_shared_memory(const char *filename, const size_t mem_size);
 
 /* Introduced sample allocations for testing reasons */
-static void * 
+int 
 SampleAllocations();
 
 

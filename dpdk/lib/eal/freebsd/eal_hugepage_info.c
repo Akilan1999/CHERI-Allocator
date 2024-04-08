@@ -51,7 +51,7 @@ create_shared_memory(const char *filename, const size_t mem_size)
 // Sample memory allocator to check 
 // if the mmap calls mmap single
 // internally
-static void * SampleAllocations() {
+int SampleAllocations(void) {
    int* ptr;
 
    struct internal_config *internal_conf =
@@ -75,6 +75,8 @@ static void * SampleAllocations() {
         printf("munmap not successful \n");
 		return -1;
 	}
+
+	return 1;
 
 }
 
