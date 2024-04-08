@@ -37,6 +37,15 @@ int eal_hugepage_info_init(void);
  */
 int eal_hugepage_info_read(void);
 
+/* Add the function call to open shared memory using huge pages */
+static void * 
+open_shared_memory(const char *filename, const size_t mem_size);
+
+/* Add function call to create shared memory using huge pages */
+static void * 
+create_shared_memory(const char *filename, const size_t mem_size);
+
+
 // Export test Malloc and Free function
 
 // void *TestMalloc(size_t sz);
