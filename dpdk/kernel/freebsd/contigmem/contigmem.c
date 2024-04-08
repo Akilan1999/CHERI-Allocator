@@ -120,8 +120,10 @@ contigmem_load()
 
 	// get page size 
 	printf("%d page size \n",PAGE_SIZE);
-
-	printf(" buffer size %" PRIu64 "\n", contigmem_buffer_size);
+    
+	// debug buffer size 
+	int DebugBufferSize = contigmem_buffer_size;
+	printf("%d buffer size \n", DebugBufferSize);
 
 	char index_string[8], description[32];
 	int  i, error = 0;
