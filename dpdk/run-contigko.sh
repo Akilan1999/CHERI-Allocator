@@ -26,5 +26,5 @@ cd /home/akilan/CHERI-Allocator/dpdk
 sudo ./build-hybrid/examples/dpdk-helloworld
 
 # Show the dmesg to see the debug prints
-sudo dmesg -w
+sudo dmesg
 
