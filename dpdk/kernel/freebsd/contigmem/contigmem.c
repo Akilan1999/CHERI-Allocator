@@ -119,7 +119,7 @@ contigmem_load()
 {
 
 	// get page size 
-	printf("%d page size 1 \n",PAGE_SIZE);
+	printf("%d page size \n",PAGE_SIZE);
     
 	// debug buffer size 
 
@@ -349,7 +349,7 @@ contigmem_mmap_single(struct cdev *cdev, vm_ooffset_t *offset, vm_size_t size,
 {
 
 	// Testing if this is called when file is opened
-	printf("contigmem_mmap_single called");
+	printf("contigmem_mmap_single called \n");
 
 	struct contigmem_vm_handle *vmh;
 	uint64_t buffer_index;

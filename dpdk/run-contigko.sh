@@ -19,6 +19,9 @@ sudo cp contigmem.ko /boot/modules/
 # Run the new contig kernel module
 sudo kldload /boot/modules/contigmem.ko
 
+# Run HelloWorld
+sudo ./build-hybrid/examples/dpdk-helloworld
+
 # Show the dmesg to see the debug prints
 sudo dmesg
 
