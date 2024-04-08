@@ -33,7 +33,7 @@ __FBSDID("$FreeBSD$");
 
 // added to print uint 
 // 64
-#include <inttypes.h>
+// #include <inttypes.h>
 
 struct contigmem_buffer {
 	void           *addr;
