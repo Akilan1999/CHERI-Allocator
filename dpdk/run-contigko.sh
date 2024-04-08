@@ -1,0 +1,15 @@
+# remove previous contig kernel module running
+sudo kldunload contigmem.ko
+
+# entering directory of the contig build .ko files
+cd /home/akilan/CHERI-Allocator/dpdk/build-hybrid/kernel/freebsd
+
+# Copyping files to /boot/modules
+cp contigmem.ko /boot/modules/
+
+# Run the new contig kernel module
+sudo kldload /boot/modules/contigmem.ko
+
+# Show the dmesg to see the debug prints
+sudo dmesg
+
