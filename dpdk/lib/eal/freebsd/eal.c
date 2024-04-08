@@ -151,7 +151,7 @@ rte_eal_config_create(void)
 		return -1;
 	}
 
-	printf("mmap called");
+	printf("before mmap called \n");
 
 	/* remap the actual file into the space we've just reserved */
 	mapped_mem_cfg_addr = mmap(rte_mem_cfg_addr,
@@ -164,6 +164,8 @@ rte_eal_config_create(void)
 		mem_cfg_fd = -1;
 		return -1;
 	}
+
+	printf("after mmap called \n");
 
 	memcpy(rte_mem_cfg_addr, config->mem_config, sizeof(struct rte_mem_config));
 	config->mem_config = rte_mem_cfg_addr;
