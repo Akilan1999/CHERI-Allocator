@@ -37,9 +37,9 @@ main(int argc, char **argv)
 	if (ret < 0)
 		rte_panic("Cannot init EAL\n");
 
-	printf("reading huge pages \n");
+	printf("reading huge pages 1 \n");
 
-	// eal_hugepage_info_read();
+	eal_hugepage_info_read();
 
     // char *ptr;
 	// ptr = TestMalloc(3);
