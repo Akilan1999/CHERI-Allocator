@@ -115,7 +115,7 @@ contigmem_load()
 {
 
 	// get page size 
-	printf("%d page size 1 \n",PAGE_SIZE);
+	printf("%d page size \n",PAGE_SIZE);
 
 	char index_string[8], description[32];
 	int  i, error = 0;
