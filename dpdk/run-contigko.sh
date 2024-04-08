@@ -1,3 +1,9 @@
+# pull changes
+git pull origin main
+
+# build the changes
+ninja -j4 -C build-hybrid
+
 # remove previous contig kernel module running
 sudo kldunload contigmem.ko
 
