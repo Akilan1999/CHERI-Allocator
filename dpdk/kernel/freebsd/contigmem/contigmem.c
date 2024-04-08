@@ -33,7 +33,7 @@ __FBSDID("$FreeBSD$");
 
 // added to print uint 
 // 64
-/
+#include <inttypes.h>
 
 struct contigmem_buffer {
 	void           *addr;
@@ -122,8 +122,6 @@ contigmem_load()
 	printf("%d page size \n",PAGE_SIZE);
     
 	// debug buffer size 
-	int DebugBufferSize = contigmem_buffer_size;
-	printf("%d buffer size \n", DebugBufferSize);
 
 	char index_string[8], description[32];
 	int  i, error = 0;
