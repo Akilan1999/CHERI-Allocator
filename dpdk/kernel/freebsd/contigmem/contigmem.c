@@ -116,6 +116,7 @@ contigmem_load()
 
 	// get page size 
 	printf("%d page size \n",PAGE_SIZE);
+	printf("%d buffer size \n",contigmem_buffer_size);
 
 	char index_string[8], description[32];
 	int  i, error = 0;
@@ -135,8 +136,6 @@ contigmem_load()
 		error = EINVAL;
 		goto error;
 	}
-
-	printf("%d buffer size \n",contigmem_buffer_size);
 
 	for (i = 0; i < contigmem_num_buffers; i++) {
 		addr = contigmalloc(contigmem_buffer_size, M_CONTIGMEM, M_ZERO,
