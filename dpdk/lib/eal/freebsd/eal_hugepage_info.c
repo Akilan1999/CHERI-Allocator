@@ -59,6 +59,8 @@ int SampleAllocations(void) {
 		eal_get_internal_configuration();
     
 	internal_conf->num_hugepage_sizes = 1;
+
+	printf("shared memory called from here \n");
     
 	// allocate for int pointer
 	ptr = (int*)create_shared_memory(eal_hugepage_info_path(),
