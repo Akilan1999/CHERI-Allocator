@@ -349,6 +349,7 @@ eal_usage(const char *prgname)
 static inline size_t
 eal_get_hugepage_mem_size(void)
 {
+	printf("Getting huge page information function called");
 	uint64_t size = 0;
 	unsigned i, j;
 	struct internal_config *internal_conf =
