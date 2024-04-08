@@ -23,6 +23,7 @@
 static void *
 map_shared_memory(const char *filename, const size_t mem_size, int flags)
 {
+	printf("Shared memory called \n");
 	void *retval;
 	int fd = open(filename, flags, 0600);
 	if (fd < 0)

@@ -39,8 +39,8 @@ main(int argc, char **argv)
 
 	printf("reading huge pages \n");
 
-    printf("calling sample allocations \n");
-	SampleAllocations();
+    // printf("calling sample allocations \n");
+	// SampleAllocations();
 
 	// eal_hugepage_info_read();
 
