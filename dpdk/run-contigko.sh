@@ -5,7 +5,7 @@ sudo kldunload contigmem.ko
 cd /home/akilan/CHERI-Allocator/dpdk/build-hybrid/kernel/freebsd
 
 # Copyping files to /boot/modules
-cp contigmem.ko /boot/modules/
+sudo cp contigmem.ko /boot/modules/
 
 # Run the new contig kernel module
 sudo kldload /boot/modules/contigmem.ko
