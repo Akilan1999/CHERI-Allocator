@@ -23,8 +23,6 @@
 static void *
 map_shared_memory(const char *filename, const size_t mem_size, int flags)
 {
-
-    printf("shared memory function called");
 	void *retval;
 	int fd = open(filename, flags, 0600);
 	if (fd < 0)
@@ -56,6 +54,8 @@ create_shared_memory(const char *filename, const size_t mem_size)
 int
 eal_hugepage_info_init(void)
 {
+
+	printf("called");
 	size_t sysctl_size;
 	int num_buffers, fd, error;
 	int64_t buffer_size;
