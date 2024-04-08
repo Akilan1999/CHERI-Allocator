@@ -151,7 +151,7 @@ rte_eal_config_create(void)
 		return -1;
 	}
 
-	EAL_LOG(INFO, "MMAP called");
+	printf("mmap called");
 
 	/* remap the actual file into the space we've just reserved */
 	mapped_mem_cfg_addr = mmap(rte_mem_cfg_addr,
