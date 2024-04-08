@@ -151,17 +151,6 @@ rte_eal_config_create(void)
 		return -1;
 	}
 
-	printf("before mmap called \n");
-
-	// Test changes to debug if mmap called mmap single
-    mapped_mem_cfg_addr = mmap(rte_mem_cfg_addr,
-			cfg_len_aligned, PROT_READ | PROT_WRITE,
-			MAP_SHARED | MAP_FIXED, mem_cfg_fd, 0);
-	
-	munmap(rte_mem_cfg_addr, cfg_len);
-    
-    printf("mmap called again\n");
-
 	/* remap the actual file into the space we've just reserved */
 	mapped_mem_cfg_addr = mmap(rte_mem_cfg_addr,
 			cfg_len_aligned, PROT_READ | PROT_WRITE,
@@ -173,8 +162,6 @@ rte_eal_config_create(void)
 		mem_cfg_fd = -1;
 		return -1;
 	}
-
-	printf("after mmap called \n");
 
 	memcpy(rte_mem_cfg_addr, config->mem_config, sizeof(struct rte_mem_config));
 	config->mem_config = rte_mem_cfg_addr;
