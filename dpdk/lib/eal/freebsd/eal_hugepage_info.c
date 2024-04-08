@@ -63,7 +63,7 @@ int SampleAllocations(void) {
 	printf("shared memory called from here \n");
     
 	// allocate for int pointer
-	ptr = (int*)create_shared_memory(eal_hugepage_info_path(),
+	ptr = (int*)create_shared_memory("/dev/contigmem",
 				  sizeof(internal_conf->hugepage_info));
     
 	printf("running sample pointer operations \n");

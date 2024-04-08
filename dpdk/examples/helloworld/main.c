@@ -41,8 +41,7 @@ main(int argc, char **argv)
 
     // printf("calling sample allocations \n");
 	SampleAllocations();
-
-	SampleAllocations();
+	// SampleAllocations();
 
 	// eal_hugepage_info_read();
 

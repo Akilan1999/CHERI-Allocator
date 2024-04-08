@@ -120,8 +120,6 @@ contigmem_load()
 
 	// get page size 
 	printf("%d page size \n",PAGE_SIZE);
-    
-	// debug buffer size 
 
 	char index_string[8], description[32];
 	int  i, error = 0;
@@ -229,7 +227,7 @@ contigmem_open(struct cdev *cdev, int fflags, int devtype,
 		struct thread *td)
 {
 
-	printf("Contigmem opened");
+	printf("Contigmem opened \n");
 
 	atomic_add_int(&contigmem_refcnt, 1);
 
