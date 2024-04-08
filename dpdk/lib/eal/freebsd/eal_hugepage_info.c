@@ -54,8 +54,6 @@ create_shared_memory(const char *filename, const size_t mem_size)
 int
 eal_hugepage_info_init(void)
 {
-
-	printf("called");
 	size_t sysctl_size;
 	int num_buffers, fd, error;
 	int64_t buffer_size;
@@ -159,6 +157,8 @@ eal_hugepage_info_read(void)
 		RTE_LOG(ERR, EAL, "Failed to open shared memory!\n");
 		return -1;
 	}
+
+	printf("about to print path \n");
 
 	printf("%s \n", eal_hugepage_info_path());
 
