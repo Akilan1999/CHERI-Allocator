@@ -119,7 +119,7 @@ contigmem_load()
 {
 
 	// get page size 
-	printf("%d page size \n",PAGE_SIZE);
+	printf("%d page size 1 \n",PAGE_SIZE);
     
 	// debug buffer size 
 
