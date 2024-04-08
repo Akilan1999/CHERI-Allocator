@@ -63,7 +63,7 @@ static void * SampleAllocations() {
 	ptr = (int*)open_shared_memory(eal_hugepage_info_path(),
 				  sizeof(internal_conf->hugepage_info));
     
-	printf("running sample pointer operations \n")
+	printf("running sample pointer operations \n");
 	ptr[0] = 1;
 	ptr[2] = 2;
     
