@@ -33,6 +33,14 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/mman.h>
+
+#include <cheriintrin.h>
+#include <cheri/cheric.h>
+
 //#define TIMING
 
 /* Debug printf */
@@ -109,6 +117,43 @@ static inline void get_time (struct timeval *t)
 #ifdef TIMING
     gettimeofday (t, NULL);
 #endif
+}
+
+static char *heap_start;
+static char *heap;
+static size_t HEAP_SIZE = 1024 * 1024 * 1024;
+
+// Quick malloc implementation with mmap
+void* MALLOCCHERI(size_t sz)
+{
+   //  void *(*libc_malloc)(size_t) = dlsym(RTLD_NEXT, "malloc");
+   //  printf("malloc\n");
+   //  return libc_malloc(sz);
+
+   void *ptr;
+
+    ptr = mmap(NULL, sz,
+    PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON,-1,0);
+
+    ptr = cheri_setbounds(ptr sz);
+
+    return ptr;
+//   sz = __builtin_align_up(sz, _Alignof(max_align_t));
+
+//   if (heap + sz > heap_start + HEAP_SIZE) return NULL;
+//   heap += sz;
+//   return heap - sz;
+     
+}
+
+// Quick cheri free implementation
+void FREECHERI(void *ptr) { 
+   // get bounds from 
+   int len = cheri_getlen(ptr);
+   
+   printf(len);
+
+   munmap(ptr, len);
 }
 
 #endif // STDDEFINES_H_
