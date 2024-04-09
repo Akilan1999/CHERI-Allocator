@@ -1,0 +1,1 @@
+cc -g -Wall -o linear_regression-pthread.out -mabi=purecap-benchmark -lpthread linear_regression-pthread.c

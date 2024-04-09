@@ -1,0 +1,1 @@
+cc -g -Wall -o matrix_multiply-pthread.out -mabi=purecap-benchmark -lpthread matrix_multiply-pthread.c
