@@ -135,7 +135,7 @@ void* MALLOCCHERI(size_t sz)
     ptr = mmap(NULL, sz,
     PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON,-1,0);
 
-    printf(sz);
+   //  printf(sz);
 
     ptr = cheri_setbounds(ptr, sz);
 
