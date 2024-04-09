@@ -135,7 +135,7 @@ void* MALLOCCHERI(size_t sz)
     ptr = mmap(NULL, sz,
     PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON,-1,0);
 
-    ptr = cheri_setbounds(ptr sz);
+    ptr = cheri_setbounds(ptr, sz);
 
     return ptr;
 //   sz = __builtin_align_up(sz, _Alignof(max_align_t));
