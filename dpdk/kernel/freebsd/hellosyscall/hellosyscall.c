@@ -34,6 +34,7 @@
 #include <sys/kernel.h>
 #include <sys/systm.h>
 
+// define custom args.
 /*
  * The function for implementing the syscall.
  */
