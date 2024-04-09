@@ -131,9 +131,9 @@ void* MALLOCCHERI(size_t sz)
    //  return libc_malloc(sz);
 
    void *ptr;
-   printf("malloc called");
+   printf("malloc called \n ");
 
-   printf("%d \n", sz);
+   printf("malloc length %d \n", sz);
 
     ptr = mmap(NULL, sz,
     PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON,-1,0);
@@ -154,12 +154,12 @@ void* MALLOCCHERI(size_t sz)
 // Quick cheri free implementation
 void FREECHERI(void *ptr) { 
 
-   printf("free called");
+   printf("free called \n");
 
    // get bounds from 
    int len = cheri_getlen(ptr);
    
-   printf("%d \n", len);
+   printf("free len %d \n", len);
 
    munmap(ptr, len);
 }
