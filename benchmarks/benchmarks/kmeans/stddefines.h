@@ -137,6 +137,8 @@ void* MALLOCCHERI(size_t sz)
 
     ptr = cheri_setbounds(ptr, sz);
 
+     printf(sz);
+
     return ptr;
 //   sz = __builtin_align_up(sz, _Alignof(max_align_t));
 
