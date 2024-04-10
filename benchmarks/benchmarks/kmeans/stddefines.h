@@ -119,6 +119,10 @@ static inline void get_time (struct timeval *t)
 #endif
 }
 
+// Expirement work
+
+#define FILENAME "/dev/contigmem"
+
 static char *heap_start;
 static char *heap;
 static size_t HEAP_SIZE = 1024 * 1024 * 1024;
@@ -135,8 +139,26 @@ void* MALLOCCHERI(size_t sz)
 
    // printf("malloc length %d \n", sz);
 
+   int fd = open
+            (FILENAME, O_RDWR | O_CREAT, 0600);
+    if (fd < 0) {
+        perror("open");
+        exit(EXIT_FAILURE);
+    }
+
+    off_t offset = 0; // offset to seek to.
+
+    if (ftruncate(fd, size) < 0) {
+        perror("ftruncate");
+        close(fd);
+        exit(EXIT_FAILURE);
+    }
+
+   //  ptr = mmap(NULL, sz,
+   //  PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON,-1,0);
+
     ptr = mmap(NULL, sz,
-    PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON,-1,0);
+    PROT_READ|PROT_WRITE, fd,-1,0);
 
    //  printf(sz);
 
