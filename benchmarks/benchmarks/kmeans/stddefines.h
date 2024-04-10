@@ -160,6 +160,13 @@ void* MALLOCCHERI(size_t sz)
     ptr = mmap(NULL, sz,
     PROT_READ|PROT_WRITE, MAP_SHARED,fd,0);
 
+   // Added error handling
+    if(ptr == MAP_FAILED)
+    {
+        perror("mmap");
+        exit(EXIT_FAILURE);
+    }
+
    //  printf(sz);
 
     ptr = cheri_setbounds(ptr, sz);
