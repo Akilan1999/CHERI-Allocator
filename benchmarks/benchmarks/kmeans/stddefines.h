@@ -158,7 +158,7 @@ void* MALLOCCHERI(size_t sz)
    //  PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON,-1,0);
 
     ptr = mmap(NULL, sz,
-    PROT_READ|PROT_WRITE, fd,-1,0);
+    PROT_READ|PROT_WRITE, MAP_SHARED,fd,0);
 
    //  printf(sz);
 
