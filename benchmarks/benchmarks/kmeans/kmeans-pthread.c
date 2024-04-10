@@ -369,7 +369,7 @@ int main(int argc, char **argv)
    free(means);
    free(clusters);
 
-   CLEARALLOC();
+   // CLEARALLOC();
 
    return 0;
 }

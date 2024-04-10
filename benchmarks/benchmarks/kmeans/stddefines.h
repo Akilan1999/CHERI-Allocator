@@ -140,7 +140,7 @@ INITAlloc(void) {
 
    size_t sz;
    // Pre Allocate 400 MB 
-   sz = 400000000;
+   sz = 4000000;
 
    int fd = open(FILENAME, O_RDWR, 0600);
 
@@ -175,61 +175,61 @@ INITAlloc(void) {
 // Quick malloc implementation with mmap
 void* MALLOCCHERI(size_t sz)
 {
-   if (MallocCounter == 0) {
-       // If this is the first time 
-       // malloc is called then 
-       // create a single mmap 
-       // entry
-       INITAlloc();
-   }
+   // if (MallocCounter == 0) {
+   //     // If this is the first time 
+   //     // malloc is called then 
+   //     // create a single mmap 
+   //     // entry
+   //     INITAlloc();
+   // }
 
-   MallocCounter += 1;
+   // MallocCounter += 1;
    //  void *(*libc_malloc)(size_t) = dlsym(RTLD_NEXT, "malloc");
    //  printf("malloc\n");
    //  return libc_malloc(sz);
 
-   // void *ptr;
-   // // printf("malloc called \n ");
+   void *ptr;
+   // printf("malloc called \n ");
 
-   // // printf("malloc length %d \n", sz);
+   // printf("malloc length %d \n", sz);
 
-   // int fd = open(FILENAME, O_RDWR, 0600);
+   int fd = open(FILENAME, O_RDWR, 0600);
 
-   //  if (fd < 0) {
-   //      perror("open");
-   //      exit(EXIT_FAILURE);
-   //  }
+    if (fd < 0) {
+        perror("open");
+        exit(EXIT_FAILURE);
+    }
 
-   //  off_t offset = 0; // offset to seek to.
+    off_t offset = 0; // offset to seek to.
 
-   //  if (ftruncate(fd, sz) < 0) {
-   //      perror("ftruncate");
-   //      close(fd);
-   //      exit(EXIT_FAILURE);
-   //  }
-
-   // //  ptr = mmap(NULL, sz,
-   // //  PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON,-1,0);
+    if (ftruncate(fd, sz) < 0) {
+        perror("ftruncate");
+        close(fd);
+        exit(EXIT_FAILURE);
+    }
 
    //  ptr = mmap(NULL, sz,
-   //  PROT_READ|PROT_WRITE, MAP_SHARED,fd,0);
+   //  PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON,-1,0);
 
-   // // Added error handling
-   //  if(ptr == MAP_FAILED)
-   //  {
-   //      perror("mmap");
-   //      exit(EXIT_FAILURE);
-   //  }
+    ptr = mmap(NULL, sz,
+    PROT_READ|PROT_WRITE, MAP_SHARED,fd,0);
+
+   // Added error handling
+    if(ptr == MAP_FAILED)
+    {
+        perror("mmap");
+        exit(EXIT_FAILURE);
+    }
    
-   // //  printf(sz);
+   //  printf(sz);
 
-   //  ptr = cheri_setbounds(ptr, sz);
+    ptr = cheri_setbounds(ptr, sz);
 
-   //  return ptr;
+    return ptr;
 
    void *CapPtr;
 
-   // CapPtr = cheri_setbounds(ptr, sz);
+   CapPtr = cheri_setbounds(ptr, sz);
 
    return ptr;
 
@@ -245,19 +245,19 @@ void* MALLOCCHERI(size_t sz)
 // Quick cheri free implementation
 void FREECHERI(void *ptr) { 
 
-   // printf("free called \n");
+   printf("free called \n");
 
    // get bounds from 
-   // int len = cheri_getlen(ptr);
+   int len = cheri_getlen(ptr);
    
-   // printf("free len %d \n", len);
+   printf("free len %d \n", len);
 
-   // munmap(ptr, len);
+   munmap(ptr, len);
 }
 
 
 void* CLEARALLOC(void) {
-   munmap(ptr, 400000000);
+/
 }
 
 #endif // STDDEFINES_H_
