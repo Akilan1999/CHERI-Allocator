@@ -256,8 +256,8 @@ void FREECHERI(void *ptr) {
 }
 
 
-void* CLEARALLOC(void) {
-/
-}
+// void* CLEARALLOC(void) {
+// /
+// }
 
 #endif // STDDEFINES_H_
