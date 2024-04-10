@@ -148,7 +148,7 @@ void* MALLOCCHERI(size_t sz)
 
     off_t offset = 0; // offset to seek to.
 
-    if (ftruncate(fd, size) < 0) {
+    if (ftruncate(fd, sz) < 0) {
         perror("ftruncate");
         close(fd);
         exit(EXIT_FAILURE);
