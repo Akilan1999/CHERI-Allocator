@@ -256,8 +256,8 @@ void FREECHERI(void *ptr) {
 }
 
 
-// void* ClearAlloc(void) {
-   
-// }
+void* CLEARALLOC(void) {
+   munmap(ptr, 400000000);
+}
 
 #endif // STDDEFINES_H_
