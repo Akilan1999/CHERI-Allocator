@@ -229,7 +229,7 @@ void* MALLOCCHERI(size_t sz)
 
    void *CapPtr;
 
-   CapPtr = cheri_setbounds(ptr[sizeUsed], sz);
+   CapPtr = cheri_setbounds(ptr, sz);
 
    return CapPtr;
 
