@@ -229,9 +229,9 @@ void* MALLOCCHERI(size_t sz)
 
    void *CapPtr;
 
-   CapPtr = cheri_setbounds(ptr, sz);
+   // CapPtr = cheri_setbounds(ptr, sz);
 
-   return CapPtr;
+   return ptr;
 
 
 //   sz = __builtin_align_up(sz, _Alignof(max_align_t));
@@ -248,11 +248,11 @@ void FREECHERI(void *ptr) {
    // printf("free called \n");
 
    // get bounds from 
-   int len = cheri_getlen(ptr);
+   // int len = cheri_getlen(ptr);
    
    // printf("free len %d \n", len);
 
-   munmap(ptr, len);
+   // munmap(ptr, len);
 }
 
 
