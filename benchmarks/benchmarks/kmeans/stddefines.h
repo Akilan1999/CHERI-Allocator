@@ -41,6 +41,10 @@
 #include <cheriintrin.h>
 #include <cheri/cheric.h>
 
+#include <sys/stat.h>
+#include <fcntl.h>
+
+
 //#define TIMING
 
 /* Debug printf */
@@ -139,8 +143,8 @@ void* MALLOCCHERI(size_t sz)
 
    // printf("malloc length %d \n", sz);
 
-   int fd = open
-            (FILENAME, O_RDWR | O_CREAT, 0600);
+   int fd = open(FILENAME, O_RDWR, 0600);
+
     if (fd < 0) {
         perror("open");
         exit(EXIT_FAILURE);
