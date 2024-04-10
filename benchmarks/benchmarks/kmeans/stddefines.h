@@ -131,12 +131,12 @@ static char *heap_start;
 static char *heap;
 static size_t HEAP_SIZE = 1024 * 1024 * 1024;
 
-void * ptr;
+void *ptr;
 int MallocCounter;
 
 size_t sizeUsed;
 
-void* INITAlloc(void) {
+INITAlloc(void) {
 
    size_t sz;
    // Pre Allocate 400 MB 
