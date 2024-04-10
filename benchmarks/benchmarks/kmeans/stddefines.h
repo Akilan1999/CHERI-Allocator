@@ -131,17 +131,16 @@ static char *heap_start;
 static char *heap;
 static size_t HEAP_SIZE = 1024 * 1024 * 1024;
 
-// Quick malloc implementation with mmap
-void* MALLOCCHERI(size_t sz)
-{
-   //  void *(*libc_malloc)(size_t) = dlsym(RTLD_NEXT, "malloc");
-   //  printf("malloc\n");
-   //  return libc_malloc(sz);
+void * ptr;
+int MallocCounter;
 
-   void *ptr;
-   // printf("malloc called \n ");
+size_t sizeUsed;
 
-   // printf("malloc length %d \n", sz);
+void* INITAlloc(void) {
+
+   size_t sz;
+   // Pre Allocate 400 MB 
+   sz = 400000000;
 
    int fd = open(FILENAME, O_RDWR, 0600);
 
@@ -171,11 +170,66 @@ void* MALLOCCHERI(size_t sz)
         exit(EXIT_FAILURE);
     }
 
-   //  printf(sz);
+}
 
-    ptr = cheri_setbounds(ptr, sz);
+// Quick malloc implementation with mmap
+void* MALLOCCHERI(size_t sz)
+{
+   if (MallocCounter == 0) {
+       // If this is the first time 
+       // malloc is called then 
+       // create a single mmap 
+       // entry
+       INITAlloc();
+   }
 
-    return ptr;
+   MallocCounter += 1;
+   //  void *(*libc_malloc)(size_t) = dlsym(RTLD_NEXT, "malloc");
+   //  printf("malloc\n");
+   //  return libc_malloc(sz);
+
+   // void *ptr;
+   // // printf("malloc called \n ");
+
+   // // printf("malloc length %d \n", sz);
+
+   // int fd = open(FILENAME, O_RDWR, 0600);
+
+   //  if (fd < 0) {
+   //      perror("open");
+   //      exit(EXIT_FAILURE);
+   //  }
+
+   //  off_t offset = 0; // offset to seek to.
+
+   //  if (ftruncate(fd, sz) < 0) {
+   //      perror("ftruncate");
+   //      close(fd);
+   //      exit(EXIT_FAILURE);
+   //  }
+
+   // //  ptr = mmap(NULL, sz,
+   // //  PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON,-1,0);
+
+   //  ptr = mmap(NULL, sz,
+   //  PROT_READ|PROT_WRITE, MAP_SHARED,fd,0);
+
+   // // Added error handling
+   //  if(ptr == MAP_FAILED)
+   //  {
+   //      perror("mmap");
+   //      exit(EXIT_FAILURE);
+   //  }
+   
+   // //  printf(sz);
+
+   //  ptr = cheri_setbounds(ptr, sz);
+
+   //  return ptr;
+
+   return cheri_setbounds(ptr[sizeUsed], sz);
+
+
 //   sz = __builtin_align_up(sz, _Alignof(max_align_t));
 
 //   if (heap + sz > heap_start + HEAP_SIZE) return NULL;
@@ -196,5 +250,10 @@ void FREECHERI(void *ptr) {
 
    munmap(ptr, len);
 }
+
+
+// void* ClearAlloc(void) {
+   
+// }
 
 #endif // STDDEFINES_H_
