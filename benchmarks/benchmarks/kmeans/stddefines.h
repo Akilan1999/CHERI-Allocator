@@ -227,7 +227,11 @@ void* MALLOCCHERI(size_t sz)
 
    //  return ptr;
 
-   return cheri_setbounds(ptr[sizeUsed], sz);
+   void *CapPtr;
+
+   CapPtr = cheri_setbounds(ptr[sizeUsed], sz)
+
+   return CapPtr;
 
 
 //   sz = __builtin_align_up(sz, _Alignof(max_align_t));
