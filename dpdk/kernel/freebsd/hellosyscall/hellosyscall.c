@@ -107,9 +107,11 @@ struct hellomet_args{
 };
 
 static int
-hellomet(struct thread *td, struct hellomet_args *arg)
+hellomet(struct thread *td, void *arg)
 {
-    int a = arg->a;
+	struct hellomet_args *uap;
+    uap = (struct hellomet_args *)arg;
+    int a = uap->a;
 
     printf("hello secondish kernel %d  \n",a);
     return (0);
