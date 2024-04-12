@@ -51,23 +51,33 @@ static int
 hello(struct thread *td, void *arg)
 {    
 
+
+    // Calculate next power of 2 
+
+	unsigned long  value  =  1;
+    
+	// 2 refers to the size
+    while  ( value  <=  2) {
+      value  =  value  <<  1 ;
+    }
+
 	// To call contig alloc and free based on 
 	// hardcoded physical allocations and adding 
 	// doing array allocations and frees. 
 	int *addr;
 
-	int alignmentInt;
-	alignmentInt = nextPowerOf2(2);
-	unsigned long alignment = ( unsigned long ) alignmentInt ;
+	// int alignmentInt;
+	// // alignmentInt = nextPowerOf2(2);
+	// unsigned long alignment = ( unsigned long ) alignmentInt ;
 
     addr = contigmalloc(2, M_CONTIGMEM, M_ZERO,
-			0, BUS_SPACE_MAXADDR, alignment, 0);
+			0, BUS_SPACE_MAXADDR, value, 0);
 
 	addr[0] = 1;
 
     int *addr1;
 	addr1 = contigmalloc(2, M_CONTIGMEM, M_ZERO,
-			0, BUS_SPACE_MAXADDR, alignment, 0);
+			0, BUS_SPACE_MAXADDR, value, 0);
 
 	addr1[0] = 2;
 
