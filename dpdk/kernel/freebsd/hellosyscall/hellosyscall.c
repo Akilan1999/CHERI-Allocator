@@ -55,14 +55,18 @@ hello(struct thread *td, void *arg)
 	// hardcoded physical allocations and adding 
 	// doing array allocations and frees. 
 	int *addr;
+
+	int alignmentInt = nextPowerOf2(2);
+	unsigned long alignment = ( unsigned long ) alignmentInt ;
+
     addr = contigmalloc(2, M_CONTIGMEM, M_ZERO,
-			0, BUS_SPACE_MAXADDR, nextPowerOf2(2), 0);
+			0, BUS_SPACE_MAXADDR, alignment, 0);
 
 	addr[0] = 1;
 
     int *addr1;
 	addr1 = contigmalloc(2, M_CONTIGMEM, M_ZERO,
-			0, BUS_SPACE_MAXADDR, nextPowerOf2(2), 0);
+			0, BUS_SPACE_MAXADDR, alignment, 0);
 
 	addr1[0] = 2;
 
