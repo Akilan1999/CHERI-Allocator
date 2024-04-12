@@ -56,7 +56,9 @@ hello(struct thread *td, void *arg)
     // addr = contigmalloc(500, M_CONTIGMEM, M_ZERO,
 	// 		0, BUS_SPACE_MAXADDR, 500, 0);
 
-	printf("max address %p", BUS_SPACE_MAXADDR);
+	printf("max address %p \n", BUS_SPACE_MAXADDR);
+
+	printf("hello kernel 1\n");
 
 	printf("hello kernel\n");
 	return (0);
