@@ -96,15 +96,15 @@ hello(struct thread *td, void *arg)
 }
 
 // calculate next power of 2 
-int nextPowerOf2 (unsigned  int  x) {
-int  value  =  1;
+// int nextPowerOf2 (unsigned  int  x) {
+// int  value  =  1;
 
-while  ( value  <=  x) {
-value  =  value  <<  1 ;
-}
+// while  ( value  <=  x) {
+// value  =  value  <<  1 ;
+// }
 
-return  value;
-}
+// return  value;
+// }
 
 /*
  * The `sysent' for the new syscall
