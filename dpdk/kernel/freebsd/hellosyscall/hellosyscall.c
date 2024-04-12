@@ -56,7 +56,8 @@ hello(struct thread *td, void *arg)
 	// doing array allocations and frees. 
 	int *addr;
 
-	int alignmentInt = nextPowerOf2(2);
+	int alignmentInt;
+	alignmentInt = nextPowerOf2(2);
 	unsigned long alignment = ( unsigned long ) alignmentInt ;
 
     addr = contigmalloc(2, M_CONTIGMEM, M_ZERO,
