@@ -117,8 +117,8 @@ hello(struct thread *td, struct syscall_hello *arg)
  * The `sysent' for the new syscall
  */
 static struct sysent hello_sysent = {
-	1,
-	(sy_call_t*) hello
+    1,          
+    (sy_call_t*) hellomet            
 };
 
 /*
