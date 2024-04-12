@@ -56,13 +56,13 @@ hello(struct thread *td, void *arg)
 	// doing array allocations and frees. 
 	int *addr;
     addr = contigmalloc(2, M_CONTIGMEM, M_ZERO,
-			0, BUS_SPACE_MAXADDR, 4, 0);
+			0, BUS_SPACE_MAXADDR, nextPowerOf2(2), 0);
 
 	addr[0] = 1;
 
     int *addr1;
 	addr1 = contigmalloc(2, M_CONTIGMEM, M_ZERO,
-			0, BUS_SPACE_MAXADDR, 4, 0);
+			0, BUS_SPACE_MAXADDR, nextPowerOf2(2), 0);
 
 	addr1[0] = 2;
 
@@ -70,7 +70,6 @@ hello(struct thread *td, void *arg)
 	printf("address 0 %i \n", addr1[0]);
 
 	contigfree(addr,2, M_CONTIGMEM);
-
 	contigfree(addr1,2, M_CONTIGMEM);
 
 	printf("contigfree complete");
@@ -79,6 +78,18 @@ hello(struct thread *td, void *arg)
 
 	printf("hello kernel\n");
 	return (0);
+}
+
+// calculate next power of 2 
+int  
+nextPowerOf2 (unsigned  int  x) {
+int  value  =  1 ;
+
+while  ( value  <=  x) {
+value  =  value  <<  1 ;
+}
+
+return  value ;
 }
 
 /*
