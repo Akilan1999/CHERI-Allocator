@@ -34,13 +34,29 @@
 #include <sys/kernel.h>
 #include <sys/systm.h>
 
+#include <sys/malloc.h>
+#include <sys/types.h>
+
+
+
+MALLOC_DEFINE(M_CONTIGMEM, "contigmem", "contigmem(4) allocations");
+
 // define custom args.
 /*
  * The function for implementing the syscall.
  */
 static int
 hello(struct thread *td, void *arg)
-{
+{    
+
+	// To call contig alloc and free based on 
+	// hardcoded physical allocations and adding 
+	// doing array allocations and frees. 
+	// int addr;
+    // addr = contigmalloc(500, M_CONTIGMEM, M_ZERO,
+	// 		0, BUS_SPACE_MAXADDR, 500, 0);
+
+	printf(BUS_SPACE_MAXADDR);
 
 	printf("hello kernel\n");
 	return (0);
