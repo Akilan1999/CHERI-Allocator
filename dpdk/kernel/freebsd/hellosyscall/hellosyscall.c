@@ -59,7 +59,7 @@ hello(struct thread *td, void *arg)
 	struct syscall_hello *uap;
     uap = (struct hellomet_args *)arg;
 
-	unsigned long uap_size = arg->size;
+	unsigned long uap_size = uap->size;
 
 	printf("size %lu \n", uap_size);
 
