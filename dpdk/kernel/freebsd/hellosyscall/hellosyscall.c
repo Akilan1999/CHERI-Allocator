@@ -59,7 +59,7 @@ hello(struct thread *td, void *arg)
 			0, BUS_SPACE_MAXADDR, 500, 0);
 
 
-	addr[0] = 1
+	addr[0] = 1;
 
 	printf("address 0 %i \n", addr[0]);
 
