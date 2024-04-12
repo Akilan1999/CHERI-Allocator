@@ -58,10 +58,16 @@ hello(struct thread *td, void *arg)
     addr = contigmalloc(2, M_CONTIGMEM, M_ZERO,
 			0, BUS_SPACE_MAXADDR, 4, 0);
 
-
 	addr[0] = 1;
 
+    int *addr1;
+	addr1 = contigmalloc(2, M_CONTIGMEM, M_ZERO,
+			0, BUS_SPACE_MAXADDR, 4, 0);
+
+	addr1[0] = 2;
+
 	printf("address 0 %i \n", addr[0]);
+	printf("address 0 %i \n", addr1[0]);
 
 	contigfree(addr,2, M_CONTIGMEM);
 
