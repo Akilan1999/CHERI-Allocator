@@ -55,8 +55,8 @@ hello(struct thread *td, void *arg)
 	// hardcoded physical allocations and adding 
 	// doing array allocations and frees. 
 	int *addr;
-    addr = contigmalloc(500, M_CONTIGMEM, M_ZERO,
-			0, BUS_SPACE_MAXADDR, 500, 0);
+    addr = contigmalloc(2, M_CONTIGMEM, M_ZERO,
+			0, BUS_SPACE_MAXADDR, 4, 0);
 
 
 	addr[0] = 1;
