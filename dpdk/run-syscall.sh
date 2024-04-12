@@ -21,4 +21,4 @@ sudo cp hellosyscall.ko /boot/modules/
 sudo kldload /boot/modules/hellosyscall.ko
 
 # Show the dmesg to see the debug prints
-sudo dmesg
+# sudo dmesg
