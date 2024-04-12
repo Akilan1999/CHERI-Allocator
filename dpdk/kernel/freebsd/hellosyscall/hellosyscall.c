@@ -71,6 +71,8 @@ hello(struct thread *td, void *arg)
 
 	contigfree(addr,2, M_CONTIGMEM);
 
+	contigfree(addr1,2, M_CONTIGMEM);
+
 	printf("contigfree complete");
 
 	printf("hello kernel 1\n");
