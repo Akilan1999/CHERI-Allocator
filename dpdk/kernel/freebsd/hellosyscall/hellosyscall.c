@@ -56,6 +56,13 @@ static int
 hello(struct thread *td, void *arg)
 {    
 
+	struct syscall_hello *uap;
+    uap = (struct hellomet_args *)arg;
+
+	unsigned long uap = arg->size;
+
+	printf("size %lu \n", size);
+
 
     // Calculate next power of 2 
 
