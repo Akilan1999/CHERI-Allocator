@@ -61,7 +61,7 @@ hello(struct thread *td, void *arg)
       value  =  value  <<  1 ;
     }
 
-	printf("alignment %lu \n", value)
+	printf("alignment %lu \n", value);
 
 	// To call contig alloc and free based on 
 	// hardcoded physical allocations and adding 
