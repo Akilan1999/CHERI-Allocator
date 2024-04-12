@@ -54,11 +54,18 @@ hello(struct thread *td, void *arg)
 	// To call contig alloc and free based on 
 	// hardcoded physical allocations and adding 
 	// doing array allocations and frees. 
-	// int addr;
-    // addr = contigmalloc(500, M_CONTIGMEM, M_ZERO,
-	// 		0, BUS_SPACE_MAXADDR, 500, 0);
+	int addr;
+    addr = contigmalloc(500, M_CONTIGMEM, M_ZERO,
+			0, BUS_SPACE_MAXADDR, 500, 0);
 
-	printf("max address %lu \n", BUS_SPACE_MAXADDR);
+
+	addr[0] = 1
+
+	printf("address 0 %i \n", addr[0]);
+
+	contigfree(addr,500, M_CONTIGMEM);
+
+	printf("contigfree complete");
 
 	printf("hello kernel 1\n");
 
