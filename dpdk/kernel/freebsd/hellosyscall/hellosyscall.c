@@ -85,7 +85,7 @@ hello(struct thread *td, void *arg)
 }
 
 // calculate next power of 2 
-int  
+static int  
 nextPowerOf2 (unsigned  int  x) {
 int  value  =  1 ;
 
