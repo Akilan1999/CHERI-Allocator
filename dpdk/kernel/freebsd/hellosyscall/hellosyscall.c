@@ -102,6 +102,19 @@ hello(struct thread *td, struct syscall_hello *arg)
 	return (0);
 }
 
+struct hellomet_args{
+    int a;
+};
+
+static int
+hellomet(struct thread *td, struct hellomet_args *arg)
+{
+    int a = arg->a;
+
+    printf("hello secondish kernel %d  \n",a);
+    return (0);
+}
+
 // calculate next power of 2 
 // int nextPowerOf2 (unsigned  int  x) {
 // int  value  =  1;
@@ -118,7 +131,7 @@ hello(struct thread *td, struct syscall_hello *arg)
  */
 static struct sysent hello_sysent = {
     1,          
-    (sy_call_t*) hello            
+    (sy_call_t*) hellomet           
 };
 
 /*
