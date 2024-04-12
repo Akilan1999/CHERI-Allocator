@@ -86,15 +86,14 @@ hello(struct thread *td, void *arg)
 }
 
 // calculate next power of 2 
-static int  
-nextPowerOf2 (unsigned  int  x) {
-int  value  =  1 ;
+static int nextPowerOf2 (unsigned  int  x) {
+int  value  =  1;
 
 while  ( value  <=  x) {
 value  =  value  <<  1 ;
 }
 
-return  value ;
+return  value;
 }
 
 /*
