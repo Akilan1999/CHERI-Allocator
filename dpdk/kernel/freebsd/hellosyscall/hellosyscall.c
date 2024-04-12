@@ -53,7 +53,7 @@ struct syscall_hello {
  * The function for implementing the syscall.
  */
 static int
-hello(struct thread *td, struct void *arg)
+hello(struct thread *td, void *arg)
 {    
 
 
