@@ -63,7 +63,7 @@ hello(struct thread *td, void *arg)
 
 	printf("address 0 %i \n", addr[0]);
 
-	contigfree(addr,500, M_CONTIGMEM);
+	contigfree(addr,2, M_CONTIGMEM);
 
 	printf("contigfree complete");
 
