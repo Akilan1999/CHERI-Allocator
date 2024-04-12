@@ -37,6 +37,8 @@
 #include <sys/malloc.h>
 #include <sys/types.h>
 
+#include <machine/bus.h>
+
 
 
 MALLOC_DEFINE(M_CONTIGMEM, "contigmem", "contigmem(4) allocations");
