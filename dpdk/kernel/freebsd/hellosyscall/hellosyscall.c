@@ -118,7 +118,7 @@ hello(struct thread *td, struct syscall_hello *arg)
  */
 static struct sysent hello_sysent = {
 	.sy_narg = 1,
-	.sy_call = hello
+	.sy_systrace_args_func = hello
 };
 
 /*
