@@ -44,7 +44,7 @@
 MALLOC_DEFINE(M_CONTIGMEM, "contigmem", "contigmem(4) allocations");
 
 struct syscall_hello {
-	unsigned long             sz;
+	unsigned long             size;
 };
 
 
@@ -53,7 +53,7 @@ struct syscall_hello {
  * The function for implementing the syscall.
  */
 static int
-hello(struct thread *td, struct syscall_hello *arg)
+hello(struct thread *td, struct void *arg)
 {    
 
 
@@ -102,21 +102,6 @@ hello(struct thread *td, struct syscall_hello *arg)
 	return (0);
 }
 
-struct hellomet_args{
-    int a;
-};
-
-static int
-hellomet(struct thread *td, void *arg)
-{
-	struct hellomet_args *uap;
-    uap = (struct hellomet_args *)arg;
-    int a = uap->a;
-
-    printf("hello secondish kernel %d  \n",a);
-    return (0);
-}
-
 // calculate next power of 2 
 // int nextPowerOf2 (unsigned  int  x) {
 // int  value  =  1;
@@ -132,8 +117,8 @@ hellomet(struct thread *td, void *arg)
  * The `sysent' for the new syscall
  */
 static struct sysent hello_sysent = {
-    1,          
-    hellomet           
+	.sy_narg = 0,
+	.sy_call = hello
 };
 
 /*
