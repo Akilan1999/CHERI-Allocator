@@ -43,25 +43,30 @@
 
 MALLOC_DEFINE(M_CONTIGMEM, "contigmem", "contigmem(4) allocations");
 
+struct syscall_hello {
+	unsigned long             size;
+};
+
+
 // define custom args.
 /*
  * The function for implementing the syscall.
  */
 static int
-hello(struct thread *td, void *arg)
+hello(struct thread *td, syscall_hello *arg)
 {    
 
 
     // Calculate next power of 2 
 
-	unsigned long  value  =  1;
+	unsigned long  alignment  =  1;
     
 	// 2 refers to the size
-    while  ( value  <=  2) {
-      value  =  value  <<  1 ;
+    while  ( alignment  <=  2) {
+      alignment  =  alignment  <<  1 ;
     }
 
-	printf("alignment %lu \n", value);
+	printf("alignment %lu \n", alignment);
 
 	// To call contig alloc and free based on 
 	// hardcoded physical allocations and adding 
@@ -73,13 +78,13 @@ hello(struct thread *td, void *arg)
 	// unsigned long alignment = ( unsigned long ) alignmentInt ;
 
     addr = contigmalloc(2, M_CONTIGMEM, M_ZERO,
-			0, BUS_SPACE_MAXADDR, value, 0);
+			0, BUS_SPACE_MAXADDR, alignment, 0);
 
 	addr[0] = 1;
 
     int *addr1;
 	addr1 = contigmalloc(2, M_CONTIGMEM, M_ZERO,
-			0, BUS_SPACE_MAXADDR, value, 0);
+			0, BUS_SPACE_MAXADDR, alignment, 0);
 
 	addr1[0] = 2;
 
