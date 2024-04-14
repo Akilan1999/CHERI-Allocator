@@ -89,6 +89,9 @@ Alloc(struct thread *td, void *arg)
     addr = contigmalloc(uap_size, M_CONTIGMEM, M_ZERO,
 			0, BUS_SPACE_MAXADDR, alignment, 0);
 	return (0);
+    
+	uap->addr = addr;
+
 	} 
 
     contigfree(uap->addr,uap->size, M_CONTIGMEM);
