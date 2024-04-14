@@ -13,10 +13,10 @@ struct syscall_alloc {
 int
 main(int argc, char *argv[])
 {
-	    struct syscall_alloc *st;
-	    st->size = 7;
+	    struct syscall_alloc st;
+	    st.size = 7;
 	    //st.addr = NULL;
-        st->malloc = 1;
+        st.malloc = 1;
 
         printf("Malloc called \n");
 
