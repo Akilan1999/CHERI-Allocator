@@ -17,10 +17,15 @@ main(int argc, char *argv[])
 	    st.size = 7;
 	    //st.addr = NULL;
         st.malloc = 1;
+        
 
-        // printf("Malloc called \n");
+        struct syscall_alloc *ref = &st;
+
+        printf("Malloc called \n");
 
 	    syscall(210,st);
+
+        printf("size %lu \n", ref->size);
 
 	    // struct syscall_alloc st1;
 	    //st1.size = 2;
