@@ -86,10 +86,10 @@ Alloc(struct thread *td, void *arg)
 	// // alignmentInt = nextPowerOf2(2);
 	// unsigned long alignment = ( unsigned long ) alignmentInt ;
 
-    addr = contigmalloc(uap_size, M_CONTIGMEM, M_ZERO,
-			0, BUS_SPACE_MAXADDR, alignment, 0);
+    // addr = contigmalloc(uap_size, M_CONTIGMEM, M_ZERO,
+	// 		0, BUS_SPACE_MAXADDR, alignment, 0);
 
-	uap->addr = &addr;
+	uap->addr = addr;
 
 	printf("Malloc complete");
 
