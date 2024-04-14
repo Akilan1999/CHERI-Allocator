@@ -285,4 +285,4 @@ load(struct module *module, int cmd, void *arg)
 }
 
 SYSCALL_MODULE(syscall, &Mallocoffset, &Malloc_sysent, load, NULL);
-SYSCALL_MODULE(syscall, &Freeoffset, &Free_sysent, load, NULL);
+// SYSCALL_MODULE(syscall, &Freeoffset, &Free_sysent, load, NULL);
