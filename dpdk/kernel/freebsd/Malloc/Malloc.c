@@ -64,9 +64,9 @@ Alloc(struct thread *td, void *arg)
 	unsigned long uap_size = uap->size;
 	int malloc = uap->malloc;
 
-	printf("size %lu \n", uap_size);
+	printf("size %lu \n", *uap_size);
 
-	printf("malloc tried %d \n", malloc);
+	printf("malloc tried %d \n",*malloc);
 
 	if(uap->malloc == 1) {
 		 // Calculate next power of 2 
