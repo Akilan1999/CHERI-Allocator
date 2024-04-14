@@ -60,7 +60,7 @@ Alloc(struct thread *td, void *arg)
 {    
 
 	struct syscall_alloc *uap;
-    uap = (struct syscall_alloc *)*arg;
+    uap = (struct syscall_alloc *)arg;
 
 	unsigned long uap_size = uap->size;
 	int malloc = uap->malloc;
@@ -95,11 +95,13 @@ Alloc(struct thread *td, void *arg)
     // addr = contigmalloc(uap_size, M_CONTIGMEM, M_ZERO,
 	// 		0, BUS_SPACE_MAXADDR, alignment, 0);
 
-	// uap->addr = addr;
+	//uap->addr = addr;
 
 	uap->size=4;
 
-	arg = uap;
+	// td->td_retval[0] = uap;
+
+	*arg = uap;
 
 	printf("Malloc complete");
 
