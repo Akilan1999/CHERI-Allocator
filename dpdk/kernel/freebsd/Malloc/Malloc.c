@@ -62,11 +62,11 @@ Alloc(struct thread *td, void *arg)
     uap = (struct syscall_alloc *)arg;
 
 	unsigned long uap_size = uap->size;
-	int malloc = uap->Malloc
+	int malloc = uap->Malloc;
 
 	printf("size %lu \n", uap_size);
 
-	printf("malloc %lu \n", uap_size);
+	printf("malloc %d \n", malloc);
 
 	if(uap->Malloc == 1) {
 		 // Calculate next power of 2 
