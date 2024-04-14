@@ -41,7 +41,7 @@
 
 
 
-MALLOC_DEFINE(M_CONTIGMEM, "contigmem", "contigmem(4) allocations");
+MALLOC_DEFINE(M_CONTIGMEM, "Free", "Free(4) allocations");
 
 struct syscall_hello {
 	unsigned long             size;
