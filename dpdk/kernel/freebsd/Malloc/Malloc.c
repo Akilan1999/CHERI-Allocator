@@ -104,65 +104,65 @@ Alloc(struct thread *td, void *arg)
 	return (0);
 }
 
-// syscall for allocating contigous memory.
-static int
-Free(struct thread *td, void *arg)
-{    
+// // syscall for allocating contigous memory.
+// static int
+// Free(struct thread *td, void *arg)
+// {    
 
-	struct syscall_alloc *uap;
-    uap = (struct syscall_alloc *)arg;
+// 	struct syscall_alloc *uap;
+//     uap = (struct syscall_alloc *)arg;
 
-	unsigned long uap_size = uap->size;
+// 	unsigned long uap_size = uap->size;
 
-	printf("free size %lu \n", uap_size);
+// 	printf("free size %lu \n", uap_size);
 
 
-    // // Calculate next power of 2 
+//     // // Calculate next power of 2 
 
-	// unsigned long  alignment  =  1;
+// 	// unsigned long  alignment  =  1;
     
-	// // 2 refers to the size
-    // while  ( alignment  <=  uap_size) {
-    //   alignment  =  alignment  <<  1 ;
-    // }
+// 	// // 2 refers to the size
+//     // while  ( alignment  <=  uap_size) {
+//     //   alignment  =  alignment  <<  1 ;
+//     // }
 
-	// printf("alignment %lu \n", alignment);
+// 	// printf("alignment %lu \n", alignment);
 
-	// // To call contig alloc and free based on 
-	// // hardcoded physical allocations and adding 
-	// // doing array allocations and frees. 
-	// void *addr;
+// 	// // To call contig alloc and free based on 
+// 	// // hardcoded physical allocations and adding 
+// 	// // doing array allocations and frees. 
+// 	// void *addr;
 
-	// int alignmentInt;
-	// // alignmentInt = nextPowerOf2(2);
-	// unsigned long alignment = ( unsigned long ) alignmentInt ;
+// 	// int alignmentInt;
+// 	// // alignmentInt = nextPowerOf2(2);
+// 	// unsigned long alignment = ( unsigned long ) alignmentInt ;
 
-	contigfree(uap->addr,uap->size, M_CONTIGMEM);
+// 	contigfree(uap->addr,uap->size, M_CONTIGMEM);
 
-    // addr = contigmalloc(uap_size, M_CONTIGMEM, M_ZERO,
-	// 		0, BUS_SPACE_MAXADDR, alignment, 0);
+//     // addr = contigmalloc(uap_size, M_CONTIGMEM, M_ZERO,
+// 	// 		0, BUS_SPACE_MAXADDR, alignment, 0);
 
-    // int *addr1;
-	// addr1 = contigmalloc(2, M_CONTIGMEM, M_ZERO,
-	// 		0, BUS_SPACE_MAXADDR, alignment, 0);
+//     // int *addr1;
+// 	// addr1 = contigmalloc(2, M_CONTIGMEM, M_ZERO,
+// 	// 		0, BUS_SPACE_MAXADDR, alignment, 0);
 
-	// uap->addr = addr;
+// 	// uap->addr = addr;
 
-	// addr1[0] = 2;
+// 	// addr1[0] = 2;
 
-	// printf("address 0 %i \n", addr[0]);
-	// printf("address 0 %i \n", addr1[0]);
+// 	// printf("address 0 %i \n", addr[0]);
+// 	// printf("address 0 %i \n", addr1[0]);
 
-	// contigfree(addr,2, M_CONTIGMEM);
-	// contigfree(addr1,2, M_CONTIGMEM);
+// 	// contigfree(addr,2, M_CONTIGMEM);
+// 	// contigfree(addr1,2, M_CONTIGMEM);
 
-	// printf("contigfree complete");
+// 	// printf("contigfree complete");
 
-	// printf("hello kernel 1\n");
+// 	// printf("hello kernel 1\n");
 
-	// printf("hello kernel\n");
-	return (0);
-}
+// 	// printf("hello kernel\n");
+// 	return (0);
+// }
 // define custom args.
 /*
  * The function for implementing the syscall.
