@@ -49,7 +49,7 @@ struct syscall_hello {
 
 struct syscall_alloc {
 	unsigned long             size;
-	int                       Malloc; 
+	int                       malloc; 
 	// void                      *addr;
 };
 
@@ -62,7 +62,7 @@ Alloc(struct thread *td, void *arg)
     uap = (struct syscall_alloc *)arg;
 
 	unsigned long uap_size = uap->size;
-	int malloc = uap->Malloc;
+	int malloc = uap->malloc;
 
 	printf("size %lu \n", uap_size);
 
