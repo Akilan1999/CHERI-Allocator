@@ -68,7 +68,7 @@ Alloc(struct thread *td, void *arg)
 
 	printf("malloc %d \n", malloc);
 
-	if(uap->Malloc == 1) {
+	if(uap->malloc == 1) {
 		 // Calculate next power of 2 
 
 	printf("Malloc called");
