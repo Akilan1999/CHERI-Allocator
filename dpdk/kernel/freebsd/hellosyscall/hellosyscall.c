@@ -249,10 +249,10 @@ static struct sysent Malloc_sysent = {
 	.sy_call = Alloc
 };
 
-static struct sysent Free_sysent = {
-	.sy_narg = 0,
-	.sy_call = Free
-};
+// static struct sysent Free_sysent = {
+// 	.sy_narg = 0,
+// 	.sy_call = Free
+// };
 
 /*
  * The offset in sysent where the syscall is allocated.
