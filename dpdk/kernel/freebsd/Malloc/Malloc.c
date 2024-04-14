@@ -83,7 +83,7 @@ Alloc(struct thread *td, void *arg)
 
 	uap->size = 3;
 
-	*arg = &uap;
+	*arg = (void)&uap;
 
 	printf("alignment %lu \n", alignment);
 
