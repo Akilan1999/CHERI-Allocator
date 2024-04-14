@@ -18,7 +18,7 @@ main(int argc, char *argv[])
 	    //st.addr = NULL;
         st.Malloc = 1;
 
-        printf("Malloc  called");
+        printf("Malloc called");
 
 	    syscall(210,st);
 

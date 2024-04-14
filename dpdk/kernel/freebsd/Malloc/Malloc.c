@@ -68,6 +68,8 @@ Alloc(struct thread *td, void *arg)
 	if(uap->Malloc == 1) {
 		 // Calculate next power of 2 
 
+	printf("Malloc called");
+
 	unsigned long  alignment  =  1;
     
 	// 2 refers to the size
@@ -95,13 +97,17 @@ Alloc(struct thread *td, void *arg)
 
 	return (0); 
 
-	} 
+	} else {
 
-	printf("Free called complete");
+		printf("Free called complete");
 
-    // contigfree(uap->addr,uap->size, M_CONTIGMEM);
+        // contigfree(uap->addr,uap->size, M_CONTIGMEM);
 
-	printf("Free complete");
+	    printf("Free complete");
+	}
+
+
+
 
 	return (0);
 }
