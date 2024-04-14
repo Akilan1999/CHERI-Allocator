@@ -41,7 +41,7 @@
 
 
 
-MALLOC_DEFINE(M_CONTIGMEM, "Free", "Free(4) allocations");
+MALLOC_DEFINE(M_FREE, "Free", "Free(4) allocations");
 
 struct syscall_hello {
 	unsigned long             size;
@@ -143,7 +143,7 @@ Free(struct thread *td, void *arg)
 	// // alignmentInt = nextPowerOf2(2);
 	// unsigned long alignment = ( unsigned long ) alignmentInt ;
 
-	contigfree(uap->addr,uap->size, M_CONTIGMEM);
+	contigfree(uap->addr,uap->size, M_FREE);
 
     // addr = contigmalloc(uap_size, M_CONTIGMEM, M_ZERO,
 	// 		0, BUS_SPACE_MAXADDR, alignment, 0);
