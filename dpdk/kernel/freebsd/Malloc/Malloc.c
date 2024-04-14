@@ -97,7 +97,7 @@ Alloc(struct thread *td, void *arg)
 
 	} 
 
-    contigfree(uap->addr,uap->size, M_CONTIGMEM);
+    // contigfree(uap->addr,uap->size, M_CONTIGMEM);
 
 	printf("Free complete");
 
