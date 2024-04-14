@@ -50,7 +50,7 @@ MALLOC_DEFINE(M_CONTIGMEM, "contigmem", "contigmem(4) allocations");
 struct syscall_alloc {
 	unsigned long             size;
 	int                       malloc; 
-	int                       newSize;
+	int                       *newSize;
 	void                      *addr;
 };
 
@@ -98,6 +98,8 @@ Alloc(struct thread *td, void *arg)
 	// uap->addr = addr;
 
 	uap->size=4;
+
+	arg = uap;
 
 	printf("Malloc complete");
 
