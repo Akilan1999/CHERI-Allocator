@@ -66,12 +66,12 @@ Alloc(struct thread *td, void *arg)
 
 	printf("size %lu \n", uap_size);
 
-	printf("malloc %d \n", malloc);
+	printf("malloc tried %d \n", malloc);
 
 	if(uap->malloc == 1) {
 		 // Calculate next power of 2 
 
-	printf("Malloc called");
+	printf("Malloc called \n");
 
 	unsigned long  alignment  =  1;
     
