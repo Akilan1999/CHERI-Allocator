@@ -23,7 +23,7 @@ main(int argc, char *argv[])
 
         printf("Malloc called \n");
 
-	    syscall(210,st);
+	    syscall(210,&st);
 
         printf("size %lu \n", ref->size);
 
