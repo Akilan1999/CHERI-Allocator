@@ -50,6 +50,7 @@ struct syscall_hello {
 struct syscall_alloc {
 	unsigned long             size;
     void                      *addr;
+	int                       Malloc; 
 };
 
 // syscall for allocating contigous memory.
@@ -64,8 +65,8 @@ Alloc(struct thread *td, void *arg)
 
 	printf("size %lu \n", uap_size);
 
-
-    // Calculate next power of 2 
+	if(uap->Malloc == 1) {
+		 // Calculate next power of 2 
 
 	unsigned long  alignment  =  1;
     
@@ -87,26 +88,11 @@ Alloc(struct thread *td, void *arg)
 
     addr = contigmalloc(uap_size, M_CONTIGMEM, M_ZERO,
 			0, BUS_SPACE_MAXADDR, alignment, 0);
+	return (0);
+	} 
 
-    // int *addr1;
-	// addr1 = contigmalloc(2, M_CONTIGMEM, M_ZERO,
-	// 		0, BUS_SPACE_MAXADDR, alignment, 0);
+    contigfree(uap->addr,uap->size, M_CONTIGMEM);
 
-	uap->addr = addr;
-
-	// addr1[0] = 2;
-
-	// printf("address 0 %i \n", addr[0]);
-	// printf("address 0 %i \n", addr1[0]);
-
-	// contigfree(addr,2, M_CONTIGMEM);
-	// contigfree(addr1,2, M_CONTIGMEM);
-
-	// printf("contigfree complete");
-
-	// printf("hello kernel 1\n");
-
-	// printf("hello kernel\n");
 	return (0);
 }
 
