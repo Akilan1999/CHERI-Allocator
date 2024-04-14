@@ -62,7 +62,7 @@ Alloc(struct thread *td, void *arg)
     uap = (struct syscall_alloc *)arg;
 
 	unsigned long uap_size = uap->size;
-	int malloc = uap->malloc;
+	// int malloc = uap->malloc;
 
 	printf("size %lu \n", uap->size);
 
