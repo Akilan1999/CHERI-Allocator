@@ -23,9 +23,19 @@ main(int argc, char *argv[])
 
         printf("Malloc called \n");
 
-	    syscall(210,&st);
+
+        pid_t tid;
+	    tid = syscall(210,st);
+
+         printf("proc %d \n", tid);
+
+        struct proc * process = pfind(tid);
+
+        
 
         printf("size %lu \n", st.size);
+
+
 
 	    // struct syscall_alloc st1;
 	    //st1.size = 2;
