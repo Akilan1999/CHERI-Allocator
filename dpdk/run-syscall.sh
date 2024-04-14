@@ -25,7 +25,7 @@ cd /home/akilan/CHERI-Allocator/dpdk
 
 cc Test-syscall.c -o syscall.out
 
-sudo syscall.out
+sudo ./syscall.out
 
 
 # Show the dmesg to see the debug prints
