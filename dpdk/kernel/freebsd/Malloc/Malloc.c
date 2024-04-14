@@ -56,7 +56,7 @@ struct syscall_alloc {
 
 // syscall for allocating contigous memory.
 static int
-Alloc(struct thread *td, void *arg&)
+Alloc(struct thread *td, void*& arg)
 {    
 
 	struct syscall_alloc *uap;
