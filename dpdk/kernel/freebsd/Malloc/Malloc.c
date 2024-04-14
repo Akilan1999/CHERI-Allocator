@@ -60,7 +60,7 @@ Alloc(struct thread *td, void *arg)
 {    
 
 	struct syscall_alloc *uap;
-    uap = (struct syscall_alloc *)*arg;
+    uap = (struct syscall_alloc *)arg;
 
 	unsigned long uap_size = uap->size;
 	int malloc = uap->malloc;
@@ -97,7 +97,7 @@ Alloc(struct thread *td, void *arg)
 
 	//uap->addr = addr;
 
-	uap->size=4;
+	uap->newSize=4;
 
 	// td->td_retval[0] = uap;
 

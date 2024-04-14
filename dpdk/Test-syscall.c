@@ -6,7 +6,8 @@
 struct syscall_alloc {
 	unsigned long             size;
     int                       malloc;
-    // void                      *addr;
+    int                       *newSize; 
+    void                      *addr;
 };
 
 
@@ -20,9 +21,9 @@ main(int argc, char *argv[])
 
         printf("Malloc called \n");
 
-	    syscall(210,&st);
+	    syscall(210,st);
 
-        printf("size %lu \n", st.size);
+        printf("size %lu \n", st.newSize);
 
 	    // struct syscall_alloc st1;
 	    //st1.size = 2;
