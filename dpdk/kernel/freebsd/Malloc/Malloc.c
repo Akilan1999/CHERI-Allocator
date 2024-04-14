@@ -99,11 +99,11 @@ Alloc(struct thread *td, void *arg)
 
 	} else {
 
-		printf("Free called complete");
+		// printf("Free called complete");
 
         // contigfree(uap->addr,uap->size, M_CONTIGMEM);
 
-	    printf("Free complete");
+	    // printf("Free complete");
 	}
 
 
