@@ -2,7 +2,7 @@
 # Copyright(c) 2010-2014 Intel Corporation
 #
 
-KMOD=	hellosyscall
-SRCS=	hellosyscall.c device_if.h bus_if.h
+KMOD=	Malloc
+SRCS=	Malloc.c device_if.h bus_if.h
 
 .include <bsd.kmod.mk>
