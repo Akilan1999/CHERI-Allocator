@@ -101,7 +101,7 @@ Alloc(struct thread *td, void *arg)
 
 	// td->td_retval[0] = uap;
 
-	(struct syscall_alloc *)arg = uap;
+	arg = uap;
 
 	printf("Malloc complete");
 
