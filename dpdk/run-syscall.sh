@@ -9,16 +9,19 @@ rm -rf /home/akilan/CHERI-Allocator/dpdk/build-hybrid/kernel/freebsd
 ninja -j4 -C build-hybrid
 
 # remove previous contig kernel module running
-sudo kldunload hellosyscall.ko
+sudo kldunload Malloc.ko
+sudo kldunload Free.ko
 
 # entering directory of the contig build .ko files
 cd /home/akilan/CHERI-Allocator/dpdk/build-hybrid/kernel/freebsd
 
 # Copyping files to /boot/modules
-sudo cp hellosyscall.ko /boot/modules/
+sudo cp Malloc.ko /boot/modules/
+sudo cp Free.ko /boot/modules/
 
 # Run the new syscall kernel module
-sudo kldload /boot/modules/hellosyscall.ko
+sudo kldload /boot/modules/Malloc.ko
+sudo kldload /boot/modules/Free.ko
 
 # Show the dmesg to see the debug prints
 # sudo dmesg

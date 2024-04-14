@@ -47,76 +47,76 @@ struct syscall_hello {
 	unsigned long             size;
 };
 
-struct syscall_alloc {
+struct syscall_free {
 	unsigned long             size;
     void                      *addr;
 };
 
 // syscall for allocating contigous memory.
-static int
-Alloc(struct thread *td, void *arg)
-{    
+// static int
+// Alloc(struct thread *td, void *arg)
+// {    
 
-	struct syscall_alloc *uap;
-    uap = (struct syscall_alloc *)arg;
+// 	struct syscall_alloc *uap;
+//     uap = (struct syscall_alloc *)arg;
 
-	unsigned long uap_size = uap->size;
+// 	unsigned long uap_size = uap->size;
 
-	printf("size %lu \n", uap_size);
+// 	printf("size %lu \n", uap_size);
 
 
-    // Calculate next power of 2 
+//     // Calculate next power of 2 
 
-	unsigned long  alignment  =  1;
+// 	unsigned long  alignment  =  1;
     
-	// 2 refers to the size
-    while  ( alignment  <=  uap_size) {
-      alignment  =  alignment  <<  1 ;
-    }
+// 	// 2 refers to the size
+//     while  ( alignment  <=  uap_size) {
+//       alignment  =  alignment  <<  1 ;
+//     }
 
-	printf("alignment %lu \n", alignment);
+// 	printf("alignment %lu \n", alignment);
 
-	// To call contig alloc and free based on 
-	// hardcoded physical allocations and adding 
-	// doing array allocations and frees. 
-	void *addr;
+// 	// To call contig alloc and free based on 
+// 	// hardcoded physical allocations and adding 
+// 	// doing array allocations and frees. 
+// 	void *addr;
 
-	// int alignmentInt;
-	// // alignmentInt = nextPowerOf2(2);
-	// unsigned long alignment = ( unsigned long ) alignmentInt ;
+// 	// int alignmentInt;
+// 	// // alignmentInt = nextPowerOf2(2);
+// 	// unsigned long alignment = ( unsigned long ) alignmentInt ;
 
-    addr = contigmalloc(uap_size, M_CONTIGMEM, M_ZERO,
-			0, BUS_SPACE_MAXADDR, alignment, 0);
+//     addr = contigmalloc(uap_size, M_CONTIGMEM, M_ZERO,
+// 			0, BUS_SPACE_MAXADDR, alignment, 0);
 
-    // int *addr1;
-	// addr1 = contigmalloc(2, M_CONTIGMEM, M_ZERO,
-	// 		0, BUS_SPACE_MAXADDR, alignment, 0);
+//     // int *addr1;
+// 	// addr1 = contigmalloc(2, M_CONTIGMEM, M_ZERO,
+// 	// 		0, BUS_SPACE_MAXADDR, alignment, 0);
 
-	uap->addr = addr;
+// 	uap->addr = addr;
 
-	// addr1[0] = 2;
+// 	// addr1[0] = 2;
 
-	// printf("address 0 %i \n", addr[0]);
-	// printf("address 0 %i \n", addr1[0]);
+// 	// printf("address 0 %i \n", addr[0]);
+// 	// printf("address 0 %i \n", addr1[0]);
 
-	// contigfree(addr,2, M_CONTIGMEM);
-	// contigfree(addr1,2, M_CONTIGMEM);
+// 	// contigfree(addr,2, M_CONTIGMEM);
+// 	// contigfree(addr1,2, M_CONTIGMEM);
 
-	// printf("contigfree complete");
+// 	// printf("contigfree complete");
 
-	// printf("hello kernel 1\n");
+// 	// printf("hello kernel 1\n");
 
-	// printf("hello kernel\n");
-	return (0);
-}
+// 	// printf("hello kernel\n");
+// 	return (0);
+// }
 
 // syscall for allocating contigous memory.
 static int
 Free(struct thread *td, void *arg)
 {    
 
-	struct syscall_alloc *uap;
-    uap = (struct syscall_alloc *)arg;
+	struct syscall_free *uap;
+    uap = (struct syscall_free *)arg;
 
 	unsigned long uap_size = uap->size;
 
@@ -244,20 +244,20 @@ Free(struct thread *td, void *arg)
 /*
  * The `sysent' for the new syscall
  */
-static struct sysent Malloc_sysent = {
-	.sy_narg = 0,
-	.sy_call = Alloc
-};
-
-// static struct sysent Free_sysent = {
+// static struct sysent Malloc_sysent = {
 // 	.sy_narg = 0,
-// 	.sy_call = Free
+// 	.sy_call = Alloc
 // };
+
+static struct sysent Free_sysent = {
+	.sy_narg = 0,
+	.sy_call = Free
+};
 
 /*
  * The offset in sysent where the syscall is allocated.
  */
-static int Mallocoffset = NO_SYSCALL;
+// static int Mallocoffset = NO_SYSCALL;
 static int Freeoffset = NO_SYSCALL;
 
 /*
@@ -270,11 +270,11 @@ load(struct module *module, int cmd, void *arg)
 
 	switch (cmd) {
 	case MOD_LOAD :
-		printf("Malloc syscall loaded at %d\n", Mallocoffset);
+		// printf("Malloc syscall loaded at %d\n", Mallocoffset);
 		printf("Free syscall loaded at %d\n", Freeoffset);
 		break;
 	case MOD_UNLOAD :
-		printf("Malloc syscall unloaded from %d\n", Mallocoffset);
+		// printf("Malloc syscall unloaded from %d\n", Mallocoffset);
 		printf("Free syscall unloaded from %d\n", Freeoffset);
 		break;
 	default :
@@ -284,5 +284,5 @@ load(struct module *module, int cmd, void *arg)
 	return (error);
 }
 
-SYSCALL_MODULE(syscall, &Mallocoffset, &Malloc_sysent, load, NULL);
-// SYSCALL_MODULE(syscall, &Freeoffset, &Free_sysent, load, NULL);
+//SYSCALL_MODULE(syscall, &Mallocoffset, &Malloc_sysent, load, NULL);
+SYSCALL_MODULE(syscall, &Freeoffset, &Free_sysent, load, NULL);
