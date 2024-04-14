@@ -50,7 +50,7 @@ struct syscall_hello {
 struct syscall_alloc {
 	unsigned long             size;
 	int                       Malloc; 
-	void                      *addr;
+	// void                      *addr;
 };
 
 // syscall for allocating contigous memory.

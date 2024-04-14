@@ -6,7 +6,7 @@
 struct syscall_alloc {
 	unsigned long             size;
     int                       Malloc;
-    void                      *addr;
+    // void                      *addr;
 };
 
 
