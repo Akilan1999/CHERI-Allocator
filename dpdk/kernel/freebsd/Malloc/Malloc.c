@@ -49,8 +49,8 @@ struct syscall_hello {
 
 struct syscall_alloc {
 	unsigned long             size;
-    void                      *addr;
 	int                       Malloc; 
+	void                      *addr;
 };
 
 // syscall for allocating contigous memory.
@@ -62,8 +62,11 @@ Alloc(struct thread *td, void *arg)
     uap = (struct syscall_alloc *)arg;
 
 	unsigned long uap_size = uap->size;
+	int malloc = uap->Malloc
 
 	printf("size %lu \n", uap_size);
+
+	printf("malloc %lu \n", uap_size);
 
 	if(uap->Malloc == 1) {
 		 // Calculate next power of 2 
