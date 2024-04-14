@@ -47,17 +47,18 @@ struct syscall_hello {
 	unsigned long             size;
 };
 
+struct syscall_alloc {
+	unsigned long             size;
+    void                      *addr;
+};
 
-// define custom args.
-/*
- * The function for implementing the syscall.
- */
+// syscall for allocating contigous memory.
 static int
-hello(struct thread *td, void *arg)
+Alloc(struct thread *td, void *arg)
 {    
 
-	struct syscall_hello *uap;
-    uap = (struct syscall_hello *)arg;
+	struct syscall_alloc *uap;
+    uap = (struct syscall_alloc *)arg;
 
 	unsigned long uap_size = uap->size;
 
@@ -69,7 +70,7 @@ hello(struct thread *td, void *arg)
 	unsigned long  alignment  =  1;
     
 	// 2 refers to the size
-    while  ( alignment  <=  2) {
+    while  ( alignment  <=  uap_size) {
       alignment  =  alignment  <<  1 ;
     }
 
@@ -78,36 +79,156 @@ hello(struct thread *td, void *arg)
 	// To call contig alloc and free based on 
 	// hardcoded physical allocations and adding 
 	// doing array allocations and frees. 
-	int *addr;
+	void *addr;
 
 	// int alignmentInt;
 	// // alignmentInt = nextPowerOf2(2);
 	// unsigned long alignment = ( unsigned long ) alignmentInt ;
 
-    addr = contigmalloc(2, M_CONTIGMEM, M_ZERO,
+    addr = contigmalloc(uap_size, M_CONTIGMEM, M_ZERO,
 			0, BUS_SPACE_MAXADDR, alignment, 0);
 
-	addr[0] = 1;
+    // int *addr1;
+	// addr1 = contigmalloc(2, M_CONTIGMEM, M_ZERO,
+	// 		0, BUS_SPACE_MAXADDR, alignment, 0);
 
-    int *addr1;
-	addr1 = contigmalloc(2, M_CONTIGMEM, M_ZERO,
-			0, BUS_SPACE_MAXADDR, alignment, 0);
+	uap->addr = addr;
 
-	addr1[0] = 2;
+	// addr1[0] = 2;
 
-	printf("address 0 %i \n", addr[0]);
-	printf("address 0 %i \n", addr1[0]);
+	// printf("address 0 %i \n", addr[0]);
+	// printf("address 0 %i \n", addr1[0]);
 
-	contigfree(addr,2, M_CONTIGMEM);
-	contigfree(addr1,2, M_CONTIGMEM);
+	// contigfree(addr,2, M_CONTIGMEM);
+	// contigfree(addr1,2, M_CONTIGMEM);
 
-	printf("contigfree complete");
+	// printf("contigfree complete");
 
-	printf("hello kernel 1\n");
+	// printf("hello kernel 1\n");
 
-	printf("hello kernel\n");
+	// printf("hello kernel\n");
 	return (0);
 }
+
+// syscall for allocating contigous memory.
+static int
+Free(struct thread *td, void *arg)
+{    
+
+	struct syscall_alloc *uap;
+    uap = (struct syscall_alloc *)arg;
+
+	unsigned long uap_size = uap->size;
+
+	printf("free size %lu \n", uap_size);
+
+
+    // // Calculate next power of 2 
+
+	// unsigned long  alignment  =  1;
+    
+	// // 2 refers to the size
+    // while  ( alignment  <=  uap_size) {
+    //   alignment  =  alignment  <<  1 ;
+    // }
+
+	// printf("alignment %lu \n", alignment);
+
+	// // To call contig alloc and free based on 
+	// // hardcoded physical allocations and adding 
+	// // doing array allocations and frees. 
+	// void *addr;
+
+	// int alignmentInt;
+	// // alignmentInt = nextPowerOf2(2);
+	// unsigned long alignment = ( unsigned long ) alignmentInt ;
+
+	contigfree(uap->addr,uap->size, M_CONTIGMEM);
+
+    // addr = contigmalloc(uap_size, M_CONTIGMEM, M_ZERO,
+	// 		0, BUS_SPACE_MAXADDR, alignment, 0);
+
+    // int *addr1;
+	// addr1 = contigmalloc(2, M_CONTIGMEM, M_ZERO,
+	// 		0, BUS_SPACE_MAXADDR, alignment, 0);
+
+	// uap->addr = addr;
+
+	// addr1[0] = 2;
+
+	// printf("address 0 %i \n", addr[0]);
+	// printf("address 0 %i \n", addr1[0]);
+
+	// contigfree(addr,2, M_CONTIGMEM);
+	// contigfree(addr1,2, M_CONTIGMEM);
+
+	// printf("contigfree complete");
+
+	// printf("hello kernel 1\n");
+
+	// printf("hello kernel\n");
+	return (0);
+}
+// define custom args.
+/*
+ * The function for implementing the syscall.
+ */
+// static int
+// hello(struct thread *td, void *arg)
+// {    
+
+// 	struct syscall_hello *uap;
+//     uap = (struct syscall_hello *)arg;
+
+// 	unsigned long uap_size = uap->size;
+
+// 	printf("size %lu \n", uap_size);
+
+
+//     // Calculate next power of 2 
+
+// 	unsigned long  alignment  =  1;
+    
+// 	// 2 refers to the size
+//     while  ( alignment  <=  2) {
+//       alignment  =  alignment  <<  1 ;
+//     }
+
+// 	printf("alignment %lu \n", alignment);
+
+// 	// To call contig alloc and free based on 
+// 	// hardcoded physical allocations and adding 
+// 	// doing array allocations and frees. 
+// 	int *addr;
+
+// 	// int alignmentInt;
+// 	// // alignmentInt = nextPowerOf2(2);
+// 	// unsigned long alignment = ( unsigned long ) alignmentInt ;
+
+//     addr = contigmalloc(2, M_CONTIGMEM, M_ZERO,
+// 			0, BUS_SPACE_MAXADDR, alignment, 0);
+
+// 	addr[0] = 1;
+
+//     int *addr1;
+// 	addr1 = contigmalloc(2, M_CONTIGMEM, M_ZERO,
+// 			0, BUS_SPACE_MAXADDR, alignment, 0);
+
+// 	addr1[0] = 2;
+
+// 	printf("address 0 %i \n", addr[0]);
+// 	printf("address 0 %i \n", addr1[0]);
+
+// 	contigfree(addr,2, M_CONTIGMEM);
+// 	contigfree(addr1,2, M_CONTIGMEM);
+
+// 	printf("contigfree complete");
+
+// 	printf("hello kernel 1\n");
+
+// 	printf("hello kernel\n");
+// 	return (0);
+// }
 
 // calculate next power of 2 
 // int nextPowerOf2 (unsigned  int  x) {
@@ -123,15 +244,21 @@ hello(struct thread *td, void *arg)
 /*
  * The `sysent' for the new syscall
  */
-static struct sysent hello_sysent = {
+static struct sysent Malloc_sysent = {
 	.sy_narg = 0,
-	.sy_call = hello
+	.sy_call = Alloc
+};
+
+static struct sysent Free_sysent = {
+	.sy_narg = 0,
+	.sy_call = Free
 };
 
 /*
  * The offset in sysent where the syscall is allocated.
  */
-static int offset = NO_SYSCALL;
+static int Mallocoffset = NO_SYSCALL;
+static int Freeoffset = NO_SYSCALL;
 
 /*
  * The function called at load/unload.
@@ -143,10 +270,10 @@ load(struct module *module, int cmd, void *arg)
 
 	switch (cmd) {
 	case MOD_LOAD :
-		printf("syscall loaded at %d\n", offset);
+		printf("Malloc syscall loaded at %d\n", Mallocoffset);
 		break;
 	case MOD_UNLOAD :
-		printf("syscall unloaded from %d\n", offset);
+		printf("Malloc syscall unloaded from %d\n", Mallocoffset);
 		break;
 	default :
 		error = EOPNOTSUPP;
@@ -155,4 +282,5 @@ load(struct module *module, int cmd, void *arg)
 	return (error);
 }
 
-SYSCALL_MODULE(syscall, &offset, &hello_sysent, load, NULL);
+SYSCALL_MODULE(syscall, &Mallocoffset, &Malloc_sysent, load, NULL);
+SYSCALL_MODULE(syscall, &Freeoffset, &Free, load, NULL);
