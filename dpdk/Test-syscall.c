@@ -22,6 +22,8 @@ main(int argc, char *argv[])
 
 	    syscall(210,st);
 
+        printf("size %lu \n", st.size);
+
 	    // struct syscall_alloc st1;
 	    //st1.size = 2;
 	    //st1.addr = st.addr;

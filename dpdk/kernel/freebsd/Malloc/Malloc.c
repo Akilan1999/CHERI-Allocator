@@ -97,9 +97,9 @@ Alloc(struct thread *td, void *arg)
 
 	// uap->addr = addr;
 
-	// uap->size=4;
+	uap->size=4;
 
-	// arg = uap;
+	arg = uap;
 
 	printf("Malloc complete");
 
