@@ -271,9 +271,11 @@ load(struct module *module, int cmd, void *arg)
 	switch (cmd) {
 	case MOD_LOAD :
 		printf("Malloc syscall loaded at %d\n", Mallocoffset);
+		printf("Free syscall loaded at %d\n", Freeoffset);
 		break;
 	case MOD_UNLOAD :
 		printf("Malloc syscall unloaded from %d\n", Mallocoffset);
+		printf("Free syscall unloaded from %d\n", Freeoffset);
 		break;
 	default :
 		error = EOPNOTSUPP;
@@ -283,4 +285,4 @@ load(struct module *module, int cmd, void *arg)
 }
 
 SYSCALL_MODULE(syscall, &Mallocoffset, &Malloc_sysent, load, NULL);
-SYSCALL_MODULE(syscall, &Freeoffset, &Free, load, NULL);
+SYSCALL_MODULE(syscall, &Freeoffset, &Free_sysent, load, NULL);
