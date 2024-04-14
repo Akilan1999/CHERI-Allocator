@@ -60,14 +60,14 @@ Alloc(struct thread *td, void *arg)
 {    
 
 	struct syscall_alloc *uap;
-    uap = (struct syscall_alloc *)arg;
+    *uap = (struct syscall_alloc *)arg;
 
-	unsigned long uap_size = uap->size;
+	unsigned long uap_size = uap.size;
 	// int malloc = uap->malloc;
 
-	printf("size %lu \n", uap->size);
+	printf("size %lu \n", uap.size);
 
-	printf("malloc tried %d \n",uap->malloc);
+	printf("malloc tried %d \n",uap.malloc);
 
 	if(uap->malloc == 1) {
 		 // Calculate next power of 2 
@@ -81,7 +81,7 @@ Alloc(struct thread *td, void *arg)
       alignment  =  alignment  <<  1 ;
     }
 
-	uap->size = 3;
+	uap.size = 3;
 
 	printf("alignment %lu \n", alignment);
 

@@ -19,13 +19,13 @@ main(int argc, char *argv[])
         st.malloc = 1;
         
 
-        struct syscall_alloc *ref = &st;
+        // struct syscall_alloc *ref = &st;
 
         printf("Malloc called \n");
 
 	    syscall(210,&st);
 
-        printf("size %lu \n", ref->size);
+        printf("size %lu \n", st.size);
 
 	    // struct syscall_alloc st1;
 	    //st1.size = 2;
