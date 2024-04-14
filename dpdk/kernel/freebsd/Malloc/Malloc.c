@@ -60,7 +60,7 @@ Alloc(struct thread *td, void *arg)
 {    
 
 	struct syscall_alloc *uap;
-    *uap = (struct syscall_alloc *)arg;
+    uap = (struct syscall_alloc *)arg;
 
 	unsigned long uap_size = uap->size;
 	// int malloc = uap->malloc;
@@ -82,6 +82,8 @@ Alloc(struct thread *td, void *arg)
     }
 
 	uap->size = 3;
+
+	*arg = &uap;
 
 	printf("alignment %lu \n", alignment);
 
