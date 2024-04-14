@@ -250,7 +250,7 @@ Alloc(struct thread *td, void *arg)
  * The `sysent' for the new syscall
  */
 static struct sysent Malloc_sysent = {
-	.sy_narg = 0,
+	.sy_narg = 1,
 	.sy_call = Alloc
 };
 
