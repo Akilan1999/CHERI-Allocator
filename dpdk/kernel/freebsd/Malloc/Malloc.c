@@ -80,7 +80,7 @@ Alloc(struct thread *td, void *arg)
 	// To call contig alloc and free based on 
 	// hardcoded physical allocations and adding 
 	// doing array allocations and frees. 
-	void *addr;
+	// void *addr;
 
 	// int alignmentInt;
 	// // alignmentInt = nextPowerOf2(2);
@@ -89,7 +89,7 @@ Alloc(struct thread *td, void *arg)
     // addr = contigmalloc(uap_size, M_CONTIGMEM, M_ZERO,
 	// 		0, BUS_SPACE_MAXADDR, alignment, 0);
 
-	uap->addr = addr;
+	// uap->addr = addr;
 
 	printf("Malloc complete");
 
