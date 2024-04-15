@@ -27,7 +27,7 @@ main(int argc, char *argv[])
 
 
         int tid;
-	    tid = syscall(210,&st);
+	    tid = syscall(210,st);
 
          printf("resp %d \n", tid);
 
