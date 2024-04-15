@@ -72,7 +72,7 @@ Alloc(struct thread *td, struct syscall_alloc *uap)
 	if(uap->malloc == 1) {
 		 // Calculate next power of 2 
 
-	printf("Malloc called 1 \n");
+	printf("Malloc called \n");
 
 	int alignment  =  1;
     
@@ -88,7 +88,7 @@ Alloc(struct thread *td, struct syscall_alloc *uap)
 
     // printf("Changing size \n"); 
 
-	uap->size = 10;
+	*(uap->size) = 10;
 
 	// *arg = uap;
 
