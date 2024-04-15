@@ -4,7 +4,7 @@
 #include <sys/types.h>
 
 struct syscall_alloc {
-	unsigned long             size;
+	int                       size;
     int                       malloc;
     // void                      *addr;
 };

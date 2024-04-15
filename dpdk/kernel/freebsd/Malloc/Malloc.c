@@ -48,7 +48,7 @@ MALLOC_DEFINE(M_CONTIGMEM, "contigmem", "contigmem(4) allocations");
 // };
 
 struct syscall_alloc {
-	unsigned long             size;
+	int                       size;
 	int                       malloc; 
 	// int                       *newSize;
 	// void                      *addr;
@@ -62,10 +62,10 @@ Alloc(struct thread *td, struct syscall_alloc uap)
 	// struct syscall_alloc *uap;
     // uap = (struct syscall_alloc *)arg;
 
-	unsigned long uap_size = 4;
+	int uap_size = 4;
 	// int malloc = uap->malloc;
 
-	printf("size %lu \n", uap.size);
+	printf("size %d \n", uap.size);
 
 	printf("malloc tried %d \n",uap.malloc);
 
@@ -74,7 +74,7 @@ Alloc(struct thread *td, struct syscall_alloc uap)
 
 	printf("Malloc called \n");
 
-	unsigned long alignment  =  1;
+	int alignment  =  1;
     
 	// 2 refers to the size
     while  ( alignment  <=  uap_size) {
