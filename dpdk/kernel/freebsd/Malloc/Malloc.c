@@ -73,7 +73,7 @@ Alloc(struct thread *td, struct syscall_alloc *uap)
 
 	// printf("malloc tried 1 %d \n",*uap->malloc);
 
-	if(state_copy.malloc == 1) {
+	if(state_copymalloc == 1) {
 		 // Calculate next power of 2 
 
 	printf("Malloc called \n");
