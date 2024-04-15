@@ -16,7 +16,7 @@ main(int argc, char *argv[])
 	    struct syscall_alloc st;
 	    st.size = 7;
 	    //st.addr = NULL;
-        st.malloc = 2;
+        st.malloc = 0;
 
         
         
