@@ -314,12 +314,13 @@ int main(int argc, char **argv)
       excess = num_points % num_procs;
       modified = false;
       printf("Modified set to false\n");
-      dprintf(".");
+      printf(".");
       printf("Point printed\n");
       curr_point = 0;
       num_threads = 0;
       
       while (curr_point < num_points) {
+         printf("Inside secondary while loop\n");
          CHECK_ERROR((arg = (thread_arg *)malloc(sizeof(thread_arg))) == NULL);
          arg->start_idx = curr_point;
          arg->num_pts = num_per_thread;
