@@ -26,5 +26,5 @@ sudo kldload /boot/modules/contigmem.ko
 # sudo ./build-hybrid/examples/dpdk-helloworld
 
 # Show the dmesg to see the debug prints
-sudo dmesg
+# sudo dmesg
 
