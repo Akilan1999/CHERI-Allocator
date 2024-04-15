@@ -161,7 +161,7 @@ INITAlloc(void) {
    //  PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON,-1,0);
 
     ptr = mmap(NULL, sz,
-    PROT_READ|PROT_WRITE, MAP_SHARED,fd,0);
+    PROT_READ|PROT_WRITE, MAP_SHARED,-1,0);
 
    // Added error handling
     if(ptr == MAP_FAILED)
