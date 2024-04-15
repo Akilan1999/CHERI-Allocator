@@ -289,7 +289,7 @@ int main(int argc, char **argv)
    //    printf("Means insertion\n");
    // }
    dprintf("Generating means\n");
-   generate_points(means, num_means);
+   // generate_points(means, num_means);
  
    clusters = (int *)malloc(sizeof(int) * num_points);
    memset(clusters, -1, sizeof(int) * num_points);
