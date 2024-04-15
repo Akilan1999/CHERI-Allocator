@@ -283,12 +283,11 @@ int main(int argc, char **argv)
 
    printf("calling malloc after generate\n");
    means = (int **)malloc(sizeof(int *) * num_means);
-   for (i=0; i<num_means; i++) 
-   {
-      // means[i] = (int *)malloc(sizeof(int) * dim);
-      means[i] = *(3);
-      printf("Means insertion\n");
-   }
+   // for (i=0; i<num_means; i++) 
+   // {
+   //    means[i] = (int *)malloc(sizeof(int) * dim);
+   //    printf("Means insertion\n");
+   // }
    dprintf("Generating means\n");
    generate_points(means, num_means);
  
