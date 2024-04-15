@@ -286,7 +286,6 @@ int main(int argc, char **argv)
    for (i=0; i<num_means; i++) 
    {
       means[i] = (int *)malloc(sizeof(int) * dim);
-      // printf("Means insertion\n");
    }
    dprintf("Generating means\n");
    generate_points(means, num_means);
@@ -310,6 +309,7 @@ int main(int argc, char **argv)
    int num_threads;   
    while (modified) 
    {
+      printf("Inside loop\n");
       num_per_thread = num_points / num_procs;
       excess = num_points % num_procs;
       modified = false;
