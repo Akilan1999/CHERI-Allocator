@@ -47,10 +47,10 @@
 // #define DEF_DIM 3
 // #define DEF_GRID_SIZE 1000
 
-#define DEF_NUM_POINTS 100000
-#define DEF_NUM_MEANS 100000
+#define DEF_NUM_POINTS 1000
+#define DEF_NUM_MEANS 10
 #define DEF_DIM 3
-#define DEF_GRID_SIZE 1000
+#define DEF_GRID_SIZE 100
 
 #define false 0
 #define true 1
@@ -283,13 +283,13 @@ int main(int argc, char **argv)
 
    printf("calling malloc after generate\n");
    means = (int **)malloc(sizeof(int *) * num_means);
-   // for (i=0; i<num_means; i++) 
-   // {
-   //    means[i] = (int *)malloc(sizeof(int) * dim);
-   //    printf("Means insertion\n");
-   // }
+   for (i=0; i<num_means; i++) 
+   {
+      means[i] = (int *)malloc(sizeof(int) * dim);
+      // printf("Means insertion\n");
+   }
    dprintf("Generating means\n");
-   // generate_points(means, num_means);
+   generate_points(means, num_means);
  
    clusters = (int *)malloc(sizeof(int) * num_points);
    memset(clusters, -1, sizeof(int) * num_points);
