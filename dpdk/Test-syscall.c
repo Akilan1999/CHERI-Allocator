@@ -29,7 +29,7 @@ main(int argc, char *argv[])
 
          printf("resp %d \n", tid);
 
-        struct proc * process = pfind(tid);
+        // struct proc * process = pfind(tid);
 
         
 
