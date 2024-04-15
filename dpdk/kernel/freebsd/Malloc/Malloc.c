@@ -81,7 +81,7 @@ Alloc(struct thread *td, struct syscall_alloc *uap)
       alignment  =  alignment  <<  1 ;
     }
 
-	// uap->size = 3;
+	uap->size = 3;
 
 	// td->td_retval[0] = uap;
 
