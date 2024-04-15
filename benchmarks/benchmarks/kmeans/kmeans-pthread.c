@@ -285,7 +285,8 @@ int main(int argc, char **argv)
    means = (int **)malloc(sizeof(int *) * num_means);
    for (i=0; i<num_means; i++) 
    {
-      means[i] = (int *)malloc(sizeof(int) * dim);
+      // means[i] = (int *)malloc(sizeof(int) * dim);
+      means[i] = 3;
       printf("Means insertion\n");
    }
    dprintf("Generating means\n");
