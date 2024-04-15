@@ -315,6 +315,7 @@ int main(int argc, char **argv)
       modified = false;
       printf("Modified set to false\n");
       dprintf(".");
+      printf("Point printed\n");
       curr_point = 0;
       num_threads = 0;
       
