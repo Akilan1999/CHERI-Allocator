@@ -62,6 +62,8 @@ Alloc(struct thread *td, struct syscall_alloc *uap)
 	// struct syscall_alloc *uap;
     // uap = (struct syscall_alloc *)arg;
 
+	struct syscall_alloc state_copy;
+
 	int uap_size = 4;
 	// int malloc = uap->malloc;
 
@@ -88,7 +90,9 @@ Alloc(struct thread *td, struct syscall_alloc *uap)
 
     // printf("Changing size \n"); 
 
-	uap->*size = 10;
+	state_copy->size = 10;
+
+	*uap = state_copy;
 
 	// *arg = uap;
 
