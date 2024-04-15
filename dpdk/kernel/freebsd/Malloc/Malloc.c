@@ -50,7 +50,7 @@ MALLOC_DEFINE(M_CONTIGMEM, "contigmem", "contigmem(4) allocations");
 struct syscall_alloc {
 	unsigned long             size;
 	int                       malloc; 
-	// int                      newSize;
+	// int                       newSize;
 	// void                      *addr;
 };
 
@@ -86,7 +86,7 @@ Alloc(struct thread *td, struct syscall_alloc *uap)
 	// td->td_retval[0] = uap;
 
 
-    printf("Changing size \n"); 
+    // printf("Changing size \n"); 
 
 	// *uap->size = 10;
 
