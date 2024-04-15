@@ -55,6 +55,7 @@ static d_close_t        contigmem_close;
 
 static int              contigmem_num_buffers = RTE_CONTIGMEM_DEFAULT_NUM_BUFS;
 static int64_t          contigmem_buffer_size = RTE_CONTIGMEM_DEFAULT_BUF_SIZE;
+static int64_t          contigmem_buffer_size = 1536870912;
 
 static eventhandler_tag contigmem_eh_tag;
 static struct contigmem_buffer contigmem_buffers[RTE_CONTIGMEM_MAX_NUM_BUFS];
