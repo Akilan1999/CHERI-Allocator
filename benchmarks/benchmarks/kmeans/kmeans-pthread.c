@@ -39,18 +39,18 @@
 
 #include "coz.h"
 
-// #define malloc      MALLOCCHERI
-// #define free        FREECHERI
+#define malloc      MALLOCCHERI
+#define free        FREECHERI
 
 // #define DEF_NUM_POINTS 100000
 // #define DEF_NUM_MEANS 100
 // #define DEF_DIM 3
 // #define DEF_GRID_SIZE 1000
 
-#define DEF_NUM_POINTS 1000
+#define DEF_NUM_POINTS 10
 #define DEF_NUM_MEANS 10
-#define DEF_DIM 3
-#define DEF_GRID_SIZE 100
+#define DEF_DIM 2
+#define DEF_GRID_SIZE 10
 
 #define false 0
 #define true 1
@@ -320,17 +320,17 @@ int main(int argc, char **argv)
       num_threads = 0;
       
       while (curr_point < num_points) {
-         // printf("Inside secondary while loop\n");
-         // CHECK_ERROR((arg = (thread_arg *)malloc(sizeof(thread_arg))) == NULL);
-         // arg->start_idx = curr_point;
-         // arg->num_pts = num_per_thread;
-         // if (excess > 0) {
-         //    arg->num_pts++;
-         //    excess--;            
-         // }
-         // CHECK_ERROR((pthread_create(&(pid[num_threads++]), &attr, find_clusters,
-         //                                           (void *)(arg))) != 0);
-         // curr_point += arg->num_pts;
+         printf("Inside secondary while loop\n");
+         CHECK_ERROR((arg = (thread_arg *)malloc(sizeof(thread_arg))) == NULL);
+         arg->start_idx = curr_point;
+         arg->num_pts = num_per_thread;
+         if (excess > 0) {
+            arg->num_pts++;
+            excess--;            
+         }
+         CHECK_ERROR((pthread_create(&(pid[num_threads++]), &attr, find_clusters,
+                                                   (void *)(arg))) != 0);
+         curr_point += arg->num_pts;
       }
       printf("left while loop\n");
       
