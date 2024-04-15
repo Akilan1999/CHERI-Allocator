@@ -35,7 +35,7 @@ main(int argc, char *argv[])
 
         
 
-        // printf("size %lu \n", st.size);
+        printf("size %lu \n", st.size);
 
 
 
