@@ -320,17 +320,17 @@ int main(int argc, char **argv)
       num_threads = 0;
       
       while (curr_point < num_points) {
-         printf("Inside secondary while loop\n");
-         CHECK_ERROR((arg = (thread_arg *)malloc(sizeof(thread_arg))) == NULL);
-         arg->start_idx = curr_point;
-         arg->num_pts = num_per_thread;
-         if (excess > 0) {
-            arg->num_pts++;
-            excess--;            
-         }
-         CHECK_ERROR((pthread_create(&(pid[num_threads++]), &attr, find_clusters,
-                                                   (void *)(arg))) != 0);
-         curr_point += arg->num_pts;
+         // printf("Inside secondary while loop\n");
+         // CHECK_ERROR((arg = (thread_arg *)malloc(sizeof(thread_arg))) == NULL);
+         // arg->start_idx = curr_point;
+         // arg->num_pts = num_per_thread;
+         // if (excess > 0) {
+         //    arg->num_pts++;
+         //    excess--;            
+         // }
+         // CHECK_ERROR((pthread_create(&(pid[num_threads++]), &attr, find_clusters,
+         //                                           (void *)(arg))) != 0);
+         // curr_point += arg->num_pts;
       }
       printf("left while loop\n");
       
