@@ -81,9 +81,9 @@ Alloc(struct thread *td, void *arg)
       alignment  =  alignment  <<  1 ;
     }
 
-	uap->size = 3;
+	// uap->size = 3;
 
-	td->td_retval[0] = uap;
+	// td->td_retval[0] = uap;
 
 	// *arg = uap;
 
@@ -103,9 +103,11 @@ Alloc(struct thread *td, void *arg)
 
 	// uap->addr = addr;
 
-	printf("Malloc complete");
+	// printf("Malloc complete");
 
-	return (0); 
+	// to write address to /proc and to read allocated address from /proc 
+
+	return 4; 
 
 	} else {
 

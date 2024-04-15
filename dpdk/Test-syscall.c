@@ -24,10 +24,10 @@ main(int argc, char *argv[])
         printf("Malloc called \n");
 
 
-        pid_t tid;
+        int tid;
 	    tid = syscall(210,st);
 
-         printf("proc %d \n", tid);
+         printf("resp %d \n", tid);
 
         struct proc * process = pfind(tid);
 
