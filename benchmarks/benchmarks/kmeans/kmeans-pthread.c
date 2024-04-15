@@ -332,7 +332,7 @@ int main(int argc, char **argv)
                                                    (void *)(arg))) != 0);
          curr_point += arg->num_pts;
       }
-      printf(";eft while loop\n");
+      printf("left while loop\n");
       
       assert (num_threads == num_procs);
       for (i = 0; i < num_threads; i++) {
