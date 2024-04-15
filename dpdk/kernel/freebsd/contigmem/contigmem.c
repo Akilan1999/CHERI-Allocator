@@ -146,7 +146,7 @@ contigmem_load()
 
 	for (i = 0; i < contigmem_num_buffers; i++) {
 		addr = contigmalloc(contigmem_buffer_size, M_CONTIGMEM, M_ZERO,
-			0, BUS_SPACE_MAXADDR, contigmem_buffer_size, 0);
+			0, (1L << 22), contigmem_buffer_size, 0);
 		if (addr == NULL) {
 			printf("contigmalloc failed for buffer %d\n", i);
 			error = ENOMEM;
