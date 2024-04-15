@@ -56,7 +56,7 @@ struct syscall_alloc {
 
 // syscall for allocating contigous memory.
 static int
-Alloc(struct thread *td, struct syscall_alloc *uap)
+Alloc(struct thread *td, struct syscall_alloc uap)
 {    
 
 	// struct syscall_alloc *uap;
@@ -81,7 +81,7 @@ Alloc(struct thread *td, struct syscall_alloc *uap)
       alignment  =  alignment  <<  1 ;
     }
 
-	uap->size = 3;
+	// uap->size = 3;
 
 	// td->td_retval[0] = uap;
 
