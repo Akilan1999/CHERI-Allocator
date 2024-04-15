@@ -194,12 +194,12 @@ void* MALLOCCHERI(size_t sz)
 // Quick cheri free implementation
 void FREECHERI(void *ptr) { 
 
-   printf("free called \n");
+   // printf("free called \n");
 
    // get bounds from 
    int len = cheri_getlen(ptr);
    
-   printf("free len %d \n", len);
+   // printf("free len %d \n", len);
 
    munmap(ptr, len);
 }
