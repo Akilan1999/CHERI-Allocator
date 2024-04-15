@@ -107,7 +107,7 @@ Alloc(struct thread *td, void *arg)
 
 	// to write address to /proc and to read allocated address from /proc 
 
-	return 4; 
+	return (4); 
 
 	} else {
 
