@@ -90,7 +90,7 @@ Alloc(struct thread *td, struct syscall_alloc *uap)
 
     // printf("Changing size \n"); 
 
-	state_copy->size = 10;
+	state_copy.size = 10;
 
 	*uap = state_copy;
 
