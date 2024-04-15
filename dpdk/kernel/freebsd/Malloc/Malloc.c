@@ -56,7 +56,7 @@ struct syscall_alloc {
 
 // syscall for allocating contigous memory.
 static int
-Alloc(struct thread *td, struct syscall_alloc *uap)
+Alloc(struct thread *td, struct syscall_alloc uap)
 {    
 
 	// struct syscall_alloc *uap;
@@ -65,11 +65,11 @@ Alloc(struct thread *td, struct syscall_alloc *uap)
 	int uap_size = 4;
 	// int malloc = uap->malloc;
 
-	printf("size %d \n", uap->size);
+	printf("size %d \n", uap.size);
 
-	printf("malloc tried 1 lol %d \n",uap->malloc);
+	printf("malloc tried 1 %d \n",uap.malloc);
 
-	if(uap->malloc == 1) {
+	if(uap.malloc == 1) {
 		 // Calculate next power of 2 
 
 	printf("Malloc called \n");
@@ -92,7 +92,7 @@ Alloc(struct thread *td, struct syscall_alloc *uap)
 
 	// *arg = uap;
 
-	printf("alignment %lu \n", alignment);
+	printf("alignment %d \n", alignment);
 
 	// To call contig alloc and free based on 
 	// hardcoded physical allocations and adding 
