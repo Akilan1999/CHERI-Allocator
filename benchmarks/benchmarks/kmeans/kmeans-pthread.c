@@ -268,6 +268,9 @@ int main(int argc, char **argv)
    int num_per_thread, excess; 
    
    parse_args(argc, argv);   
+
+   printf("Initial alloc called\n");
+   INITAlloc();
    
    points = (int **)malloc(sizeof(int *) * num_points);
    for (i=0; i<num_points; i++) 

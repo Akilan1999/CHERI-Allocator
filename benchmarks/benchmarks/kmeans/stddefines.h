@@ -175,63 +175,11 @@ INITAlloc(void) {
 // Quick malloc implementation with mmap
 void* MALLOCCHERI(size_t sz)
 {
-   // if (MallocCounter == 0) {
-   //     // If this is the first time 
-   //     // malloc is called then 
-   //     // create a single mmap 
-   //     // entry
-   //     INITAlloc();
-   // }
+   ptr[MallocCounter] = cheri_setbounds(ptr, sz);
 
-   // MallocCounter += 1;
-   //  void *(*libc_malloc)(size_t) = dlsym(RTLD_NEXT, "malloc");
-   //  printf("malloc\n");
-   //  return libc_malloc(sz);
+   MallocCounter = MallocCounter + size;
 
-   void *ptr;
-   // printf("malloc called \n ");
-
-   // printf("malloc length %d \n", sz);
-
-   int fd = open(FILENAME, O_RDWR, 0600);
-
-    if (fd < 0) {
-        perror("open");
-        exit(EXIT_FAILURE);
-    }
-
-    off_t offset = 0; // offset to seek to.
-
-    if (ftruncate(fd, sz) < 0) {
-        perror("ftruncate");
-        close(fd);
-        exit(EXIT_FAILURE);
-    }
-
-   //  ptr = mmap(NULL, sz,
-   //  PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON,-1,0);
-
-    ptr = mmap(NULL, sz,
-    PROT_READ|PROT_WRITE, MAP_SHARED,fd,0);
-
-   // Added error handling
-    if(ptr == MAP_FAILED)
-    {
-        perror("mmap");
-        exit(EXIT_FAILURE);
-    }
-   
-   //  printf(sz);
-
-    ptr = cheri_setbounds(ptr, sz);
-
-    return ptr;
-
-   void *CapPtr;
-
-   CapPtr = cheri_setbounds(ptr, sz);
-
-   return ptr;
+   return ptr[MallocCounter];
 
 
 //   sz = __builtin_align_up(sz, _Alignof(max_align_t));
