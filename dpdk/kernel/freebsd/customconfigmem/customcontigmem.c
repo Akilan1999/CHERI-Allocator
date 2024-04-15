@@ -124,73 +124,73 @@ static int
 contigmem_load()
 {
 
-// 	// get page size 
-// 	printf("%d page size \n",PAGE_SIZE);
+	// get page size 
+	printf("%d page size \n",PAGE_SIZE);
 
-// 	char index_string[8], description[32];
-// 	int  i, error = 0;
-// 	void *addr;
+	char index_string[8], description[32];
+	int  i, error = 0;
+	void *addr;
 
-// 	if (contigmem_num_buffers > RTE_CONTIGMEM_MAX_NUM_BUFS) {
-// 		printf("%d buffers requested is greater than %d allowed\n",
-// 				contigmem_num_buffers, RTE_CONTIGMEM_MAX_NUM_BUFS);
-// 		error = EINVAL;
-// 		goto error;
-// 	}
+	if (contigmem_num_buffers > RTE_CONTIGMEM_MAX_NUM_BUFS) {
+		printf("%d buffers requested is greater than %d allowed\n",
+				contigmem_num_buffers, RTE_CONTIGMEM_MAX_NUM_BUFS);
+		error = EINVAL;
+		goto error;
+	}
 
-// 	if (contigmem_buffer_size < PAGE_SIZE ||
-// 			(contigmem_buffer_size & (contigmem_buffer_size - 1)) != 0) {
-// 		printf("buffer size 0x%lx is not greater than PAGE_SIZE and "
-// 				"power of two\n", contigmem_buffer_size);
-// 		error = EINVAL;
-// 		goto error;
-// 	}
+	if (contigmem_buffer_size < PAGE_SIZE ||
+			(contigmem_buffer_size & (contigmem_buffer_size - 1)) != 0) {
+		printf("buffer size 0x%lx is not greater than PAGE_SIZE and "
+				"power of two\n", contigmem_buffer_size);
+		error = EINVAL;
+		goto error;
+	}
 
-// 	for (i = 0; i < contigmem_num_buffers; i++) {
-// 		addr = contigmalloc(contigmem_buffer_size, M_CONTIGMEM, M_ZERO,
-// 			0, BUS_SPACE_MAXADDR, contigmem_buffer_size, 0);
-// 		if (addr == NULL) {
-// 			printf("contigmalloc failed for buffer %d\n", i);
-// 			error = ENOMEM;
-// 			goto error;
-// 		}
+	for (i = 0; i < contigmem_num_buffers; i++) {
+		addr = contigmalloc(contigmem_buffer_size, M_CONTIGMEM, M_ZERO,
+			0, BUS_SPACE_MAXADDR, contigmem_buffer_size, 0);
+		if (addr == NULL) {
+			printf("contigmalloc failed for buffer %d\n", i);
+			error = ENOMEM;
+			goto error;
+		}
 
-// #ifndef RTE_ARCH_ARM_PURECAP_HACK
-// 		printf("%2u: virt=%p phys=%p\n", i, addr,
-// 			(void *)pmap_kextract((vm_offset_t)addr));
-// #endif
+#ifndef RTE_ARCH_ARM_PURECAP_HACK
+		printf("%2u: virt=%p phys=%p\n", i, addr,
+			(void *)pmap_kextract((vm_offset_t)addr));
+#endif
 
-// 		mtx_init(&contigmem_buffers[i].mtx, "contigmem", NULL, MTX_DEF);
-// 		contigmem_buffers[i].addr = addr;
-// 		contigmem_buffers[i].refcnt = 0;
+		mtx_init(&contigmem_buffers[i].mtx, "contigmem", NULL, MTX_DEF);
+		contigmem_buffers[i].addr = addr;
+		contigmem_buffers[i].refcnt = 0;
 
-// 		snprintf(index_string, sizeof(index_string), "%d", i);
-// 		snprintf(description, sizeof(description),
-// 				"phys addr for buffer %d", i);
-// 		SYSCTL_ADD_PROC(NULL,
-// 				&SYSCTL_NODE_CHILDREN(_hw_contigmem, physaddr), OID_AUTO,
-// 				index_string, CTLTYPE_U64 | CTLFLAG_RD,
-// 				(void *)(uintptr_t)i, 0, contigmem_physaddr, "LU",
-// 				description);
-// 	}
+		snprintf(index_string, sizeof(index_string), "%d", i);
+		snprintf(description, sizeof(description),
+				"phys addr for buffer %d", i);
+		SYSCTL_ADD_PROC(NULL,
+				&SYSCTL_NODE_CHILDREN(_hw_contigmem, physaddr), OID_AUTO,
+				index_string, CTLTYPE_U64 | CTLFLAG_RD,
+				(void *)(uintptr_t)i, 0, contigmem_physaddr, "LU",
+				description);
+	}
 
-// 	contigmem_cdev = make_dev_credf(0, &contigmem_ops, 0, NULL, UID_ROOT,
-// 			GID_WHEEL, 0600, "contigmem");
+	contigmem_cdev = make_dev_credf(0, &contigmem_ops, 0, NULL, UID_ROOT,
+			GID_WHEEL, 0600, "contigmem");
 
-// 	return 0;
+	return 0;
 
-// error:
-// 	for (i = 0; i < contigmem_num_buffers; i++) {
-// 		if (contigmem_buffers[i].addr != NULL) {
-// 			contigfree(contigmem_buffers[i].addr,
-// 				contigmem_buffer_size, M_CONTIGMEM);
-// 			contigmem_buffers[i].addr = NULL;
-// 		}
-// 		if (mtx_initialized(&contigmem_buffers[i].mtx))
-// 			mtx_destroy(&contigmem_buffers[i].mtx);
-// 	}
+error:
+	for (i = 0; i < contigmem_num_buffers; i++) {
+		if (contigmem_buffers[i].addr != NULL) {
+			contigfree(contigmem_buffers[i].addr,
+				contigmem_buffer_size, M_CONTIGMEM);
+			contigmem_buffers[i].addr = NULL;
+		}
+		if (mtx_initialized(&contigmem_buffers[i].mtx))
+			mtx_destroy(&contigmem_buffers[i].mtx);
+	}
 
-// 	return error;
+	return error;
 
 // Want to design contig load to do nothing
 }
