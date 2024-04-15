@@ -118,8 +118,11 @@ static int
 contigmem_load()
 {
 
+	int buffer_size;
+	buffer_size = (int)contigmem_buffer_size;
+
 	// get page size 
-	printf("%d page 1 size \n",PAGE_SIZE);
+	printf("%d buffer size \n",buffer_size);
 
 	char index_string[8], description[32];
 	int  i, error = 0;
