@@ -54,8 +54,8 @@ static d_open_t         contigmem_open;
 static d_close_t        contigmem_close;
 
 static int              contigmem_num_buffers = RTE_CONTIGMEM_DEFAULT_NUM_BUFS;
-// static int64_t          contigmem_buffer_size = RTE_CONTIGMEM_DEFAULT_BUF_SIZE;
-static int64_t          contigmem_buffer_size = 1073741824;
+static int64_t          contigmem_buffer_size = RTE_CONTIGMEM_DEFAULT_BUF_SIZE;
+// static int64_t          contigmem_buffer_size = 1073741824;
 
 static eventhandler_tag contigmem_eh_tag;
 static struct contigmem_buffer contigmem_buffers[RTE_CONTIGMEM_MAX_NUM_BUFS];
@@ -146,7 +146,7 @@ contigmem_load()
 
 	for (i = 0; i < contigmem_num_buffers; i++) {
 		addr = contigmalloc(contigmem_buffer_size, M_CONTIGMEM, M_ZERO,
-			0, (1L << 22), contigmem_buffer_size, 0);
+			0, BUS_SPACE_MAXADDR, contigmem_buffer_size, 0);
 		if (addr == NULL) {
 			printf("contigmalloc failed for buffer %d\n", i);
 			error = ENOMEM;
