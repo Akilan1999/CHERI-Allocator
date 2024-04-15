@@ -175,7 +175,7 @@ INITAlloc(void) {
 // Quick malloc implementation with mmap
 void* MALLOCCHERI(size_t sz)
 {
-   void *ptrLink = &ptr[MallocCounter]
+   void *ptrLink = &ptr[MallocCounter];
    ptrLink = cheri_setbounds(ptrLink, sz);
 
    MallocCounter = MallocCounter + (int)sz;
