@@ -313,6 +313,7 @@ int main(int argc, char **argv)
       num_per_thread = num_points / num_procs;
       excess = num_points % num_procs;
       modified = false;
+      printf("Modified set to false\n");
       dprintf(".");
       curr_point = 0;
       num_threads = 0;
