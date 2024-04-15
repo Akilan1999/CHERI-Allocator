@@ -56,11 +56,11 @@ struct syscall_alloc {
 
 // syscall for allocating contigous memory.
 static int
-Alloc(struct thread *td, void *arg)
+Alloc(struct thread *td, struct syscall_alloc *uap)
 {    
 
-	struct syscall_alloc *uap;
-    uap = (struct syscall_alloc *)arg;
+	// struct syscall_alloc *uap;
+    // uap = (struct syscall_alloc *)arg;
 
 	unsigned long uap_size = uap->size;
 	// int malloc = uap->malloc;
@@ -260,7 +260,7 @@ Alloc(struct thread *td, void *arg)
  */
 static struct sysent Malloc_sysent = {
 	.sy_narg = 1,
-	.sy_call = Alloc
+	.sy_call = (sy_call_t*)Alloc
 };
 
 // static struct sysent Free_sysent = {
