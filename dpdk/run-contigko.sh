@@ -19,11 +19,11 @@ sudo cp contigmem.ko /boot/modules/
 # Run the new contig kernel module
 sudo kldload /boot/modules/contigmem.ko
 
-# Get back to the DPDK directory
-cd /home/akilan/CHERI-Allocator/dpdk
+# # Get back to the DPDK directory
+# cd /home/akilan/CHERI-Allocator/dpdk
 
-# Run HelloWorld
-sudo ./build-hybrid/examples/dpdk-helloworld
+# # Run HelloWorld
+# sudo ./build-hybrid/examples/dpdk-helloworld
 
 # Show the dmesg to see the debug prints
 sudo dmesg
