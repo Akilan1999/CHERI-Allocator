@@ -56,7 +56,7 @@ struct syscall_alloc {
 
 // syscall for allocating contigous memory.
 static int
-Alloc(struct thread *td, struct syscall_alloc *uap)
+Alloc(struct thread *td, struct syscall_alloc uap)
 {    
 
 	// struct syscall_alloc *uap;
@@ -69,7 +69,7 @@ Alloc(struct thread *td, struct syscall_alloc *uap)
 
 	printf("malloc tried 1 %d \n",*uap->malloc);
 
-	if(uap.malloc == 1) {
+	if(*uap->malloc == 1) {
 		 // Calculate next power of 2 
 
 	printf("Malloc called \n");
