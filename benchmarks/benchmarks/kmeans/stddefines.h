@@ -139,8 +139,8 @@ size_t sizeUsed;
 INITAlloc(void) {
 
    size_t sz;
-   // Pre Allocate 400 MB 
-   sz = 4000000;
+   // Pre Allocate 600 MB 
+   sz = 6000000;
 
    int fd = open(FILENAME, O_RDWR, 0600);
 
