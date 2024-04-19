@@ -42,15 +42,15 @@
 #define malloc      MALLOCCHERI
 #define free        FREECHERI
 
-// #define DEF_NUM_POINTS 100000
-// #define DEF_NUM_MEANS 100
-// #define DEF_DIM 3
-// #define DEF_GRID_SIZE 1000
-
-#define DEF_NUM_POINTS 1000
-#define DEF_NUM_MEANS 10
+#define DEF_NUM_POINTS 100000
+#define DEF_NUM_MEANS 100
 #define DEF_DIM 3
-#define DEF_GRID_SIZE 100
+#define DEF_GRID_SIZE 1000
+
+// #define DEF_NUM_POINTS 1000
+// #define DEF_NUM_MEANS 10
+// #define DEF_DIM 3
+// #define DEF_GRID_SIZE 100
 
 #define false 0
 #define true 1
@@ -357,6 +357,8 @@ int main(int argc, char **argv)
             arg->num_pts++;
             excess--;            
          }
+
+         printf("Running create \n");
          CHECK_ERROR((pthread_create(&(pid[num_threads++]), &attr, calc_means,
                                                    (void *)(arg))) != 0);
          curr_point += arg->num_pts;
