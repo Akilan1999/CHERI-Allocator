@@ -352,7 +352,7 @@ int main(int argc, char **argv)
          printf("succesfully runs \n");
          arg->start_idx = curr_point;
          printf("Running malloc \n");
-         // arg->sum = (int *)malloc(dim * sizeof(int));
+         arg->sum = (int *)malloc(dim * sizeof(int));
          printf("Finished malloc \n");
          arg->num_pts = num_per_thread;
          if (excess > 0) {
@@ -361,10 +361,8 @@ int main(int argc, char **argv)
          }
 
          printf("Running create \n");
-
-         calc_means((void *)(arg));
-         // CHECK_ERROR((pthread_create(&(pid[num_threads++]), &attr, calc_means,
-         //                                           (void *)(arg))) != 0);
+         CHECK_ERROR((pthread_create(&(pid[num_threads++]), &attr, calc_means,
+                                                   (void *)(arg))) != 0);
          printf("Create complete \n");
          curr_point += arg->num_pts;
       }
