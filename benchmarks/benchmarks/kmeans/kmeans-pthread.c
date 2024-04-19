@@ -346,26 +346,26 @@ int main(int argc, char **argv)
       num_threads = 0;
 
       printf("reaches here \n");
-      while (curr_point < num_means) {
-         printf("enters while loop \n");
-         CHECK_ERROR((arg = (thread_arg *)malloc(sizeof(thread_arg))) == NULL);
-         printf("succesfully runs \n");
-         arg->start_idx = curr_point;
-         printf("Running malloc \n");
-         arg->sum = (int *)malloc(dim * sizeof(int));
-         printf("Finished malloc \n");
-         arg->num_pts = num_per_thread;
-         if (excess > 0) {
-            arg->num_pts++;
-            excess--;            
-         }
+      // while (curr_point < num_means) {
+      //    printf("enters while loop \n");
+      //    CHECK_ERROR((arg = (thread_arg *)malloc(sizeof(thread_arg))) == NULL);
+      //    printf("succesfully runs \n");
+      //    arg->start_idx = curr_point;
+      //    printf("Running malloc \n");
+      //    arg->sum = (int *)malloc(dim * sizeof(int));
+      //    printf("Finished malloc \n");
+      //    arg->num_pts = num_per_thread;
+      //    if (excess > 0) {
+      //       arg->num_pts++;
+      //       excess--;            
+      //    }
 
-         printf("Running create \n");
-         CHECK_ERROR((pthread_create(&(pid[num_threads++]), &attr, calc_means,
-                                                   (void *)(arg))) != 0);
-         printf("Create complete \n");
-         curr_point += arg->num_pts;
-      }
+      //    printf("Running create \n");
+      //    CHECK_ERROR((pthread_create(&(pid[num_threads++]), &attr, calc_means,
+      //                                              (void *)(arg))) != 0);
+      //    printf("Create complete \n");
+      //    curr_point += arg->num_pts;
+      // }
 
       printf("Running secondary join \n");
       
