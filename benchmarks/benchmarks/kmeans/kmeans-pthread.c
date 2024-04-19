@@ -367,13 +367,13 @@ int main(int argc, char **argv)
       //    curr_point += arg->num_pts;
       // }
 
-      printf("Running secondary join \n");
+      // printf("Running secondary join \n");
       
-      assert (num_threads == num_procs);
-      for (i = 0; i < num_threads; i++) {
-         pthread_join(pid[i], NULL);   
-      }
-      printf("Left while loop \n");
+      // assert (num_threads == num_procs);
+      // for (i = 0; i < num_threads; i++) {
+      //    pthread_join(pid[i], NULL);   
+      // }
+      // printf("Left while loop \n");
       
    }
    
