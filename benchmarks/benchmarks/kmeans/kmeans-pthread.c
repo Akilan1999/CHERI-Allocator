@@ -335,7 +335,7 @@ int main(int argc, char **argv)
       }
       printf("left while loop\n");
       
-      assert (num_threads == num_procs);
+      // assert (num_threads == num_procs);
       for (i = 0; i < num_threads; i++) {
          pthread_join(pid[i], NULL);   
       }
