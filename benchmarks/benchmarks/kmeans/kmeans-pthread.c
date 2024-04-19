@@ -351,6 +351,7 @@ int main(int argc, char **argv)
          CHECK_ERROR((arg = (thread_arg *)malloc(sizeof(thread_arg))) == NULL);
          printf("succesfully runs \n");
          arg->start_idx = curr_point;
+         printf("Running malloc \n");
          arg->sum = (int *)malloc(dim * sizeof(int));
          arg->num_pts = num_per_thread;
          if (excess > 0) {
