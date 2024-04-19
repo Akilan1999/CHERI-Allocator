@@ -69,7 +69,7 @@ int *clusters;
 typedef struct {
    int start_idx;
    int num_pts;
-   int sum;
+   int *sum;
 } thread_arg;
 
 /** dump_points()
@@ -363,7 +363,7 @@ int main(int argc, char **argv)
          printf("Running create \n");
          CHECK_ERROR((pthread_create(&(pid[num_threads++]), &attr, calc_means,
                                                    (void *)(arg))) != 0);
-         printf("Create complete \n");
+         printf("Create complete  \n");
          curr_point += arg->num_pts;
       }
 
