@@ -201,7 +201,7 @@ void FREECHERI(void *ptr) {
    
    // printf("free len %d \n", len);
 
-   munmap(ptr, len);
+   CHECK_ERROR(munmap(ptr, len));
 }
 
 INITREGULARALLOC(void) {
