@@ -69,7 +69,7 @@ int *clusters;
 typedef struct {
    int start_idx;
    int num_pts;
-   int sum;
+   int *sum;
 } thread_arg;
 
 /** dump_points()
