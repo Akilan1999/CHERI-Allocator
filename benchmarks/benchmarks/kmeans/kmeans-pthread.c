@@ -370,6 +370,7 @@ int main(int argc, char **argv)
       for (i = 0; i < num_threads; i++) {
          pthread_join(pid[i], NULL);   
       }
+      printf("Left while loop \n");
       
    }
    
