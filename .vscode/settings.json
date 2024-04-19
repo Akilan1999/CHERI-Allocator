@@ -28,7 +28,8 @@
         "unordered_set": "c",
         "string": "c",
         "string_view": "c",
-        "stddefines.h": "c"
+        "stddefines.h": "c",
+        "charconv": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
