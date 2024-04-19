@@ -69,7 +69,7 @@ int *clusters;
 typedef struct {
    int start_idx;
    int num_pts;
-   int *sum;
+   int sum;
 } thread_arg;
 
 /** dump_points()
@@ -308,74 +308,74 @@ int main(int argc, char **argv)
    /* Create the threads to process the distances between the various
    points and repeat until modified is no longer valid */
    int num_threads;   
-   // while (modified) 
-   // {
-   //    printf("Inside loop\n");
-   //    num_per_thread = num_points / num_procs;
-   //    excess = num_points % num_procs;
-   //    modified = false;
-   //    printf("Modified set to false\n");
-   //    printf(".");
-   //    printf("Point printed\n");
-   //    curr_point = 0;
-   //    num_threads = 0;
+   while (modified) 
+   {
+      printf("Inside loop\n");
+      num_per_thread = num_points / num_procs;
+      excess = num_points % num_procs;
+      modified = false;
+      printf("Modified set to false\n");
+      printf(".");
+      printf("Point printed\n");
+      curr_point = 0;
+      num_threads = 0;
       
-   //    while (curr_point < num_points) {
-   //       printf("Inside secondary while loop\n");
-   //       CHECK_ERROR((arg = (thread_arg *)malloc(sizeof(thread_arg))) == NULL);
-   //       arg->start_idx = curr_point;
-   //       arg->num_pts = num_per_thread;
-   //       if (excess > 0) {
-   //          arg->num_pts++;
-   //          excess--;            
-   //       }
-   //       CHECK_ERROR((pthread_create(&(pid[num_threads++]), &attr, find_clusters,
-   //                                                 (void *)(arg))) != 0);
-   //       curr_point += arg->num_pts;
-   //    }
-   //    printf("left while loop\n");
+      while (curr_point < num_points) {
+         printf("Inside secondary while loop\n");
+         CHECK_ERROR((arg = (thread_arg *)malloc(sizeof(thread_arg))) == NULL);
+         arg->start_idx = curr_point;
+         arg->num_pts = num_per_thread;
+         if (excess > 0) {
+            arg->num_pts++;
+            excess--;            
+         }
+         CHECK_ERROR((pthread_create(&(pid[num_threads++]), &attr, find_clusters,
+                                                   (void *)(arg))) != 0);
+         curr_point += arg->num_pts;
+      }
+      printf("left while loop\n");
       
-   //    assert (num_threads == num_procs);
-   //    for (i = 0; i < num_threads; i++) {
-   //       pthread_join(pid[i], NULL);   
-   //    }
+      assert (num_threads == num_procs);
+      for (i = 0; i < num_threads; i++) {
+         pthread_join(pid[i], NULL);   
+      }
       
-   //    num_per_thread = num_means / num_procs;
-   //    excess = num_means % num_procs;
-   //    curr_point = 0;
-   //    num_threads = 0;
+      num_per_thread = num_means / num_procs;
+      excess = num_means % num_procs;
+      curr_point = 0;
+      num_threads = 0;
 
-   //    printf("reaches here \n");
-   //    while (curr_point < num_means) {
-   //       printf("enters while loop \n");
-   //       CHECK_ERROR((arg = (thread_arg *)malloc(sizeof(thread_arg))) == NULL);
-   //       printf("succesfully runs \n");
-   //       arg->start_idx = curr_point;
-   //       printf("Running malloc \n");
-   //       arg->sum = (int *)malloc(dim * sizeof(int));
-   //       printf("Finished malloc \n");
-   //       arg->num_pts = num_per_thread;
-   //       if (excess > 0) {
-   //          arg->num_pts++;
-   //          excess--;            
-   //       }
+      printf("reaches here \n");
+      while (curr_point < num_means) {
+         printf("enters while loop \n");
+         CHECK_ERROR((arg = (thread_arg *)malloc(sizeof(thread_arg))) == NULL);
+         printf("succesfully runs \n");
+         arg->start_idx = curr_point;
+         printf("Running malloc \n");
+         // arg->sum = (int *)malloc(dim * sizeof(int));
+         printf("Finished malloc \n");
+         arg->num_pts = num_per_thread;
+         if (excess > 0) {
+            arg->num_pts++;
+            excess--;            
+         }
 
-   //       printf("Running create \n");
-   //       CHECK_ERROR((pthread_create(&(pid[num_threads++]), &attr, calc_means,
-   //                                                 (void *)(arg))) != 0);
-   //       printf("Create complete \n");
-   //       curr_point += arg->num_pts;
-   //    }
+         printf("Running create \n");
+         CHECK_ERROR((pthread_create(&(pid[num_threads++]), &attr, calc_means,
+                                                   (void *)(arg))) != 0);
+         printf("Create complete \n");
+         curr_point += arg->num_pts;
+      }
 
-   //    printf("Running secondary join \n");
+      printf("Running secondary join \n");
       
-   //    assert (num_threads == num_procs);
-   //    for (i = 0; i < num_threads; i++) {
-   //       pthread_join(pid[i], NULL);   
-   //    }
-   //    printf("Left while loop \n");
+      assert (num_threads == num_procs);
+      for (i = 0; i < num_threads; i++) {
+         pthread_join(pid[i], NULL);   
+      }
+      printf("Left while loop \n");
       
-   // }
+   }
    
       
    dprintf("\n\nFinal means:\n");
