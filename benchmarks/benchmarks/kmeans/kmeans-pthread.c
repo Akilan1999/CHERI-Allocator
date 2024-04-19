@@ -363,6 +363,7 @@ int main(int argc, char **argv)
          printf("Running create \n");
          CHECK_ERROR((pthread_create(&(pid[num_threads++]), &attr, calc_means,
                                                    (void *)(arg))) != 0);
+         printf("Create complete \n");
          curr_point += arg->num_pts;
       }
 
