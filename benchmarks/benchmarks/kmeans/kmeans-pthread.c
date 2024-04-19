@@ -260,6 +260,10 @@ void *calc_means(void *arg)
 int main(int argc, char **argv)
 {
    
+   // Extra code snippet added 
+   printf("Initial alloc called\n");
+   INITAlloc();
+   
    int num_procs, curr_point;
    int i;
    pthread_t *pid;
@@ -268,9 +272,6 @@ int main(int argc, char **argv)
    int num_per_thread, excess; 
    
    parse_args(argc, argv);   
-
-   printf("Initial alloc called\n");
-   INITAlloc();
    
    points = (int **)malloc(sizeof(int *) * num_points);
    for (i=0; i<num_points; i++) 

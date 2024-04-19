@@ -204,6 +204,22 @@ void FREECHERI(void *ptr) {
    munmap(ptr, len);
 }
 
+INITREGULARALLOC(void) {
+   ptr = mmap(NULL, sz,
+    PROT_READ|PROT_WRITE, MAP_SHARED,-1,0);
+
+   // Added error handling
+    if(ptr == MAP_FAILED)
+    {
+        perror("mmap");
+        exit(EXIT_FAILURE);
+    }
+}
+// Standard Alloc 
+// void* MALLOCREGULAR(size_t sz) {
+   
+// }
+
 
 // void* CLEARALLOC(void) {
 // /
