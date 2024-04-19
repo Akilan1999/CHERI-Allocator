@@ -208,9 +208,9 @@ INITREGULARALLOC(void) {
    size_t sz;
    // Pre Allocate 400 MB 
    sz = 4000000;
-   
+
    ptr = mmap(NULL, sz,
-    PROT_READ|PROT_WRITE, MAP_SHARED,-1,0);
+    PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON,-1,0);
 
    // Added error handling
     if(ptr == MAP_FAILED)
