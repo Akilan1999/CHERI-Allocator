@@ -336,9 +336,9 @@ int main(int argc, char **argv)
       printf("left while loop\n");
       
       // assert (num_threads == num_procs);
-      for (i = 0; i < num_threads; i++) {
-         pthread_join(pid[i], NULL);   
-      }
+      // for (i = 0; i < num_threads; i++) {
+      //    pthread_join(pid[i], NULL);   
+      // }
       
       num_per_thread = num_means / num_procs;
       excess = num_means % num_procs;
