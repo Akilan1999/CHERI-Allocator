@@ -335,15 +335,17 @@ int main(int argc, char **argv)
       }
       printf("left while loop\n");
       
-      // assert (num_threads == num_procs);
-      // for (i = 0; i < num_threads; i++) {
-      //    pthread_join(pid[i], NULL);   
-      // }
+      assert (num_threads == num_procs);
+      for (i = 0; i < num_threads; i++) {
+         pthread_join(pid[i], NULL);   
+      }
       
       num_per_thread = num_means / num_procs;
       excess = num_means % num_procs;
       curr_point = 0;
       num_threads = 0;
+
+      printf("reaches here \n");
       while (curr_point < num_means) {
          CHECK_ERROR((arg = (thread_arg *)malloc(sizeof(thread_arg))) == NULL);
          arg->start_idx = curr_point;
