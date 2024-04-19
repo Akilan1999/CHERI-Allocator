@@ -347,7 +347,9 @@ int main(int argc, char **argv)
 
       printf("reaches here \n");
       while (curr_point < num_means) {
+         printf("enters while loop \n");
          CHECK_ERROR((arg = (thread_arg *)malloc(sizeof(thread_arg))) == NULL);
+         printf("succesfully runs \n");
          arg->start_idx = curr_point;
          arg->sum = (int *)malloc(dim * sizeof(int));
          arg->num_pts = num_per_thread;
