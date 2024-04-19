@@ -205,6 +205,10 @@ void FREECHERI(void *ptr) {
 }
 
 INITREGULARALLOC(void) {
+   size_t sz;
+   // Pre Allocate 400 MB 
+   sz = 4000000;
+   
    ptr = mmap(NULL, sz,
     PROT_READ|PROT_WRITE, MAP_SHARED,-1,0);
 
