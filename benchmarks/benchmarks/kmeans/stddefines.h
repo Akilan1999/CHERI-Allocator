@@ -177,6 +177,7 @@ INITAlloc(void) {
 // Quick malloc implementation with mmap
 void* MALLOCCHERI(size_t sz)
 {
+   sz = __builtin_align_up(sz, _Alignof(max_align_t));
 
    printf("%d \n", sz);
    printf("%d Malloc counter\n", MallocCounter);
@@ -186,9 +187,6 @@ void* MALLOCCHERI(size_t sz)
    ptrLink = cheri_setbounds(ptrLink, sz);
 
    return ptrLink;
-
-
-
 
 //   if (heap + sz > heap_start + HEAP_SIZE) return NULL;
 //   heap += sz;
