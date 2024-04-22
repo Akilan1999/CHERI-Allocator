@@ -39,18 +39,10 @@
 
 #include "coz.h"
 
-// #define malloc      MALLOCCHERI
-// #define free        FREECHERI
-
 #define DEF_NUM_POINTS 100000
 #define DEF_NUM_MEANS 100
 #define DEF_DIM 3
 #define DEF_GRID_SIZE 1000
-
-// #define DEF_NUM_POINTS 1000
-// #define DEF_NUM_MEANS 10
-// #define DEF_DIM 3
-// #define DEF_GRID_SIZE 100
 
 #define false 0
 #define true 1
@@ -260,10 +252,6 @@ void *calc_means(void *arg)
 int main(int argc, char **argv)
 {
    
-   // Extra code snippet added 
-   // printf("Initial alloc called\n");
-   // INITREGULARALLOC();
-   
    int num_procs, curr_point;
    int i;
    pthread_t *pid;
@@ -278,11 +266,9 @@ int main(int argc, char **argv)
    {
       points[i] = (int *)malloc(sizeof(int) * dim);
    }
-   printf("Generating points\n");
+   dprintf("Generating points\n");
    generate_points(points, num_points);
-
-
-   printf("calling malloc after generate\n");
+   
    means = (int **)malloc(sizeof(int *) * num_means);
    for (i=0; i<num_means; i++) 
    {
@@ -310,18 +296,14 @@ int main(int argc, char **argv)
    int num_threads;   
    while (modified) 
    {
-      printf("Inside loop\n");
       num_per_thread = num_points / num_procs;
       excess = num_points % num_procs;
       modified = false;
-      printf("Modified set to false\n");
-      printf(".");
-      printf("Point printed\n");
+      dprintf(".");
       curr_point = 0;
       num_threads = 0;
       
       while (curr_point < num_points) {
-         printf("Inside secondary while loop\n");
          CHECK_ERROR((arg = (thread_arg *)malloc(sizeof(thread_arg))) == NULL);
          arg->start_idx = curr_point;
          arg->num_pts = num_per_thread;
@@ -333,7 +315,6 @@ int main(int argc, char **argv)
                                                    (void *)(arg))) != 0);
          curr_point += arg->num_pts;
       }
-      printf("left while loop\n");
       
       assert (num_threads == num_procs);
       for (i = 0; i < num_threads; i++) {
@@ -344,36 +325,24 @@ int main(int argc, char **argv)
       excess = num_means % num_procs;
       curr_point = 0;
       num_threads = 0;
-
-      printf("reaches here \n");
       while (curr_point < num_means) {
-         printf("enters while loop \n");
          CHECK_ERROR((arg = (thread_arg *)malloc(sizeof(thread_arg))) == NULL);
-         printf("succesfully runs \n");
          arg->start_idx = curr_point;
-         printf("Running malloc \n");
-            arg->sum = (int *)malloc(dim * sizeof(int));
-         printf("Finished malloc \n");
+         arg->sum = (int *)malloc(dim * sizeof(int));
          arg->num_pts = num_per_thread;
          if (excess > 0) {
             arg->num_pts++;
             excess--;            
          }
-
-         printf("Running create \n");
          CHECK_ERROR((pthread_create(&(pid[num_threads++]), &attr, calc_means,
                                                    (void *)(arg))) != 0);
-         printf("Create complete  \n");
          curr_point += arg->num_pts;
       }
-
-      printf("Running secondary join \n");
       
       assert (num_threads == num_procs);
       for (i = 0; i < num_threads; i++) {
          pthread_join(pid[i], NULL);   
       }
-      printf("Left while loop \n");
       
    }
    
@@ -391,8 +360,6 @@ int main(int argc, char **argv)
    }
    free(means);
    free(clusters);
-
-   // CLEARALLOC();
 
    return 0;
 }
