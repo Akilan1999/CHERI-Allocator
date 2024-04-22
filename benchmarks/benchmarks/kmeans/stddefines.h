@@ -170,6 +170,8 @@ INITAlloc(void) {
         exit(EXIT_FAILURE);
     }
 
+    MallocCounter = (int)sz;
+
 }
 
 // Quick malloc implementation with mmap
@@ -178,10 +180,10 @@ void* MALLOCCHERI(size_t sz)
 
    printf("%d \n", sz);
    printf("%d Malloc counter\n", MallocCounter);
+
+   MallocCounter -= sz;
    void *ptrLink = &ptr[MallocCounter];
    ptrLink = cheri_setbounds(ptrLink, sz);
-
-   MallocCounter = MallocCounter + (int)sz;
 
    return ptrLink;
 
@@ -221,6 +223,8 @@ INITREGULARALLOC(void) {
         perror("mmap");
         exit(EXIT_FAILURE);
     }
+
+    MallocCounter = (int)sz;
 }
 // Standard Alloc 
 // void* MALLOCREGULAR(size_t sz) {
