@@ -176,7 +176,7 @@ INITAlloc(void) {
 void* MALLOCCHERI(size_t sz)
 {
 
-   // printf(sz);
+   printf("%d", sz);
    void *ptrLink = &ptr[MallocCounter];
    ptrLink = cheri_setbounds(ptrLink, sz);
 
