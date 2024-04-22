@@ -185,7 +185,10 @@ void* MALLOCCHERI(size_t sz)
 
    MallocCounter -= sz;
    void *ptrLink = &ptr[MallocCounter];
-   ptrLink = cheri_setbounds_exact(ptrLink, sz);
+   // ptrLink = cheri_setbounds_exact(ptrLink, sz);
+
+   ptrLink = __builtin_cheri_bounds_set_exact(		\
+				    __DECONST(capability, (ptrLink)), (sz))
 
    return ptrLink;
 
