@@ -39,12 +39,12 @@
 
 #include "coz.h"
 
-// #define malloc      MALLOCCHERI
-// #define free        FREECHERI
+#define malloc      MALLOCCHERI
+#define free        FREECHERI
 
 #define DEF_NUM_POINTS 100000
 #define DEF_NUM_MEANS 100
-#define DEF_DIM 4
+#define DEF_DIM 5
 #define DEF_GRID_SIZE 1000
 
 // #define DEF_NUM_POINTS 1000
@@ -262,7 +262,7 @@ int main(int argc, char **argv)
    
    // Extra code snippet added 
    // printf("Initial alloc called\n");
-   // INITAlloc();
+   INITAlloc();
    //INITREGULARALLOC();
    
    int num_procs, curr_point;
