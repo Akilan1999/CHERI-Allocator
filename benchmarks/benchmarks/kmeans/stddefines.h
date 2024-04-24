@@ -140,7 +140,7 @@ INITAlloc(void) {
 
    size_t sz;
    // Pre Allocate 600 MB 
-   sz = 10000000;
+   sz = 100000000;
 
    int fd = open(FILENAME, O_RDWR, 0600);
 
