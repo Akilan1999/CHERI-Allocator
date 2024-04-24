@@ -140,7 +140,7 @@ INITAlloc(void) {
 
    size_t sz;
    // Pre Allocate 600 MB 
-   sz = 6000000;
+   sz = 10000000;
 
    int fd = open(FILENAME, O_RDWR, 0600);
 
@@ -210,7 +210,7 @@ void FREECHERI(void *ptr) {
 INITREGULARALLOC(void) {
    size_t sz;
    // Pre Allocate 400 MB 
-   sz = 6000000;
+   sz = 10000000;
 
    ptr = mmap(NULL, sz,
     PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON,-1,0);
