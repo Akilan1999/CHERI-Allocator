@@ -262,7 +262,7 @@ int main(int argc, char **argv)
    
    // Extra code snippet added 
    // printf("Initial alloc called\n");
-   INITAlloc();
+   //INITAlloc();
    //INITREGULARALLOC();
    
    int num_procs, curr_point;
