@@ -44,7 +44,7 @@
 
 #define DEF_NUM_POINTS 100000
 #define DEF_NUM_MEANS 100
-#define DEF_DIM 6
+#define DEF_DIM 3
 #define DEF_GRID_SIZE 1000
 
 // #define DEF_NUM_POINTS 1000
