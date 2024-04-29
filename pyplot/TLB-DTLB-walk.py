@@ -26,7 +26,7 @@ ypoints = np.array([3625,
          1496,
          951])
 
-xpoints = np.array([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17])
+xpoints = np.array([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18])
 
 ypoints1 = np.array([6798,
          2144,
@@ -47,22 +47,27 @@ ypoints1 = np.array([6798,
          3235,
          4939])
 
-xpoints1 = np.array([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17])
+xpoints1 = np.array([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18])
 
 plt.plot(xpoints, ypoints,label='Malloc Physically contigous with bounds')
 plt.plot(xpoints1, ypoints1,label='System memory allocator')
 
 '''
-L1D_TLB
-The counter counts each Memory-read operation or Memory-write operation that causes a TLB
-access to at least the Level 1 data or unified TLB.
-Each access to a TLB entry is counted including multiple accesses caused by single instructions
-such as LDM or STM.
+DTLB_WALK
+The counter counts each access counted by L1D_TLB that causes a 
+refill of a data or unified 
+TLB involving at least one translation table walk access.
+This includes each complete or partial translation table walk that causes an 
+access to memory, including to data or translation table walk caches.
+If Armv8.7 is not implemented, it is IMPLEMENTATION DEFINED whether accesses 
+that cause an update of an existing TLB entry involving at least one translation 
+table walk access are counted. If Armv8.7 is implemented, these accesses 
+are counted.
 '''
-plt.title("DTLB walk access, read \n ARM Performance counter: L1D_TLB_RD \n This counter counts each access counted by \n L1D_TLB that is a Memory-read operation. \n Kmeans C program with Cluster size 3")
+plt.title("Data TLB access, read \n ARM Performance counter: DTLB_WALK \n Data TLB access with at least one translation table walk \n This includes each complete or partial translation table walk that causes an access to memory, including to data or translation table walk caches. \n Kmeans C program with Cluster size 3")
 
 plt.xlabel("time in seconds")
-plt.ylabel("L1 DTLB reads")
+plt.ylabel("DTLB walks")
 # plt.plot(xpoints1, ypoints1)
 plt.legend()
 plt.show()
