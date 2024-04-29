@@ -28,24 +28,24 @@ ypoints = np.array([78303,
 
 xpoints = np.array([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18])
 
-ypoints1 = np.array([69789,
-       98176,
-       84635,
-      120922,
-       64256,
-       76703,
-       73646,
-      113839,
-       61033,
-       77009,
-       75661,
-       93193,
-      120468,
-      106568,
-       93912,
-      151603,
-      138165,
-      22468])
+ypoints1 = np.array([127978,
+       79046,
+       67101,
+       99081,
+      186824,
+      111734,
+      120426,
+       65293,
+      112589,
+      113350,
+      110875,
+       74596,
+       86142,
+       77054,
+      106211,
+      133301,
+      109764,
+      68751])
 
 xpoints1 = np.array([1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18])
 
@@ -54,20 +54,17 @@ plt.plot(xpoints1, ypoints1,label='System memory allocator')
 
 '''
 DTLB_WALK
-The counter counts each access counted by L1D_TLB that causes a 
-refill of a data or unified 
-TLB involving at least one translation table walk access.
-This includes each complete or partial translation table walk that causes an 
-access to memory, including to data or translation table walk caches.
-If Armv8.7 is not implemented, it is IMPLEMENTATION DEFINED whether accesses 
-that cause an update of an existing TLB entry involving at least one translation 
-table walk access are counted. If Armv8.7 is implemented, these accesses 
-are counted.
+The counter counts each Memory-read operation or Memory-write operation that causes a 
+TLB access to at least the Level 2 data or unified TLB.
+Each access to a TLB entry is counted including refills 
+of Level 1 TLBs.
+The counter does not count the access if the access i
+s due to a TLB maintenance instruction.
 '''
-plt.title("Data TLB access, read \n ARM Performance counter: DTLB_WALK \n Data TLB access with at least one translation table walk \n This includes each complete or partial translation table walk that causes an access to memory, including to data or translation table walk caches. \n Kmeans C program with Cluster size 3")
+plt.title("Level 2 data TLB acces, read \n ARM Performance counter: L2D_TLB \n The counter counts each Memory-read operation or Memory-write operation that causes a TLB access to at least the Level 2 data or unified TLB. \n Kmeans C program with Cluster size 3")
 
 plt.xlabel("time in seconds")
-plt.ylabel("DTLB walks")
+plt.ylabel("L2 DTLB reads")
 # plt.plot(xpoints1, ypoints1)
 plt.legend()
 plt.show()
