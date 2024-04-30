@@ -27,23 +27,45 @@ ypoints = np.array([1944100892,
 
 xpoints = np.array([(i) for i, x in enumerate(ypoints, 1)])
 
-ypoints1 = np.array([2001205195,
-    2037350408,
-    2077998800,
-    2064361816,
-    2370004326,
-    2366505116,
-    2433485997,
-    2388982491,
-    2622710065,
-    2231849577,
-    2213896383,
-    1971144730,
-    2279336623,
-    2384236727,
-    2159066740,
-    1872922315,
-    2046840068])
+ypoints1 = np.array([3512147188,
+    2931698338,
+    3130637973,
+    2799013235,
+    3256184323,
+    2992132432,
+    3041359022,
+    3094813437,
+    3028071885,
+    3380696386,
+    3018331410,
+    2899603552,
+    3264907899,
+    3002822837,
+    3045671887,
+    3119204499,
+    2953573342,
+    2963606839,
+    2855193865,
+    3043260399,
+    2972252469,
+    2503069946,
+    2958386657,
+    3033810534,
+    3007362327,
+    3026500873,
+    3159826130,
+    2504328570,
+    4058464445,
+    3218889301,
+    3597912212,
+    4181723542,
+    3749432601,
+    3654586898,
+    3557679884,
+    3322970044,
+    3630597266,
+    3130958213,
+    1019981557])
 
 xpoints1 = np.array([(i) for i, x in enumerate(ypoints1, 1)])
 
@@ -57,7 +79,7 @@ access to at least the Level 1 data or unified TLB.
 Each access to a TLB entry is counted including multiple accesses caused by single instructions
 such as LDM or STM.
 '''
-plt.title("Level 1 data TLB access, read \n ARM Performance counter: L1D_TLB_RD \n This counter counts each access counted by \n L1D_TLB that is a Memory-read operation. \n Kmeans C program with Cluster size 3")
+plt.title("Level 1 data TLB access, read \n ARM Performance counter: L1D_TLB_RD \n This counter counts each access counted by \n L1D_TLB that is a Memory-read operation. \n Kmeans C program with Cluster size 6")
 
 plt.xlabel("time in seconds")
 plt.ylabel("L1 DTLB reads")
