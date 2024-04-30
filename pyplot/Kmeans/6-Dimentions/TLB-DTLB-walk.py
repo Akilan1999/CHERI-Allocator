@@ -50,24 +50,45 @@ ypoints = np.array([12140,
 
 xpoints = np.array([(i) for i, x in enumerate(ypoints, 1)])
 
-ypoints1 = np.array([6798,
-         2144,
-         2327,
-         2234,
-         2779,
-         3046,
-         2824,
-         2762,
-         2857,
-         2404,
-         3236,
-         2473,
-         2517,
-         2558,
-         3065,
-         3222,
-         3235,
-         4939])
+ypoints1 = np.array([12300,
+         8615,
+         6314,
+         6995,
+         4796,
+        10032,
+         4414,
+         8960,
+         7265,
+         8670,
+         5075,
+         8384,
+         5986,
+         8500,
+         7639,
+         8565,
+         7414,
+         5646,
+         9956,
+         4638,
+         8766,
+         5357,
+        13762,
+         6227,
+        12425,
+         7081,
+        11306,
+         8253,
+         8411,
+         6267,
+        15571,
+         5383,
+        11586,
+         8497,
+        11189,
+         7123,
+         7342,
+         6345,
+         5933])
 
 xpoints1 = np.array([(i) for i, x in enumerate(ypoints1, 1)])
 
@@ -86,7 +107,7 @@ that cause an update of an existing TLB entry involving at least one translation
 table walk access are counted. If Armv8.7 is implemented, these accesses 
 are counted.
 '''
-plt.title("Data TLB access, read \n ARM Performance counter: DTLB_WALK \n Data TLB access with at least one translation table walk \n This includes each complete or partial translation table walk that causes an access to memory, including to data or translation table walk caches. \n Kmeans C program with Cluster size 3")
+plt.title("Data TLB access, read \n ARM Performance counter: DTLB_WALK \n Data TLB access with at least one translation table walk \n This includes each complete or partial translation table walk that causes an access to memory, including to data or translation table walk caches. \n Kmeans C program with Cluster size 6")
 
 plt.xlabel("time in seconds")
 plt.ylabel("DTLB walks")
