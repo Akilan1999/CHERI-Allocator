@@ -8,24 +8,45 @@ import numpy as np
 # xpoints1 = np.array([5,10,15,20])
 
 
-ypoints = np.array([127978,
-       79046,
-       67101,
-       99081,
-      186824,
-      111734,
-      120426,
-       65293,
-      112589,
-      113350,
-      110875,
-       74596,
-       86142,
-       77054,
-      106211,
-      133301,
-      109764,
-      68751])
+ypoints = np.array([72589,
+      169120,
+       35199,
+       71459,
+       55242,
+       83325,
+      144975,
+       55231,
+       73573,
+      103593,
+      122123,
+       88845,
+       99314,
+       32081,
+      130112,
+      117455,
+       73731,
+       90279,
+       93552,
+      136261,
+       35079,
+       81254,
+       93388,
+       79594,
+      173510,
+       51158,
+      140234,
+       64106,
+       45336,
+      178182,
+       38224,
+      101736,
+      104410,
+       57382,
+      141596,
+       59233,
+       84714,
+       74438,
+       55860])
 
 xpoints = np.array([(i) for i, x in enumerate(ypoints, 1)])
 
@@ -82,7 +103,7 @@ of Level 1 TLBs.
 The counter does not count the access if the access i
 s due to a TLB maintenance instruction.
 '''
-plt.title("Level 2 data TLB acces, read \n ARM Performance counter: L2D_TLB \n The counter counts each Memory-read operation or Memory-write operation that causes a TLB access to at least the Level 2 data or unified TLB. \n Kmeans C program with Cluster size 3")
+plt.title("Level 2 data TLB acces, read \n ARM Performance counter: L2D_TLB \n The counter counts each Memory-read operation or Memory-write operation that causes a TLB access to at least the Level 2 data or unified TLB. \n Kmeans C program with Cluster size 6")
 
 plt.xlabel("time in seconds")
 plt.ylabel("L2 DTLB reads")
