@@ -347,7 +347,7 @@ that cause an update of an existing TLB entry involving at least one translation
 table walk access are counted. If Armv8.7 is implemented, these accesses 
 are counted.
 '''
-plt.title("Data TLB access, read \n ARM Performance counter: DTLB_WALK \n Data TLB access with at least one translation table walk \n This includes each complete or partial translation table walk that causes an access to memory, including to data or translation table walk caches. \n Kmeans C program with Cluster size 20")
+plt.title("Data TLB access, read \n ARM Performance counter: DTLB_WALK \n Data TLB access with at least one translation table walk \n This includes each complete or partial translation table walk that causes an access to memory, including to data or translation table walk caches. \n Kmeans C program with Cluster size 40")
 
 plt.xlabel("time in seconds")
 plt.ylabel("DTLB walks")

@@ -336,7 +336,7 @@ xpoints1 = np.array([(i) for i, x in enumerate(ypoints1, 1)])
 plt.plot(xpoints, ypoints,label='Malloc Physically contigous with bounds')
 plt.plot(xpoints1, ypoints1,label='System memory allocator')
 
-plt.title("Level 2 data TLB acces, read \n ARM Performance counter: L2D_TLB \n The counter counts each Memory-read operation or Memory-write operation that causes a TLB access to at least the Level 2 data or unified TLB. \n Kmeans C program with Cluster size 20")
+plt.title("Level 2 data TLB acces, read \n ARM Performance counter: L2D_TLB \n The counter counts each Memory-read operation or Memory-write operation that causes a TLB access to at least the Level 2 data or unified TLB. \n Kmeans C program with Cluster size 40")
 
 plt.xlabel("time in seconds")
 plt.ylabel("L2 DTLB reads")
