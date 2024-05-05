@@ -117,8 +117,8 @@ void matrixmult_splitter(void *data_in)
     for (i = 0; i < num_procs; i++)
     {
         dprintf("Inner loop \n");
-        int ret_val;
-        CHECK_ERROR(pthread_join(tid[i], (void **)(void*)&ret_val) != 0);
+        // int ret_val;
+        // CHECK_ERROR(pthread_join(tid[i], (void **)(void*)&ret_val) != 0);
 	//   CHECK_ERROR(ret_val != 0);
     }
     dprintf("Free step \n");
