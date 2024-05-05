@@ -12,11 +12,11 @@
 
 double startTime;
 
-showElapsed(id,m)
-int id;
-char * m;
-{  printf("%d: %s %f secs\n",id,m,(clock()-startTime)/CLOCKS_PER_SEC);
-}
+// showElapsed(id,m)
+// int id;
+// char * m;
+// {  printf("%d: %s %f secs\n",id,m,(clock()-startTime)/CLOCKS_PER_SEC);
+// }
 
 int * makeVector(n)
 int n;
