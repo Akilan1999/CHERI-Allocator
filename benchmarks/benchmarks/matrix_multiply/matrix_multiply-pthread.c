@@ -111,6 +111,8 @@ void matrixmult_splitter(void *data_in)
 	    CHECK_ERROR(pthread_create(&tid[i], &attr, matrixmult_map, (void*)out) != 0);
 
     }
+
+    dprintf("outer loop \n");
     /* Barrier, wait for all threads to finish */
     for (i = 0; i < num_procs; i++)
     {
