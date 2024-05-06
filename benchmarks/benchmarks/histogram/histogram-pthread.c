@@ -41,6 +41,9 @@
 
 #include "coz.h"
 
+#define malloc      MALLOCCHERI
+#define free        FREECHERI
+
 #define IMG_DATA_OFFSET_POS 10
 #define BITS_PER_PIXEL_POS 28
 
@@ -138,6 +141,9 @@ void *calc_hist(void *arg) {
 
 
 int main(int argc, char *argv[]) {
+
+   INITAlloc();
+   //INITREGULARALLOC();
       
    int i, j;
    int fd;
