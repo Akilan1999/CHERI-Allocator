@@ -214,7 +214,7 @@ int main(int argc, char *argv[]) {
    excess = num_pixels % num_procs;
    
    CHECK_ERROR( (pid = (pthread_t *)malloc(sizeof(pthread_t) * num_procs)) == NULL);
-   CHECK_ERROR( (arg = (thread_arg_t *)calloc(sizeof(thread_arg_t), num_procs)) == NULL);
+   CHECK_ERROR( (arg = (thread_arg_t *)malloc(sizeof(thread_arg_t) * num_procs)) == NULL);
    
    /* Assign portions of the image to each thread */
    long curr_pos = (long)(*data_pos);
