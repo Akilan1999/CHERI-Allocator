@@ -33,6 +33,18 @@
 #include <stdint.h>
 #include <stdio.h>
 
+#include <stddef.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/mman.h>
+
+#include <cheriintrin.h>
+#include <cheri/cheric.h>
+
+#include <sys/stat.h>
+#include <fcntl.h>
+
+
 //#define TIMING
 
 /* Debug printf */
@@ -110,5 +122,116 @@ static inline void get_time (struct timeval *t)
     gettimeofday (t, NULL);
 #endif
 }
+
+// Expirement work
+
+#define FILENAME "/dev/contigmem"
+
+static char *heap_start;
+static char *heap;
+static size_t HEAP_SIZE = 1024 * 1024 * 1024;
+
+void *ptr;
+int MallocCounter;
+
+size_t sizeUsed;
+
+INITAlloc(void) {
+
+   size_t sz;
+   // Pre Allocate 600 MB 
+   sz = 100000000;
+
+   int fd = open(FILENAME, O_RDWR, 0600);
+
+    if (fd < 0) {
+        perror("open");
+        exit(EXIT_FAILURE);
+    }
+
+    off_t offset = 0; // offset to seek to.
+
+    if (ftruncate(fd, sz) < 0) {
+        perror("ftruncate");
+        close(fd);
+        exit(EXIT_FAILURE);
+    }
+
+   //  ptr = mmap(NULL, sz,
+   //  PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON,-1,0);
+
+    ptr = mmap(NULL, sz,
+    PROT_READ|PROT_WRITE, MAP_SHARED,fd,0);
+
+   // Added error handling
+    if(ptr == MAP_FAILED)
+    {
+        perror("mmap");
+        exit(EXIT_FAILURE);
+    }
+
+    MallocCounter = (int)sz;
+
+}
+
+// Quick malloc implementation with mmap
+void* MALLOCCHERI(size_t sz)
+{
+   sz = __builtin_align_up(sz, _Alignof(max_align_t));
+
+   // printf("%d \n", sz);
+   // printf("%d Malloc counter\n", MallocCounter);
+
+   MallocCounter -= sz;
+   void *ptrLink = &ptr[MallocCounter];
+   ptrLink = cheri_setbounds(ptrLink, sz);
+
+   return ptrLink;
+
+//   if (heap + sz > heap_start + HEAP_SIZE) return NULL;
+//   heap += sz;
+//   return heap - sz;
+     
+}
+
+// Quick cheri free implementation
+void FREECHERI(void *ptr) { 
+
+   // printf("free called \n");
+
+   // get bounds from 
+   int len = cheri_getlen(ptr);
+   
+   // printf("free len %d \n", len);
+
+   munmap(ptr, len);
+}
+
+INITREGULARALLOC(void) {
+   size_t sz;
+   // Pre Allocate 400 MB 
+   sz = 100000000;
+
+   ptr = mmap(NULL, sz,
+    PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON,-1,0);
+
+   // Added error handling
+    if(ptr == MAP_FAILED)
+    {
+        perror("mmap");
+        exit(EXIT_FAILURE);
+    }
+
+    MallocCounter = (int)sz;
+}
+// Standard Alloc 
+// void* MALLOCREGULAR(size_t sz) {
+   
+// }
+
+
+// void* CLEARALLOC(void) {
+// /
+// }
 
 #endif // STDDEFINES_H_

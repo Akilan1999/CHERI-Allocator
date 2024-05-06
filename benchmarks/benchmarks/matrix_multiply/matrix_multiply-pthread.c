@@ -45,6 +45,9 @@
 
 #include "coz.h"
 
+// #define malloc      MALLOCCHERI
+// #define free        FREECHERI
+
 typedef struct {
     int row_num;
     int *matrix_A;
@@ -83,7 +86,7 @@ void matrixmult_splitter(void *data_in)
     CHECK_ERROR((num_procs = sysconf(_SC_NPROCESSORS_ONLN)) <= 0);
     dprintf("THe number of processors is %d\n", num_procs);
 
-    tid = (pthread_t *)MALLOC(num_procs * sizeof(pthread_t));
+    tid = (pthread_t *)malloc(num_procs * sizeof(pthread_t));
     /* Thread must be scheduled systemwide */
     pthread_attr_init(&attr);
     pthread_attr_setscope(&attr, PTHREAD_SCOPE_SYSTEM);
@@ -169,6 +172,9 @@ void *matrixmult_map(void *args_in)
 }
 
 int main(int argc, char *argv[]) {
+
+    // INITAlloc();
+   //INITREGULARALLOC();
     
     int i,j, create_files;
     int fd_A, fd_B, fd_out,file_size;
