@@ -256,8 +256,6 @@ void *string_match_map(void *args)
         printf("here \n");
     }
 
-    printf("here");
-
     free(cur_word);
     free(cur_word_final); 
     return (void *)0;
