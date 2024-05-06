@@ -253,7 +253,7 @@ void *string_match_map(void *args)
 		
 		COZ_PROGRESS;
 
-        printf("here");
+        printf("here \n");
     }
 
     printf("here");
