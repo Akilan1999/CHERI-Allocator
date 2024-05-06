@@ -253,6 +253,9 @@ void *string_match_map(void *args)
 		
 		COZ_PROGRESS;
     }
+
+    printf("here");
+
     free(cur_word);
     free(cur_word_final); 
     return (void *)0;
@@ -313,8 +316,6 @@ int main(int argc, char *argv[]) {
     gettimeofday(&starttime,0);
     string_match_splitter(&str_data);
     gettimeofday(&endtime,0);
-
-    printf("here");
 
     printf("String Match: Completed %ld\n",(endtime.tv_sec - starttime.tv_sec));
 
