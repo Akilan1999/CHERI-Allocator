@@ -314,6 +314,8 @@ int main(int argc, char *argv[]) {
     string_match_splitter(&str_data);
     gettimeofday(&endtime,0);
 
+    printf("here");
+
     printf("String Match: Completed %ld\n",(endtime.tv_sec - starttime.tv_sec));
 
     /*CHECK_ERROR(munmap(fdata_encrypt, finfo_encrypt.st_size + 1) < 0);
