@@ -149,7 +149,7 @@ void string_match_splitter(void *data_in)
     /* Check whether the various terms exist */
     assert(data_in);
 
-    tid = (pthread_t *)MALLOC(num_procs * sizeof(pthread_t));
+    tid = (pthread_t *)malloc(num_procs * sizeof(pthread_t));
 
     /* Thread must be scheduled systemwide */
     pthread_attr_init(&attr);
