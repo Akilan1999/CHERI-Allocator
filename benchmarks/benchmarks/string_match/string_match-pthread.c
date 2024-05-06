@@ -251,7 +251,7 @@ void *string_match_map(void *args)
 		bzero(cur_word_final, MAX_REC_LEN);
 		total_len+=key_len;
 		
-		COZ_PROGRESS;
+		// COZ_PROGRESS;
     }
 
     free(cur_word);
