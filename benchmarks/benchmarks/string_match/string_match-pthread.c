@@ -252,8 +252,6 @@ void *string_match_map(void *args)
 		total_len+=key_len;
 		
 		COZ_PROGRESS;
-
-        printf("here \n");
     }
 
     free(cur_word);
