@@ -181,7 +181,7 @@ ypoints1 = np.array([int(x) for x in """2780755
    18940111
    16777309
    19653443
-   17616389                 
+   17616389
    1417668
    23258907
    0
@@ -309,7 +309,6 @@ ypoints1 = np.array([int(x) for x in """2780755
 
 xpoints1 = np.array([(i) for i, x in enumerate(ypoints1, 1)])
 
-xpoints1 = np.array([(i) for i, x in enumerate(ypoints1, 1)])
 
 plt.plot(xpoints, ypoints,label='Malloc Physically contigous with bounds')
 plt.plot(xpoints1, ypoints1,label='System memory allocator')
