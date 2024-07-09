@@ -389,7 +389,8 @@ contigmem_mmap_single(struct cdev *cdev, vm_ooffset_t *offset, vm_size_t size,
     
 	*offset = (vm_ooffset_t)vtophys(contigmem_buffers[buffer_index].addr);
 
-	printf(*offset)
+	printf("test virt=%p phys=%p\n",contigmem_buffers[buffer_index].addr,
+			(void *)(vm_ooffset_t)vtophys(contigmem_buffers[buffer_index].addr));
 
 	// Print offset ? 
 	
