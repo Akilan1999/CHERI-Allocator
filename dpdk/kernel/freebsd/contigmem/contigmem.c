@@ -364,7 +364,7 @@ contigmem_mmap_single(struct cdev *cdev, vm_ooffset_t *offset, vm_size_t size,
 {
 
 	// Testing if this is called when file is opened
-	printf("contigmem_mmap_single called  1 \n");
+	printf("contigmem_mmap_single called \n");
 
 	struct contigmem_vm_handle *vmh;
 	uint64_t buffer_index;
@@ -388,6 +388,8 @@ contigmem_mmap_single(struct cdev *cdev, vm_ooffset_t *offset, vm_size_t size,
 	vmh->buffer_index = buffer_index;
     
 	*offset = (vm_ooffset_t)vtophys(contigmem_buffers[buffer_index].addr);
+
+	printf(*offset)
 
 	// Print offset ? 
 	
