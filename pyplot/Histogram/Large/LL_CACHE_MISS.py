@@ -7,8 +7,7 @@ import numpy as np
 # ypoints1 = np.array([10062197042, 9873241615,12034929886,5118684853])
 # xpoints1 = np.array([5,10,15,20])
 
-ypoints = np.array(np.array([int(x) for x in """
-             5527931
+ypoints = np.array(np.array([int(x) for x in """5527931
              8487180
              8358903
              8502471
@@ -41,10 +40,12 @@ It is IMPLEMENTATION DEFINED whether accesses that result from cache maintenance
 If the cache is shared and the Effective value of PMEVTYPER<n>_EL0.MT for the counter is 0, then the counter counts only events Attributable to the PE counting the event. For a multithreaded processor implementation, if the cache is shared by PEs other than the PEs in the multithreaded processor and the Effective value of PMEVTYPER<n>_EL0.MT for the counter is 1, then the counter counts only events Attributable to PEs in the multithreaded processor. In all other cases, it is IMPLEMENTATION DEFINED whether only events Attributable to the PE counting the event or all events are counted, and might depend on the Effective value of PMEVTYPER<n>_EL1.MT.
 PMCEID1_EL0[25] reads as 1 if this event is implemented and 0 otherwise. This event must be implemented if FEAT_PMUv3p4 is implemented.
 '''
-plt.title("L1D cache miss read \n ARM Performance counter: L1D_CACHE_LMISS_RD \n each Memory-read operation or Memory-write operation that causes a cache \n access to at least the Level 1 data or unified cache. This includes each complete or partial translation table walk that causes an access to memory, including to data or translation table walk caches. \n Histogram large")
+# plt.title("L1D cache miss read \n ARM Performance counter: L1D_CACHE_LMISS_RD \n each Memory-read operation or Memory-write operation that causes a cache \n access to at least the Level 1 data or unified cache. This includes each complete or partial translation table walk that causes an access to memory, including to data or translation table walk caches. \n Histogram large")
 
 plt.xlabel("time in seconds")
-plt.ylabel("DTLB walks")
+plt.ylabel("LL cache miss")
 # plt.plot(xpoints1, ypoints1)
 plt.legend()
-plt.show()
+# plt.show()
+
+plt.savefig('ll_cache_histogram_large.png')

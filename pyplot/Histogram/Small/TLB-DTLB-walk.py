@@ -26,10 +26,12 @@ that cause an update of an existing TLB entry involving at least one translation
 table walk access are counted. If Armv8.7 is implemented, these accesses 
 are counted.
 '''
-plt.title("Data TLB access, read \n ARM Performance counter: DTLB_WALK \n Data TLB access with at least one translation table walk \n This includes each complete or partial translation table walk that causes an access to memory, including to data or translation table walk caches. \n Histogram medium")
+# plt.title("Data TLB access, read \n ARM Performance counter: DTLB_WALK \n Data TLB access with at least one translation table walk \n This includes each complete or partial translation table walk that causes an access to memory, including to data or translation table walk caches. \n Histogram medium")
 
 plt.xlabel("time in seconds")
 plt.ylabel("DTLB walks")
 # plt.plot(xpoints1, ypoints1)
 plt.legend()
-plt.show()
+# plt.show()
+
+plt.savefig('dtlb_walk_histogram_small.png')

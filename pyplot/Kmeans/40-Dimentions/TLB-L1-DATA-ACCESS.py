@@ -346,10 +346,12 @@ access to at least the Level 1 data or unified TLB.
 Each access to a TLB entry is counted including multiple accesses caused by single instructions
 such as LDM or STM.
 '''
-plt.title("Level 1 data TLB access, read \n ARM Performance counter: L1D_TLB_RD \n This counter counts each access counted by \n L1D_TLB that is a Memory-read operation. \n Kmeans C program with Cluster size 40")
+# plt.title("Level 1 data TLB access, read \n ARM Performance counter: L1D_TLB_RD \n This counter counts each access counted by \n L1D_TLB that is a Memory-read operation. \n Kmeans C program with Cluster size 40")
 
 plt.xlabel("time in seconds")
 plt.ylabel("L1 DTLB reads")
 # plt.plot(xpoints1, ypoints1)
 plt.legend()
-plt.show()
+# plt.show()
+
+plt.savefig('l1_tlb_40_dimentions.png')

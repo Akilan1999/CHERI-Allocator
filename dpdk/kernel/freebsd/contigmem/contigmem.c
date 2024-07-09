@@ -255,14 +255,25 @@ contigmem_cdev_pager_ctor(void *handle, vm_ooffset_t size, vm_prot_t prot,
 	struct contigmem_vm_handle *vmh = handle;
 	struct contigmem_buffer *buf;
 
+	// TODO: add track to check on mmap to see if 
+	// this is called with debug metrics
+
 	buf = &contigmem_buffers[vmh->buffer_index];
 
 	atomic_add_int(&contigmem_refcnt, 1);
-
+    
+	// Looks like a Mutex lock
 	mtx_lock(&buf->mtx);
+	// To check if memset is called
+    // memset -	fill memory with a constant byte
+    // The  memset()  function	fills  the  first  n  bytes of the memory area
+    // pointed to by s with the	constant byte c.
+
 	if (buf->refcnt == 0)
 		memset(buf->addr, 0, contigmem_buffer_size);
 	buf->refcnt++;
+
+	// Looks like a Mutex unlock
 	mtx_unlock(&buf->mtx);
 
 	return 0;
@@ -314,7 +325,7 @@ contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 		page = *mres;
 		VM_OBJECT_WLOCK(object);
 		vm_page_updatefake(page, paddr, memattr);
-	} else {
+	} else {we
 		/*
 		 * Replace the passed in reqpage page with our own fake page and
 		 * free up the original page.
@@ -341,7 +352,9 @@ contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 
 static struct cdev_pager_ops contigmem_cdev_pager_ops = {
 	.cdev_pg_ctor = contigmem_cdev_pager_ctor,
+	// Regular page
 	.cdev_pg_dtor = contigmem_cdev_pager_dtor,
+	// Page fault
 	.cdev_pg_fault = contigmem_cdev_pager_fault,
 };
 
@@ -368,14 +381,25 @@ contigmem_mmap_single(struct cdev *cdev, vm_ooffset_t *offset, vm_size_t size,
 	if (size > contigmem_buffer_size)
 		return EINVAL;
 
+    // Allocates unitialized space in the kernel 
 	vmh = malloc(sizeof(*vmh), M_CONTIGMEM, M_NOWAIT | M_ZERO);
 	if (vmh == NULL)
 		return ENOMEM;
 	vmh->buffer_index = buffer_index;
-
+    
 	*offset = (vm_ooffset_t)vtophys(contigmem_buffers[buffer_index].addr);
+
+	// Print offset ? 
+	
+	// Allocates to a particular page
 	*obj = cdev_pager_allocate(vmh, OBJT_DEVICE, &contigmem_cdev_pager_ops,
 			size, nprot, *offset, curthread->td_ucred);
 
 	return 0;
 }
+
+// Todo: 
+// - Get the automated flow working. 
+// - Print physical address of sample C programs.
+// - Check grouping of TLB entries. 
+// - Get writing for EuroSys.

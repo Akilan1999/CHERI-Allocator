@@ -13,7 +13,7 @@ ypoints = np.array([int(x) for x in """140262
       156217
       155686
       139859
-      80438""".replace('       ',',').replace('\n','').split(",")])
+      80438""".replace('      ',',').replace('\n','').split(",")])
 
 xpoints = np.array([(i) for i, x in enumerate(ypoints, 1)])
 
@@ -40,10 +40,11 @@ of Level 1 TLBs.
 The counter does not count the access if the access i
 s due to a TLB maintenance instruction.
 '''
-plt.title("Level 2 data TLB acces, read \n ARM Performance counter: L2D_TLB \n The counter counts each Memory-read operation or Memory-write operation that causes a TLB access to at least the Level 2 data or unified TLB. \n Histogram large")
+# plt.title("Level 2 data TLB acces, read \n ARM Performance counter: L2D_TLB \n The counter counts each Memory-read operation or Memory-write operation that causes a TLB access to at least the Level 2 data or unified TLB. \n Histogram large")
 
 plt.xlabel("time in seconds")
 plt.ylabel("L2 DTLB reads")
 # plt.plot(xpoints1, ypoints1)
 plt.legend()
-plt.show()
+# plt.show()
+plt.savefig('tlb_l2_data.png')
