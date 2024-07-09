@@ -325,7 +325,7 @@ contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 		page = *mres;
 		VM_OBJECT_WLOCK(object);
 		vm_page_updatefake(page, paddr, memattr);
-	} else {we
+	} else {
 		/*
 		 * Replace the passed in reqpage page with our own fake page and
 		 * free up the original page.
