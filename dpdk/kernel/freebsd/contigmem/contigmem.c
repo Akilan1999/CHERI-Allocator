@@ -258,6 +258,8 @@ contigmem_cdev_pager_ctor(void *handle, vm_ooffset_t size, vm_prot_t prot,
 	// TODO: add track to check on mmap to see if 
 	// this is called with debug metrics
 
+	printf("Create page called \n");
+
 	buf = &contigmem_buffers[vmh->buffer_index];
 
 	atomic_add_int(&contigmem_refcnt, 1);
@@ -389,8 +391,7 @@ contigmem_mmap_single(struct cdev *cdev, vm_ooffset_t *offset, vm_size_t size,
     
 	*offset = (vm_ooffset_t)vtophys(contigmem_buffers[buffer_index].addr);
 
-	printf("test virt=%p phys=%p\n",contigmem_buffers[buffer_index].addr,
-			(void *)(vm_ooffset_t)vtophys(contigmem_buffers[buffer_index].addr));
+	// printf("test virt=%p",vm_ooffset_t);
 
 	// Print offset ? 
 	
