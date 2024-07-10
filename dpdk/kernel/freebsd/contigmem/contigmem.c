@@ -353,6 +353,8 @@ contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 
 	page->valid = VM_PAGE_BITS_ALL;
 
+	printf("Page OK \n");
+
 	return VM_PAGER_OK;
 }
 
