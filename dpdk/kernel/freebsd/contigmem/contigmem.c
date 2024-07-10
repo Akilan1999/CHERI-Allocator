@@ -304,6 +304,10 @@ static int
 contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 		vm_page_t *mres)
 {
+	// Setting a timer to clock page faults
+	int msec = 0, trigger = 10; /* 10ms */
+    clock_t before = clock();
+
 	vm_paddr_t paddr;
 	vm_page_t m_paddr, page;
 	vm_memattr_t memattr, memattr1;
@@ -323,11 +327,7 @@ contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 	if (m_paddr != NULL) {
 		memattr1 = pmap_page_get_memattr(m_paddr);
 		if (memattr1 != memattr) {
-			printf("mem attribute different");
 			memattr = memattr1;
-		} 
-		else { 
-			printf("mem attribute NOT different");
 		}
 	}
 
@@ -364,6 +364,9 @@ contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 	page->valid = VM_PAGE_BITS_ALL;
 
 	printf("Page OK \n");
+
+	printf("Time taken %d seconds %d milliseconds (%d iterations)\n",
+  msec/1000, msec%1000, iterations);
 
 	return VM_PAGER_OK;
 }
@@ -419,7 +422,7 @@ contigmem_mmap_single(struct cdev *cdev, vm_ooffset_t *offset, vm_size_t size,
 }
 
 // Todo: 
-// - Get the automated flow working. 
-// - Print physical address of sample C programs.
+// - Get the automated flow working. (Done)
+// - Print physical address of sample C programs (Done)
 // - Check grouping of TLB entries. 
 // - Get writing for EuroSys.
