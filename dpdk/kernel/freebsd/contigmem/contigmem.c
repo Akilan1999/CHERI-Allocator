@@ -328,6 +328,7 @@ contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 		 * If the passed in result page is a fake page, update it with
 		 * the new physical address.
 		 */
+		printf("Fake page \n");
 		page = *mres;
 		VM_OBJECT_WLOCK(object);
 		vm_page_updatefake(page, paddr, memattr);
@@ -336,10 +337,10 @@ contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 		 * Replace the passed in reqpage page with our own fake page and
 		 * free up the original page.
 		 */
+		printf("Regular Page \n");
 		page = vm_page_getfake(paddr, memattr);
 		VM_OBJECT_WLOCK(object);
 #if __FreeBSD__ >= 13
-        printf("FREEBSD 13 \n");
 		vm_page_replace(page, object, (*mres)->pindex, *mres);
 #else
 		vm_page_t mret = vm_page_replace(page, object, (*mres)->pindex);
