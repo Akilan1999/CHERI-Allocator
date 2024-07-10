@@ -321,6 +321,7 @@ contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 
 	m_paddr = vm_phys_paddr_to_vm_page(paddr);
 	if (m_paddr != NULL) {
+		printf("m_paddr is not nil \n");
 		memattr1 = pmap_page_get_memattr(m_paddr);
 		if (memattr1 != memattr)
 			memattr = memattr1;
