@@ -349,6 +349,7 @@ contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 		vm_page_lock(mret);
 		vm_page_free(mret);
 		vm_page_unlock(mret);
+		printf("Not entering the else block \n");
 #endif
 		*mres = page;
 	}
