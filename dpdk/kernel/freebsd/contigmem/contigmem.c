@@ -339,6 +339,7 @@ contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 		page = vm_page_getfake(paddr, memattr);
 		VM_OBJECT_WLOCK(object);
 #if __FreeBSD__ >= 13
+        printf("FREEBSD 13 \n");
 		vm_page_replace(page, object, (*mres)->pindex, *mres);
 #else
 		vm_page_t mret = vm_page_replace(page, object, (*mres)->pindex);
