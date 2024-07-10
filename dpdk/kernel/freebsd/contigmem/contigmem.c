@@ -287,6 +287,8 @@ contigmem_cdev_pager_dtor(void *handle)
 	struct contigmem_vm_handle *vmh = handle;
 	struct contigmem_buffer *buf;
 
+	printf("Destroyed page called \n");
+
 	buf = &contigmem_buffers[vmh->buffer_index];
 
 	mtx_lock(&buf->mtx);
