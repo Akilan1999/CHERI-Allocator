@@ -308,7 +308,7 @@ contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 	vm_page_t m_paddr, page;
 	vm_memattr_t memattr, memattr1;
 
-	printf("test page 1=%lu",(*mres)->pindex);
+	printf("test page 12=%lu",(*mres)->pindex);
 	// printf("offset=%p", *offset);
 
 	printf("Page fault \n");
