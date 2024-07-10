@@ -20,7 +20,7 @@ __FBSDID("$FreeBSD$");
 #include <sys/sysctl.h>
 #include <sys/vmmeter.h>
 #include <sys/eventhandler.h>
-#include <sys/time.h>
+#include <sys/clock.h>
 
 #include <machine/bus.h>
 
