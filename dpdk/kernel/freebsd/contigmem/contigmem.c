@@ -323,8 +323,10 @@ contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 	if (m_paddr != NULL) {
 		printf("m_paddr is not nil \n");
 		memattr1 = pmap_page_get_memattr(m_paddr);
-		if (memattr1 != memattr)
+		if (memattr1 != memattr) {
+			printf("mem attribute different");
 			memattr = memattr1;
+		}
 	}
 
 	if (((*mres)->flags & PG_FICTITIOUS) != 0) {
