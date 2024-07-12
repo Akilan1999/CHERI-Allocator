@@ -293,7 +293,7 @@ contigmem_cdev_pager_dtor(void *handle)
 	struct contigmem_vm_handle *vmh = handle;
 	struct contigmem_buffer *buf;
 
-	printf("Destroyed page called \n");
+	// printf("Destroyed page called \n");
 
 	buf = &contigmem_buffers[vmh->buffer_index];
 
@@ -303,7 +303,7 @@ contigmem_cdev_pager_dtor(void *handle)
 
 	free(vmh, M_CONTIGMEM);
 
-	printf("Total time taken %ld \n",time_taken);
+	// printf("Total time taken %ld \n",time_taken);
 
 	time_taken = 0;
 
@@ -327,9 +327,9 @@ contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 
 	nanotime(&bin);
 
-	printf("Page fault \n");
+	// printf("Page fault \n");
 
-	printf("Time Page fault start %ld\n",bin.tv_nsec);
+	// printf("Time Page fault start %ld\n",bin.tv_nsec);
 
 	memattr = object->memattr;
 
@@ -350,7 +350,7 @@ contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 		 * If the passed in result page is a fake page, update it with
 		 * the new physical address.
 		 */
-		printf("Fake page \n");
+		// printf("Fake page \n");
 		page = *mres;
 		VM_OBJECT_WLOCK(object);
 		vm_page_updatefake(page, paddr, memattr);
@@ -359,7 +359,7 @@ contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 		 * Replace the passed in reqpage page with our own fake page and
 		 * free up the original page.
 		 */
-		printf("Regular Page \n");
+		// printf("Regular Page \n");
 		page = vm_page_getfake(paddr, memattr);
 		VM_OBJECT_WLOCK(object);
 #if __FreeBSD__ >= 13
@@ -377,13 +377,13 @@ contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 
 	page->valid = VM_PAGE_BITS_ALL;
 
-	printf("Page OK \n");
+	// printf("Page OK \n");
 
 	struct timespec bin1;
 
 	nanotime(&bin1);
 
-	printf("Time Page fault end %ld\n",bin1.tv_nsec);
+	// printf("Time Page fault end %ld\n",bin1.tv_nsec);
 
 	time_taken = time_taken + (bin1.tv_nsec - bin.tv_nsec);
 
@@ -395,7 +395,7 @@ static struct cdev_pager_ops contigmem_cdev_pager_ops = {
 	// Regular page
 	.cdev_pg_dtor = contigmem_cdev_pager_dtor,
 	// Page fault
-	.cdev_pg_fault = contigmem_cdev_pager_fault,
+	// .cdev_pg_fault = contigmem_cdev_pager_fault,
 };
 
 static int
