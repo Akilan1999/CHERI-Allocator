@@ -320,6 +320,8 @@ contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 
 	printf("Page fault \n");
 
+	printf("Page fault %lu\n",bin);
+
 	memattr = object->memattr;
 
 	VM_OBJECT_WUNLOCK(object);
