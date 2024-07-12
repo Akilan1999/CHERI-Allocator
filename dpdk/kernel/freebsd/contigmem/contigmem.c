@@ -20,7 +20,7 @@ __FBSDID("$FreeBSD$");
 #include <sys/sysctl.h>
 #include <sys/vmmeter.h>
 #include <sys/eventhandler.h>
-#include	<time.h>
+#include <sys/time.h>
 
 #include <machine/bus.h>
 
@@ -288,6 +288,10 @@ contigmem_cdev_pager_dtor(void *handle)
 	struct contigmem_vm_handle *vmh = handle;
 	struct contigmem_buffer *buf;
 
+	struct timeval time_now;
+    gettimeofday(&time_now,NULL);
+    printf ("%ld secs, %ld usecs\n",time_now.tv_sec,time_now.tv_usec);
+
 	printf("Destroyed page called \n");
 
 	buf = &contigmem_buffers[vmh->buffer_index];
@@ -305,6 +309,7 @@ static int
 contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 		vm_page_t *mres)
 {
+
 
 	vm_paddr_t paddr;
 	vm_page_t m_paddr, page;
