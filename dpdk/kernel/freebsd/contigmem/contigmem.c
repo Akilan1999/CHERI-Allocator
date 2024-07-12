@@ -314,13 +314,13 @@ contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 	// printf("test page 12=%lu",(*mres)->pindex);
 	// printf("offset=%p", *offset);
 
-    struct bintime bin;
+    struct timespec bin;
 
-	// bintime(&bin);
+	nanotime(&bin);
 
 	printf("Page fault \n");
 
-	printf("Time %lu\n",bin.sec);
+	printf("Time %lu\n",bin.tv_sec);
 
 	memattr = object->memattr;
 
