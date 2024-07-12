@@ -298,8 +298,17 @@ contigmem_cdev_pager_dtor(void *handle)
 
 	free(vmh, M_CONTIGMEM);
 
+	printf("Total time taken %ld\\n",time_taken);
+
+	time_taken = 0;
+
 	atomic_subtract_int(&contigmem_refcnt, 1);
 }
+
+// Creating machanism to count the impact 
+// page faults in co-relation to run times. 
+
+long time_taken;
 
 static int
 contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
@@ -376,7 +385,7 @@ contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 
 	printf("Time Page fault end %ld\n",bin1.tv_nsec);
 
-	printf("Time taken to complete function %ld\n",bin1.tv_nsec - bin.tv_nsec);
+	time_taken = time_taken + (bin1.tv_nsec - bin.tv_nsec);
 
 	return VM_PAGER_OK;
 }
