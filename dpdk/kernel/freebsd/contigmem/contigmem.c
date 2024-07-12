@@ -282,6 +282,11 @@ contigmem_cdev_pager_ctor(void *handle, vm_ooffset_t size, vm_prot_t prot,
 	return 0;
 }
 
+// Creating machanism to count the impact 
+// page faults in co-relation to run times. 
+
+long time_taken;
+
 static void
 contigmem_cdev_pager_dtor(void *handle)
 {
@@ -304,11 +309,6 @@ contigmem_cdev_pager_dtor(void *handle)
 
 	atomic_subtract_int(&contigmem_refcnt, 1);
 }
-
-// Creating machanism to count the impact 
-// page faults in co-relation to run times. 
-
-long time_taken;
 
 static int
 contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
