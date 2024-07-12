@@ -20,7 +20,7 @@ __FBSDID("$FreeBSD$");
 #include <sys/sysctl.h>
 #include <sys/vmmeter.h>
 #include <sys/eventhandler.h>
-#include <sys/clock.h>
+#include	<time.h>
 
 #include <machine/bus.h>
 
@@ -305,9 +305,6 @@ static int
 contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 		vm_page_t *mres)
 {
-	// Setting a timer to clock page faults
-	int msec = 0, trigger = 10; /* 10ms */
-    clock_t before = clock();
 
 	vm_paddr_t paddr;
 	vm_page_t m_paddr, page;
@@ -365,9 +362,6 @@ contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 	page->valid = VM_PAGE_BITS_ALL;
 
 	printf("Page OK \n");
-
-	printf("Time taken %d seconds %d milliseconds (%d iterations)\n",
-  msec/1000, msec%1000, iterations);
 
 	return VM_PAGER_OK;
 }
