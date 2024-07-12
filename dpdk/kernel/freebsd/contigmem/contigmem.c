@@ -316,7 +316,7 @@ contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 
     struct bintime bin;
 
-	bintime(&bin);
+	// bintime(&bin);
 
 	printf("Page fault \n");
 
