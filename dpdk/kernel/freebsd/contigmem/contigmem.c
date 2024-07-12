@@ -320,7 +320,7 @@ contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 
 	printf("Page fault \n");
 
-	printf("Time %lu\n",bin.tv_sec);
+	printf("Time %ld\n",bin.tv_sec);
 
 	memattr = object->memattr;
 
