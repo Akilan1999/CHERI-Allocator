@@ -370,9 +370,13 @@ contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 
 	printf("Page OK \n");
 
-	nanotime(&bin);
+	struct timespec bin1;
 
-	printf("Time Page fault end %ld\n",bin.tv_nsec);
+	nanotime(&bin1);
+
+	printf("Time Page fault end %ld\n",bin1.tv_nsec);
+
+	printf("Time taken to complete function %ld\n",bin1.tv_nsec - bin.tv_nsec);
 
 	return VM_PAGER_OK;
 }
