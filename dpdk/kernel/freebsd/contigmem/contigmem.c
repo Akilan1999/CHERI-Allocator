@@ -320,7 +320,7 @@ contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 
 	printf("Page fault \n");
 
-	printf("Time %ld\n",bin.tv_nsec);
+	printf("Time Page fault start %ld\n",bin.tv_nsec);
 
 	memattr = object->memattr;
 
@@ -369,6 +369,10 @@ contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 	page->valid = VM_PAGE_BITS_ALL;
 
 	printf("Page OK \n");
+
+	nanotime(&bin);
+
+	printf("Time Page fault end %ld\n",bin.tv_nsec);
 
 	return VM_PAGER_OK;
 }
