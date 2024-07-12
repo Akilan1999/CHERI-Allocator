@@ -314,7 +314,7 @@ contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 	// printf("test page 12=%lu",(*mres)->pindex);
 	// printf("offset=%p", *offset);
 
-    bintime bin;
+    struct bintime bin;
 
 	bintime(&bin);
 
