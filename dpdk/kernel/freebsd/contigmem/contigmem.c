@@ -20,7 +20,7 @@ __FBSDID("$FreeBSD$");
 #include <sys/sysctl.h>
 #include <sys/vmmeter.h>
 #include <sys/eventhandler.h>
-#include	<sys/pmc.h>
+#include <sys/time.h>
 
 #include <machine/bus.h>
 
@@ -311,8 +311,12 @@ contigmem_cdev_pager_fault(vm_object_t object, vm_ooffset_t offset, int prot,
 	vm_page_t m_paddr, page;
 	vm_memattr_t memattr, memattr1;
 
-	printf("test page 12=%lu",(*mres)->pindex);
+	// printf("test page 12=%lu",(*mres)->pindex);
 	// printf("offset=%p", *offset);
+
+    bintime bin;
+
+	bintime(&bin);
 
 	printf("Page fault \n");
 
