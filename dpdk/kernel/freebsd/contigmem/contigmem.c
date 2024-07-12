@@ -303,7 +303,7 @@ contigmem_cdev_pager_dtor(void *handle)
 
 	free(vmh, M_CONTIGMEM);
 
-	printf("Total time taken %ld\\n",time_taken);
+	printf("Total time taken %ld \n",time_taken);
 
 	time_taken = 0;
 
