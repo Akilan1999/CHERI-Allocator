@@ -149,6 +149,7 @@ contigmem_load()
 	}
 
 	for (i = 0; i < contigmem_num_buffers; i++) {
+		printf(contigmem_num_buffers);
 		addr = contigmalloc(contigmem_buffer_size, M_CONTIGMEM, M_ZERO,
 			0, BUS_SPACE_MAXADDR, contigmem_buffer_size, 0);
 		if (addr == NULL) {
