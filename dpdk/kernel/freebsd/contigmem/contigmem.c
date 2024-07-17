@@ -32,6 +32,8 @@ __FBSDID("$FreeBSD$");
 #include <vm/vm_pager.h>
 #include <vm/vm_phys.h>
 
+#define RTE_CONTIGMEM_DEFAULT_BUF_SIZE 1073741824
+
 // added to print uint 
 // 64
 // #include <inttypes.h>
@@ -54,8 +56,8 @@ static d_mmap_single_t  contigmem_mmap_single;
 static d_open_t         contigmem_open;
 static d_close_t        contigmem_close;
 
-RTE_CONTIGMEM_DEFAULT_NUM_BUFS = 3;
-RTE_CONTIGMEM_DEFAULT_BUF_SIZE = 1073741824;
+// RTE_CONTIGMEM_DEFAULT_NUM_BUFS = 3;
+// RTE_CONTIGMEM_DEFAULT_BUF_SIZE = 1073741824;
 
 static int              contigmem_num_buffers = RTE_CONTIGMEM_DEFAULT_NUM_BUFS;
 static int64_t          contigmem_buffer_size = RTE_CONTIGMEM_DEFAULT_BUF_SIZE;
