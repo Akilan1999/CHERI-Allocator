@@ -33,6 +33,7 @@ __FBSDID("$FreeBSD$");
 #include <vm/vm_phys.h>
 
 #define RTE_CONTIGMEM_DEFAULT_BUF_SIZE (1024*1024*1024)
+#define RTE_CONTIGMEM_DEFAULT_NUM_BUF 2
 
 // added to print uint 
 // 64
