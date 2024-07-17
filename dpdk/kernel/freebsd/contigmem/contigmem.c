@@ -54,7 +54,7 @@ static d_mmap_single_t  contigmem_mmap_single;
 static d_open_t         contigmem_open;
 static d_close_t        contigmem_close;
 
-RTE_CONTIGMEM_DEFAULT_NUM_BUFS = 1;
+RTE_CONTIGMEM_DEFAULT_NUM_BUFS = 3;
 RTE_CONTIGMEM_DEFAULT_BUF_SIZE = 1073741824;
 
 static int              contigmem_num_buffers = RTE_CONTIGMEM_DEFAULT_NUM_BUFS;
