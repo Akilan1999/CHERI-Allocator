@@ -48,7 +48,7 @@
 // #define DEF_GRID_SIZE 1000
 
 #define DEF_NUM_POINTS 10000
-#define DEF_NUM_MEANS 10
+#define DEF_NUM_MEANS 100
 #define DEF_DIM 40
 #define DEF_GRID_SIZE 100
 
@@ -265,140 +265,140 @@ void *calc_means(void *arg)
 int main(int argc, char **argv)
 {
 
-   sleep(10);
+   // sleep(10);
    
    // Extra code snippet added 
    // printf("Initial alloc called\n");
-   // INITAlloc();
+   INITAlloc();
    //INITREGULARALLOC();
    
-   // int num_procs, curr_point;
-   // int i;
-   // pthread_t *pid;
-   // pthread_attr_t attr;
-   // thread_arg *arg;
-   // int num_per_thread, excess; 
+   int num_procs, curr_point;
+   int i;
+   pthread_t *pid;
+   pthread_attr_t attr;
+   thread_arg *arg;
+   int num_per_thread, excess; 
    
-   // parse_args(argc, argv);   
+   parse_args(argc, argv);   
    
-   // points = (int **)malloc(sizeof(int *) * num_points);
-   // for (i=0; i<num_points; i++) 
-   // {
-   //    points[i] = (int *)malloc(sizeof(int) * dim);
-   // }
-   // printf("Generating points\n");
-   // generate_points(points, num_points);
+   points = (int **)malloc(sizeof(int *) * num_points);
+   for (i=0; i<num_points; i++) 
+   {
+      points[i] = (int *)malloc(sizeof(int) * dim);
+   }
+   printf("Generating points\n");
+   generate_points(points, num_points);
 
 
-   // // printf("calling malloc after generate\n");
-   // means = (int **)malloc(sizeof(int *) * num_means);
-   // for (i=0; i<num_means; i++) 
-   // {
-   //    means[i] = (int *)malloc(sizeof(int) * dim);
-   // }
-   // dprintf("Generating means\n");
-   // generate_points(means, num_means);
+   // printf("calling malloc after generate\n");
+   means = (int **)malloc(sizeof(int *) * num_means);
+   for (i=0; i<num_means; i++) 
+   {
+      means[i] = (int *)malloc(sizeof(int) * dim);
+   }
+   dprintf("Generating means\n");
+   generate_points(means, num_means);
  
-   // clusters = (int *)malloc(sizeof(int) * num_points);
-   // memset(clusters, -1, sizeof(int) * num_points);
+   clusters = (int *)malloc(sizeof(int) * num_points);
+   memset(clusters, -1, sizeof(int) * num_points);
    
    
-   // pthread_attr_init(&attr);
-   // pthread_attr_setscope(&attr, PTHREAD_SCOPE_SYSTEM);
-   // CHECK_ERROR((num_procs = sysconf(_SC_NPROCESSORS_ONLN)) <= 0);
+   pthread_attr_init(&attr);
+   pthread_attr_setscope(&attr, PTHREAD_SCOPE_SYSTEM);
+   CHECK_ERROR((num_procs = sysconf(_SC_NPROCESSORS_ONLN)) <= 0);
       
-   // CHECK_ERROR( (pid = (pthread_t *)malloc(sizeof(pthread_t) * num_procs)) == NULL);
+   CHECK_ERROR( (pid = (pthread_t *)malloc(sizeof(pthread_t) * num_procs)) == NULL);
    
-   // modified = true; 
+   modified = true; 
    
-   // printf("Starting iterative algorithm\n");
+   printf("Starting iterative algorithm\n");
    
-   // /* Create the threads to process the distances between the various
-   // points and repeat until modified is no longer valid */
-   // int num_threads;   
-   // while (modified) 
-   // {
-   //    // printf("Inside loop\n");
-   //    num_per_thread = num_points / num_procs;
-   //    excess = num_points % num_procs;
-   //    modified = false;
-   //    // printf("Modified set to false\n");
-   //    // printf(".");
-   //    // printf("Point printed\n");
-   //    curr_point = 0;
-   //    num_threads = 0;
+   /* Create the threads to process the distances between the various
+   points and repeat until modified is no longer valid */
+   int num_threads;   
+   while (modified) 
+   {
+      // printf("Inside loop\n");
+      num_per_thread = num_points / num_procs;
+      excess = num_points % num_procs;
+      modified = false;
+      // printf("Modified set to false\n");
+      // printf(".");
+      // printf("Point printed\n");
+      curr_point = 0;
+      num_threads = 0;
       
-   //    while (curr_point < num_points) {
-   //       // printf("Inside secondary while loop\n");
-   //       CHECK_ERROR((arg = (thread_arg *)malloc(sizeof(thread_arg))) == NULL);
-   //       arg->start_idx = curr_point;
-   //       arg->num_pts = num_per_thread;
-   //       if (excess > 0) {
-   //          arg->num_pts++;
-   //          excess--;            
-   //       }
-   //       CHECK_ERROR((pthread_create(&(pid[num_threads++]), &attr, find_clusters,
-   //                                                 (void *)(arg))) != 0);
-   //       curr_point += arg->num_pts;
-   //    }
-   //    // printf("left while loop\n");
+      while (curr_point < num_points) {
+         // printf("Inside secondary while loop\n");
+         CHECK_ERROR((arg = (thread_arg *)malloc(sizeof(thread_arg))) == NULL);
+         arg->start_idx = curr_point;
+         arg->num_pts = num_per_thread;
+         if (excess > 0) {
+            arg->num_pts++;
+            excess--;            
+         }
+         CHECK_ERROR((pthread_create(&(pid[num_threads++]), &attr, find_clusters,
+                                                   (void *)(arg))) != 0);
+         curr_point += arg->num_pts;
+      }
+      // printf("left while loop\n");
       
-   //    assert (num_threads == num_procs);
-   //    for (i = 0; i < num_threads; i++) {
-   //       pthread_join(pid[i], NULL);   
-   //    }
+      assert (num_threads == num_procs);
+      for (i = 0; i < num_threads; i++) {
+         pthread_join(pid[i], NULL);   
+      }
       
-   //    num_per_thread = num_means / num_procs;
-   //    excess = num_means % num_procs;
-   //    curr_point = 0;
-   //    num_threads = 0;
+      num_per_thread = num_means / num_procs;
+      excess = num_means % num_procs;
+      curr_point = 0;
+      num_threads = 0;
 
-   //    // printf("reaches here \n");
-   //    while (curr_point < num_means) {
-   //       // printf("enters while loop \n");
-   //       CHECK_ERROR((arg = (thread_arg *)malloc(sizeof(thread_arg))) == NULL);
-   //       // printf("succesfully runs \n");
-   //       arg->start_idx = curr_point;
-   //       // printf("Running malloc \n");
-   //          arg->sum = (int *)malloc(dim * sizeof(int));
-   //       // printf("Finished malloc \n");
-   //       arg->num_pts = num_per_thread;
-   //       if (excess > 0) {
-   //          arg->num_pts++;
-   //          excess--;            
-   //       }
+      // printf("reaches here \n");
+      while (curr_point < num_means) {
+         // printf("enters while loop \n");
+         CHECK_ERROR((arg = (thread_arg *)malloc(sizeof(thread_arg))) == NULL);
+         // printf("succesfully runs \n");
+         arg->start_idx = curr_point;
+         // printf("Running malloc \n");
+            arg->sum = (int *)malloc(dim * sizeof(int));
+         // printf("Finished malloc \n");
+         arg->num_pts = num_per_thread;
+         if (excess > 0) {
+            arg->num_pts++;
+            excess--;            
+         }
 
-   //       // printf("Running create \n");
-   //       CHECK_ERROR((pthread_create(&(pid[num_threads++]), &attr, calc_means,
-   //                                                 (void *)(arg))) != 0);
-   //       // printf("Create complete  \n");
-   //       curr_point += arg->num_pts;
-   //    }
+         // printf("Running create \n");
+         CHECK_ERROR((pthread_create(&(pid[num_threads++]), &attr, calc_means,
+                                                   (void *)(arg))) != 0);
+         // printf("Create complete  \n");
+         curr_point += arg->num_pts;
+      }
 
-   //    // printf("Running secondary join \n");
+      // printf("Running secondary join \n");
       
-   //    assert (num_threads == num_procs);
-   //    for (i = 0; i < num_threads; i++) {
-   //       pthread_join(pid[i], NULL);   
-   //    }
-   //    // printf("Left while loop \n");
+      assert (num_threads == num_procs);
+      for (i = 0; i < num_threads; i++) {
+         pthread_join(pid[i], NULL);   
+      }
+      // printf("Left while loop \n");
       
-   // }
+   }
    
       
-   // dprintf("\n\nFinal means:\n");
-   // dump_points(means, num_means);
+   dprintf("\n\nFinal means:\n");
+   dump_points(means, num_means);
 
-   // for (i = 0; i < num_points; i++) 
-   //    free(points[i]);
-   // free(points);
+   for (i = 0; i < num_points; i++) 
+      free(points[i]);
+   free(points);
    
-   // for (i = 0; i < num_means; i++) 
-   // {
-   //    free(means[i]);
-   // }
-   // free(means);
-   // free(clusters);
+   for (i = 0; i < num_means; i++) 
+   {
+      free(means[i]);
+   }
+   free(means);
+   free(clusters);
 
    // CLEARALLOC();
 
