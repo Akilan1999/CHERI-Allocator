@@ -400,7 +400,7 @@ static struct cdev_pager_ops contigmem_cdev_pager_ops = {
 	// Regular page
 	.cdev_pg_dtor = contigmem_cdev_pager_dtor,
 	// Page fault
-	.cdev_pg_fault = contigmem_cdev_pager_fault,
+	// .cdev_pg_fault = contigmem_cdev_pager_fault,
 };
 
 static int
