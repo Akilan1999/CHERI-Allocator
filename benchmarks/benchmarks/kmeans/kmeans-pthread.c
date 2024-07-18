@@ -264,6 +264,8 @@ void *calc_means(void *arg)
 
 int main(int argc, char **argv)
 {
+
+   sleep(10);
    
    // Extra code snippet added 
    // printf("Initial alloc called\n");
