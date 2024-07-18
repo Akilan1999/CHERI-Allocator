@@ -129,7 +129,7 @@ static inline void get_time (struct timeval *t)
 
 static char *heap_start;
 static char *heap;
-static size_t HEAP_SIZE = 1024 * 1024 * 1024;
+static size_t HEAP_SIZE = 512 * 1024 * 1024;
 
 void *ptr;
 int MallocCounter;
@@ -140,7 +140,7 @@ INITAlloc(void) {
 
    size_t sz;
    // Pre Allocate 600 MB 
-   sz = 100000000;
+   sz = HEAP_SIZE;
 
    int fd = open(FILENAME, O_RDWR, 0600);
 
