@@ -59,7 +59,7 @@ static d_close_t        contigmem_close;
 // RTE_CONTIGMEM_DEFAULT_NUM_BUFS = 3;
 // RTE_CONTIGMEM_DEFAULT_BUF_SIZE = 1073741824;
 
-static int              contigmem_num_buffers = 3;
+static int              contigmem_num_buffers = 1;
 static int64_t          contigmem_buffer_size = (512*1024*1024);
 // static int64_t          contigmem_buffer_size = 1073741824;
 
