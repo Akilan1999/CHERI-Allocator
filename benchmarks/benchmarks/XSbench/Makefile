@@ -35,7 +35,7 @@ obj = $(source:.c=.o)
 
 # Make sure we didn't pick up lower case cc
 ifeq (cc,$(CC))
-CC    = gcc
+CC    = clang
 endif
 
 # Standard Flags
