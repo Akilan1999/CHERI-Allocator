@@ -53,12 +53,12 @@ ifneq (,$(findstring gcc,$(CC)))
 endif
 
 # LLVM Compiler
-ifneq (,$(findstring clang,$(CC)))
-  CFLAGS += -flto
-  ifeq ($(OPENMP),yes)
-	CFLAGS += -fopenmp -DOPENMP
-  endif
-endif
+# ifneq (,$(findstring clang,$(CC)))
+#   CFLAGS += -flto
+#   ifeq ($(OPENMP),yes)
+# 	CFLAGS += -fopenmp -DOPENMP
+#   endif
+# endif
 
 # # Intel Compiler
 # ifneq (,$(findstring intel,$(CC)))
