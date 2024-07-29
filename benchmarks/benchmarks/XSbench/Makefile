@@ -60,19 +60,19 @@ ifneq (,$(findstring clang,$(CC)))
   endif
 endif
 
-# Intel Compiler
-ifneq (,$(findstring intel,$(CC)))
-  CFLAGS += -ipo
-  ifeq ($(OPENMP),yes)
-	CFLAGS += -fopenmp -DOPENMP
-  endif
-endif
+# # Intel Compiler
+# ifneq (,$(findstring intel,$(CC)))
+#   CFLAGS += -ipo
+#   ifeq ($(OPENMP),yes)
+# 	CFLAGS += -fopenmp -DOPENMP
+#   endif
+# endif
 
-# Debug Flags
-ifeq ($(DEBUG),yes)
-  CFLAGS += -g
-  LDFLAGS  += -g
-endif
+# # Debug Flags
+# ifeq ($(DEBUG),yes)
+#   CFLAGS += -g
+#   LDFLAGS  += -g
+# endif
 
 # Profiling Flags
 ifeq ($(PROFILE),yes)
