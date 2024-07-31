@@ -35,7 +35,7 @@ obj = $(source:.c=.o)
 
 # Make sure we didn't pick up lower case cc
 ifeq (cc,$(CC))
-CC    = gcc
+CC    = clang
 endif
 
 # Standard Flags
@@ -53,26 +53,26 @@ ifneq (,$(findstring gcc,$(CC)))
 endif
 
 # LLVM Compiler
-ifneq (,$(findstring clang,$(CC)))
-  CFLAGS += -flto
-  ifeq ($(OPENMP),yes)
-	CFLAGS += -fopenmp -DOPENMP
-  endif
-endif
+# ifneq (,$(findstring clang,$(CC)))
+#   CFLAGS += -flto
+#   ifeq ($(OPENMP),yes)
+# 	CFLAGS += -fopenmp -DOPENMP
+#   endif
+# endif
 
-# Intel Compiler
-ifneq (,$(findstring intel,$(CC)))
-  CFLAGS += -ipo
-  ifeq ($(OPENMP),yes)
-	CFLAGS += -fopenmp -DOPENMP
-  endif
-endif
+# # Intel Compiler
+# ifneq (,$(findstring intel,$(CC)))
+#   CFLAGS += -ipo
+#   ifeq ($(OPENMP),yes)
+# 	CFLAGS += -fopenmp -DOPENMP
+#   endif
+# endif
 
-# Debug Flags
-ifeq ($(DEBUG),yes)
-  CFLAGS += -g
-  LDFLAGS  += -g
-endif
+# # Debug Flags
+# ifeq ($(DEBUG),yes)
+#   CFLAGS += -g
+#   LDFLAGS  += -g
+# endif
 
 # Profiling Flags
 ifeq ($(PROFILE),yes)
