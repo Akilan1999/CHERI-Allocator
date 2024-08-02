@@ -129,7 +129,7 @@ static inline void get_time (struct timeval *t)
 
 static char *heap_start;
 static char *heap;
-static size_t HEAP_SIZE = 720 * 1024 * 1024;
+static size_t HEAP_SIZE = 512 * 1024 * 1024;
 
 void *ptr;
 int MallocCounter;
