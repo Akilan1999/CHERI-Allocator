@@ -36,6 +36,9 @@
 #include <pthread.h>
 #include "stddefines.h"
 
+#define malloc      MALLOCCHERI
+#define free        FREECHERI
+
 #include "coz.h"
 
 #define DEF_GRID_SIZE 1000  // all values in the matrix are from 0 to this value 
@@ -260,6 +263,9 @@ void pthread_cov() {
 
 
 int main(int argc, char **argv) {
+
+    INITAlloc();
+   //INITREGULARALLOC();
    
    int i;
    
