@@ -264,8 +264,8 @@ void pthread_cov() {
 
 int main(int argc, char **argv) {
 
-    INITAlloc();
-   //INITREGULARALLOC();
+      INITAlloc();
+      //INITREGULARALLOC();
    
    int i;
    
