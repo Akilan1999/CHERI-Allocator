@@ -45,8 +45,8 @@
 
 #include "coz.h"
 
-#define malloc      MALLOCCHERI
-#define free        FREECHERI
+// #define malloc      MALLOCCHERI
+// #define free        FREECHERI
 
 typedef struct {
     int row_num;
@@ -173,7 +173,7 @@ void *matrixmult_map(void *args_in)
 
 int main(int argc, char *argv[]) {
 
-    INITAlloc();
+    // INITAlloc();
    //INITREGULARALLOC();
     
     int i,j, create_files;
