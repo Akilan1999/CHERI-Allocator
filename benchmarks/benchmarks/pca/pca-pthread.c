@@ -36,8 +36,8 @@
 #include <pthread.h>
 #include "stddefines.h"
 
-#define malloc      MALLOCCHERI
-#define free        FREECHERI
+// #define malloc      MALLOCCHERI
+// #define free        FREECHERI
 
 #include "coz.h"
 
@@ -264,7 +264,7 @@ void pthread_cov() {
 
 int main(int argc, char **argv) {
 
-      INITAlloc();
+      // INITAlloc();
       //INITREGULARALLOC();
    
    int i;
