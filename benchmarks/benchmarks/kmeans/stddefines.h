@@ -129,7 +129,7 @@ static inline void get_time (struct timeval *t)
 
 static char *heap_start;
 static char *heap;
-// static size_t HEAP_SIZE = 600 * 1024 * 1024;
+static size_t HEAP_SIZE = 1024 * 1024 * 1024;
 
 void *ptr;
 int MallocCounter;
@@ -210,7 +210,7 @@ void FREECHERI(void *ptr) {
 INITREGULARALLOC(void) {
    size_t sz;
    // Pre Allocate 400 MB 
-   sz = 1000000000;
+   sz = 100000000;
 
    ptr = mmap(NULL, sz,
     PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON,-1,0);
