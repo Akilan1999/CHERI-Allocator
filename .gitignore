@@ -1,0 +1,5 @@
+# ignore shared object files
+*.so
+# ignore .out binaries
+*.out
+

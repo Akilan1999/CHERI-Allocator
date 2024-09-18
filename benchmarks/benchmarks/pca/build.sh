@@ -1,0 +1,6 @@
+cc -g -Wall -o pca-pthread.out -mabi=purecap-benchmark -lpthread pca-pthread.c
+
+sudo time pmcstat -d -w 1 -p l1d_tlb_rd -p l2d_tlb_rd -p l1d_tlb_refill -p cpu_cycles -p dtlb_walk -p stall_backend -p ll_cache_miss_rd -o pca-20-15000-regular.txt ./pca-pthread.out -r 20 -c 50 -s 15000 > pca-20-15000-out-regular.txt
+sudo time pmcstat -d -w 1 -p l1d_tlb_rd -p l2d_tlb_rd -p l1d_tlb_refill -p cpu_cycles -p dtlb_walk -p stall_backend -p ll_cache_miss_rd -o pca-100-15000-regular.txt ./pca-pthread.out -r 100 -c 500 -s 15000 > pca-100-15000-out-regular.txt
+sudo time pmcstat -d -w 1 -p l1d_tlb_rd -p l2d_tlb_rd -p l1d_tlb_refill -p cpu_cycles -p dtlb_walk -p stall_backend -p ll_cache_miss_rd -o pca-1000-15000-regular.txt ./pca-pthread.out -r 1000 -c 5000 -s 15000 > pca-1000-15000-out-regular.txt
+# sudo time pmcstat -d -w 1 -p l1d_tlb_rd -p l2d_tlb_rd -p l1d_tlb_refill -p cpu_cycles -p dtlb_walk -p stall_backend -p ll_cache_miss_rd -o pca-1000-15000-cheri.txt ./pca-pthread.out -r 10000 -c 50000 -s 15000 > pca-10000-15000-out-cheri.txt

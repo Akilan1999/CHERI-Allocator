@@ -1,0 +1,7 @@
+Regular mmap:
+723.17 real
+modified mmap:
+723.17 real
+
+modified mmap:
+156.65 real

@@ -1,0 +1,1 @@
+cc -g -Wall -o string_match-pthread.out -mabi=purecap-benchmark -lpthread string_match-pthread.c

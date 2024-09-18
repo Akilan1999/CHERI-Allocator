@@ -1,0 +1,1 @@
+cc -g -Wall -o sort-pthread.out -mabi=purecap-benchmark -lpthread sort-pthread.c
