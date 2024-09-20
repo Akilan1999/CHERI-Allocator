@@ -5,7 +5,7 @@
 rm -rf /home/akilan/Alloc-Test/Allocator/dpdk/build-hybrid/kernel/freebsd
 
 # build the changes
-ninja -j4 -C build-hybrid
+sudo ninja -j4 -C build-hybrid
 
 # remove previous contig kernel module running
 sudo kldunload contigmem.ko
