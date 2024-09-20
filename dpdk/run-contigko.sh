@@ -1,8 +1,8 @@
-# pull changes
-git pull origin main
+# # pull changes
+# git pull origin main
 
 # remove freebsd build directory to force build
-rm -rf /home/akilan/CHERI-Allocator/dpdk/build-hybrid/kernel/freebsd
+rm -rf /home/akilan/Alloc-Test/Allocator/dpdk/build-hybrid/kernel/freebsd
 
 # build the changes
 ninja -j4 -C build-hybrid
@@ -11,7 +11,7 @@ ninja -j4 -C build-hybrid
 sudo kldunload contigmem.ko
 
 # entering directory of the contig build .ko files
-cd /home/akilan/CHERI-Allocator/dpdk/build-hybrid/kernel/freebsd
+cd /home/akilan/Alloc-Test/Allocator/dpdk/build-hybrid/kernel/freebsd
 
 # Copyping files to /boot/modules
 sudo cp contigmem.ko /boot/modules/
