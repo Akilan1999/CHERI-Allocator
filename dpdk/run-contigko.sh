@@ -6,7 +6,7 @@ rm -rf /home/akilan/Alloc-Test/Allocator/dpdk/build-hybrid/kernel/freebsd
 
 export PKG_CONFIG_PATH=`pwd`/config/hybrid
 
-sudo CC=clang meson -Dexamples=helloworld -Denable_kmods=true build-hybrid
+# sudo CC=clang meson -Dexamples=helloworld -Denable_kmods=true build-hybrid
 
 # build the changes
 sudo ninja -j4 -C build-hybrid
