@@ -2,11 +2,11 @@
 # git pull origin main
 
 # remove freebsd build directory to force build
-rm -rf /home/akilan/Alloc-Test/Allocator/dpdk/build-hybrid/kernel/freebsd
+# rm -rf /home/akilan/Alloc-Test/Allocator/dpdk/build-hybrid/kernel/freebsd
 
 export PKG_CONFIG_PATH=`pwd`/config/hybrid
 
-# sudo CC=clang meson -Dexamples=helloworld -Denable_kmods=true build-hybrid
+sudo CC=clang meson -Dexamples=helloworld -Denable_kmods=true build-hybrid
 
 # build the changes
 sudo ninja -j4 -C build-hybrid
@@ -15,7 +15,7 @@ sudo ninja -j4 -C build-hybrid
 sudo kldunload contigmem.ko
 
 # entering directory of the contig build .ko files
-cd /home/akilan/Alloc-Test/Allocator/dpdk/build-hybrid/kernel/freebsd
+cd /home/akilan/Alloc-Test/CHERI-Allocator/dpdk/build-hybrid/kernel/freebsd
 
 # Copyping files to /boot/modules
 sudo cp contigmem.ko /boot/modules/

@@ -10,7 +10,8 @@ __FBSDID("$FreeBSD$");
 #include <sys/bus.h>
 #include <sys/conf.h>
 #include <sys/kernel.h>
-#include <sys/malloc.h>
+//#include <sys/malloc.h>
+#include "malloc.h"
 #include <sys/module.h>
 #include <sys/proc.h>
 #include <sys/lock.h>
@@ -129,6 +130,7 @@ contigmem_load()
 	buffer_size = (int)contigmem_buffer_size;
 
 	// get page size 
+	printf("%d buffer size \n",buffer_size);
 	printf("%d buffer size \n",buffer_size);
 
 	char index_string[8], description[32];
