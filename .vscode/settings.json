@@ -34,7 +34,10 @@
         "assert.h": "c",
         "mman.h": "c",
         "time.h": "c",
-        "vmmeter.h": "c"
+        "vmmeter.h": "c",
+        "malloc.h": "c",
+        "lock.h": "c",
+        "proc.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

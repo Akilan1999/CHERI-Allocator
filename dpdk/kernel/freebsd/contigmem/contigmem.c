@@ -33,6 +33,80 @@ __FBSDID("$FreeBSD$");
 #include <vm/vm_pager.h>
 #include <vm/vm_phys.h>
 
+// -- Debug contigous allocator header files -- 
+#include <sys/cdefs.h>
+// #include "opt_ddb.h"
+// #include "opt_vm.h"
+
+#include <sys/asan.h>
+#include <sys/kdb.h>
+#include <sys/msan.h>
+#include <sys/queue.h>
+#include <sys/sbuf.h>
+#include <sys/smp.h>
+#include <sys/vmem.h>
+#ifdef EPOCH_TRACE
+#include <sys/epoch.h>
+#endif
+
+#include <cheri/cheric.h>
+
+// #include <vm/vm_domainset.h>
+#include "vm_domainset.h"
+#include <vm/vm_pageout.h>
+#include <vm/vm_kern.h>
+#include "vm_extern.h"
+#include <vm/vm_map.h>
+#include <vm/vm_pagequeue.h>
+#include <vm/uma.h>
+#include <vm/uma_int.h>
+#include <vm/uma_dbg.h>
+
+#ifdef DEBUG_MEMGUARD
+#include <vm/memguard.h>
+#endif
+#ifdef DEBUG_REDZONE
+#include <vm/redzone.h>
+#endif
+
+#if defined(INVARIANTS) && defined(__i386__)
+#include <machine/cpu.h>
+#endif
+
+#include <ddb/ddb.h>
+
+#ifdef KDTRACE_HOOKS
+#include <sys/dtrace_bsd.h>
+
+bool	__read_frequently			dtrace_malloc_enabled;
+dtrace_malloc_probe_func_t __read_mostly	dtrace_malloc_probe;
+#endif
+
+#if defined(INVARIANTS) || defined(MALLOC_MAKE_FAILURES) ||		\
+    defined(DEBUG_MEMGUARD) || defined(DEBUG_REDZONE)
+#define	MALLOC_DEBUG	1
+#endif
+
+#if defined(KASAN) || defined(DEBUG_REDZONE)
+#define	DEBUG_REDZONE_ARG_DEF	, unsigned long osize
+#define	DEBUG_REDZONE_ARG	, osize
+#else
+#define	DEBUG_REDZONE_ARG_DEF
+#define	DEBUG_REDZONE_ARG
+#endif
+
+// -----------------------------
+
+// -------------------- Inside contig malloc 
+#include <sys/domainset.h>
+
+#include <cheri/cheric.h>
+
+#include <vm/vm_object.h>
+#include <vm/vm_radix.h>
+
+// -------------------------------------
+
 // #define RTE_CONTIGMEM_DEFAULT_BUF_SIZE 1073741824
 
 // added to print uint 
@@ -122,6 +196,180 @@ static struct cdevsw contigmem_ops = {
 	.d_close        = contigmem_close,
 };
 
+static void
+vm_domainset_iter_ignore(struct vm_domainset_iter *di, int domain)
+{
+	KASSERT(DOMAINSET_ISSET(domain, &di->di_valid_mask),
+	    ("%s: domain %d not present in di_valid_mask for di %p",
+	    __func__, domain, di));
+	DOMAINSET_CLR(domain, &di->di_valid_mask);
+}
+
+static __always_inline void
+kmem_alloc_san(vm_offset_t addr, vm_size_t size, vm_size_t asize, int flags)
+{
+	if ((flags & M_ZERO) == 0) {
+		kmsan_mark((void *)addr, asize, KMSAN_STATE_UNINIT);
+		kmsan_orig((void *)addr, asize, KMSAN_TYPE_KMEM,
+		    KMSAN_RET_ADDR);
+	} else {
+		kmsan_mark((void *)addr, asize, KMSAN_STATE_INITED);
+	}
+	kasan_mark((void *)addr, size, asize, KASAN_KMEM_REDZONE);
+}
+
+static vm_page_t
+kmem_alloc_contig_pages(vm_object_t object, vm_pindex_t pindex, int domain,
+    int pflags, u_long npages, vm_paddr_t low, vm_paddr_t high,
+    u_long alignment, vm_paddr_t boundary, vm_memattr_t memattr)
+{
+	vm_page_t m;
+	int tries;
+	bool wait, reclaim;
+
+	VM_OBJECT_ASSERT_WLOCKED(object);
+
+	wait = (pflags & VM_ALLOC_WAITOK) != 0;
+	reclaim = (pflags & VM_ALLOC_NORECLAIM) == 0;
+	pflags &= ~(VM_ALLOC_NOWAIT | VM_ALLOC_WAITOK | VM_ALLOC_WAITFAIL);
+	pflags |= VM_ALLOC_NOWAIT;
+	for (tries = wait ? 3 : 1;; tries--) {
+		m = vm_page_alloc_contig_domain(object, pindex, domain, pflags,
+		    npages, low, high, alignment, boundary, memattr);
+		if (m != NULL || tries == 0 || !reclaim)
+			break;
+
+		VM_OBJECT_WUNLOCK(object);
+		if (vm_page_reclaim_contig_domain(domain, pflags, npages,
+		    low, high, alignment, boundary) == ENOMEM && wait)
+			vm_wait_domain(domain);
+		VM_OBJECT_WLOCK(object);
+	}
+	return (m);
+}
+
+static void *
+kmem_alloc_contig_domain(int domain, vm_size_t size, int flags, vm_paddr_t low,
+    vm_paddr_t high, u_long alignment, vm_paddr_t boundary,
+    vm_memattr_t memattr)
+{
+	vmem_t *vmem;
+	vm_object_t object;
+	vm_pointer_t addr;
+	vm_offset_t offset, tmp;
+	vm_page_t end_m, m;
+	vm_size_t asize;
+	u_long npages;
+	int pflags;
+
+#ifdef __CHERI_PURE_CAPABILITY__
+	size = CHERI_REPRESENTABLE_LENGTH(size);
+#endif
+	object = kernel_object;
+	asize = round_page(size);
+	vmem = vm_dom[domain].vmd_kernel_arena;
+	if (vmem_alloc(vmem, asize, flags | M_BESTFIT, &addr))
+		return (NULL);
+	addr = cheri_kern_andperm(addr, CHERI_PERMS_KERNEL_DATA);
+	offset = addr - VM_MIN_KERNEL_ADDRESS;
+	pflags = malloc2vm_flags(flags) | VM_ALLOC_WIRED;
+	npages = atop(asize);
+	VM_OBJECT_WLOCK(object);
+	printf("reaches to contig pages");
+	m = kmem_alloc_contig_pages(object, atop(offset), domain,
+	    pflags, npages, low, high, alignment, boundary, memattr);
+	if (m == NULL) {
+		VM_OBJECT_WUNLOCK(object);
+		vmem_free(vmem, addr, asize);
+		return (NULL);
+	}
+	KASSERT(vm_page_domain(m) == domain,
+	    ("kmem_alloc_contig_domain: Domain mismatch %d != %d",
+	    vm_page_domain(m), domain));
+	end_m = m + npages;
+	tmp = addr;
+	for (; m < end_m; m++) {
+		if ((flags & M_ZERO) && (m->flags & PG_ZERO) == 0)
+			pmap_zero_page(m);
+		vm_page_valid(m);
+		VM_OBJECT_ASSERT_CAP(object, VM_PROT_RW_CAP);
+		vm_page_aflag_set(m, PGA_CAPSTORE | PGA_CAPDIRTY);
+		// To modify pmap_enter to use only huge pages
+		pmap_enter(kernel_pmap, tmp, m, VM_PROT_RW_CAP,
+		    VM_PROT_RW_CAP | PMAP_ENTER_WIRED, 0);
+		tmp += PAGE_SIZE;
+	}
+	VM_OBJECT_WUNLOCK(object);
+	kmem_alloc_san(addr, size, asize, flags);
+#ifdef __CHERI_PURE_CAPABILITY__
+	KASSERT(cheri_gettag(addr), ("Expected valid capability"));
+	KASSERT(cheri_getlen(addr) == asize,
+	    ("Inexact bounds expected %zx found %zx",
+	    (size_t)asize, (size_t)cheri_getlen(addr)));
+#endif
+	return ((void *)addr);
+}
+
+static void *
+kmem_alloc_contig_domainset(struct domainset *ds, vm_size_t size, int flags,
+    vm_paddr_t low, vm_paddr_t high, u_long alignment, vm_paddr_t boundary,
+    vm_memattr_t memattr)
+{
+	struct vm_domainset_iter di;
+	vm_page_t bounds[2];
+	void *addr;
+	int domain;
+	int start_segind;
+
+	start_segind = -1;
+
+	vm_domainset_iter_policy_init(&di, ds, &domain, &flags);
+	do {
+		addr = kmem_alloc_contig_domain(domain, size, flags, low, high,
+		    alignment, boundary, memattr);
+		if (addr != NULL)
+			break;
+		if (start_segind == -1)
+			start_segind = vm_phys_lookup_segind(low);
+		if (vm_phys_find_range(bounds, start_segind, domain,
+		    atop(round_page(size)), low, high) == -1) {
+			vm_domainset_iter_ignore(&di, domain);
+		}
+	} while (vm_domainset_iter_policy(&di, &domain) == 0);
+
+	return (addr);
+}
+
+static void *
+kmem_alloc_contig(vm_size_t size, int flags, vm_paddr_t low, vm_paddr_t high,
+    u_long alignment, vm_paddr_t boundary, vm_memattr_t memattr)
+{
+
+	return (kmem_alloc_contig_domainset(DOMAINSET_RR(), size, flags, low,
+	    high, alignment, boundary, memattr));
+}
+
+static void * 
+contigmalloc(unsigned long size, struct malloc_type *type, int flags,
+    vm_paddr_t low, vm_paddr_t high, unsigned long alignment,
+    vm_paddr_t boundary)
+{
+    printf("contigmalloc called");
+	void *ret;
+
+	ret = (void *)kmem_alloc_contig(size, flags, low, high, alignment,
+	    boundary, VM_MEMATTR_DEFAULT);
+	if (ret != NULL)
+		malloc_type_allocated(type, ret, round_page(size));
+#ifdef __CHERI_PURE_CAPABILITY__
+	KASSERT(cheri_gettag(ret), ("Expected valid capability"));
+#endif
+
+	return (ret);
+}
+
+// -------------------- Contigous kernel module load -------------------------------
+
 static int
 contigmem_load()
 {
@@ -130,7 +378,6 @@ contigmem_load()
 	buffer_size = (int)contigmem_buffer_size;
 
 	// get page size 
-	printf("%d buffer size \n",buffer_size);
 	printf("%d buffer size \n",buffer_size);
 
 	char index_string[8], description[32];
