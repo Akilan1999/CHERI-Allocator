@@ -30,13 +30,17 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <sys/time.h>
+#include <sys/errno.h>
 #include <stdint.h>
 #include <stdio.h>
+#include	<unistd.h>
+
 
 #include <stddef.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/mman.h>
+#include	<sys/types.h>
 
 #include <cheriintrin.h>
 #include <cheri/cheric.h>
@@ -44,9 +48,7 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
-// #include	<sys/types.h>
-#include	<sys/mman.h>
-// #include	<fcntl.h>
+#define	MAXPAGESIZES	2
 
 
 //#define TIMING
@@ -146,16 +148,12 @@ INITAlloc(void) {
    // Pre Allocate 600 MB 
    sz = 100000000;
 
-   // int fd = open(FILENAME, O_RDWR, 0600);
+   int fd = open(FILENAME, O_RDWR, 0600);
 
-   int fd = memfd_create("kilgore",0x00000004);
-   if (fd == -1)
-        perror("memfd_create()");
-
-   //  if (fd < 0) {
-   //      perror("open");
-   //      exit(EXIT_FAILURE);
-   //  }
+    if (fd < 0) {
+        perror("open");
+        exit(EXIT_FAILURE);
+    }
 
     off_t offset = 0; // offset to seek to.
 
@@ -215,13 +213,68 @@ void FREECHERI(void *ptr) {
    munmap(ptr, len);
 }
 
+static int
+pagesizes(size_t ps[MAXPAGESIZES])
+{
+	int pscnt;
+
+	pscnt = getpagesizes(ps, MAXPAGESIZES);
+	// ATF_REQUIRE_MSG(pscnt != -1, "getpagesizes failed; errno=%d", errno);
+	// ATF_REQUIRE_MSG(ps[0] != 0, "psind 0 is %zu", ps[0]);
+	// ATF_REQUIRE_MSG(pscnt <= MAXPAGESIZES, "invalid pscnt %d", pscnt);
+	// if (pscnt == 1){
+   //    printf("pscnt is 1");
+   // }
+     
+	// 	atf_tc_skip("no large page support");
+	return (pscnt);
+}
+
 INITREGULARALLOC(void) {
    size_t sz;
    // Pre Allocate 400 MB 
-   sz = 100000000;
+   sz = 1073741824;
+
+   int error, fd, pscnt, pn;
+
+   size_t ps[MAXPAGESIZES];
+
+   size_t size[3];
+
+   pn = getpagesizes(size, 3);
+   printf("page size is [%d]", size[2]);
+
+   pscnt = pagesizes(ps);
+
+	fd = shm_create_largepage(SHM_ANON, O_CREAT | O_RDWR, 1, SHM_LARGEPAGE_ALLOC_DEFAULT, 0);
+
+   if (fd < 0 && errno == ENOTTY) {
+      perror("sh_create_largepages");
+      close(fd);
+      exit(EXIT_FAILURE);
+   }
+   // if (fd < 0)
+   //     perror("no large page supported");
+   //     exit(EXIT_FAILURE);
+	// if (fd < 0 && errno == ENOTTY)
+	// 	atf_tc_skip("no large page support");
+	// ATF_REQUIRE_MSG(fd >= 0, "shm_create_largepage failed; errno=%d", errno);
+
+	if (ftruncate(fd, sz) < 0) {
+        perror("ftruncate");
+        close(fd);
+        exit(EXIT_FAILURE);
+    }
+	// if (error != 0 && errno == ENOMEM)
+	// 	/*
+	// 	 * The test system might not have enough memory to accommodate
+	// 	 * the request.
+	// 	 */
+	// 	atf_tc_skip("failed to allocate %zu-byte superpage", sz);
+	// ATF_REQUIRE_MSG(error == 0, "ftruncate failed; errno=%d", errno);
 
    ptr = mmap(NULL, sz,
-    PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON,-1,0);
+    PROT_READ|PROT_WRITE, MAP_SHARED,fd,0);
 
    // Added error handling
     if(ptr == MAP_FAILED)
