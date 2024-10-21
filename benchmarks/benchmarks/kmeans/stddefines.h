@@ -44,6 +44,10 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+// #include	<sys/types.h>
+#include	<sys/mman.h>
+// #include	<fcntl.h>
+
 
 //#define TIMING
 
@@ -142,12 +146,16 @@ INITAlloc(void) {
    // Pre Allocate 600 MB 
    sz = 100000000;
 
-   int fd = open(FILENAME, O_RDWR, 0600);
+   // int fd = open(FILENAME, O_RDWR, 0600);
 
-    if (fd < 0) {
-        perror("open");
-        exit(EXIT_FAILURE);
-    }
+   int fd = memfd_create("kilgore",0x00000004);
+   if (fd == -1)
+        perror("memfd_create()");
+
+   //  if (fd < 0) {
+   //      perror("open");
+   //      exit(EXIT_FAILURE);
+   //  }
 
     off_t offset = 0; // offset to seek to.
 

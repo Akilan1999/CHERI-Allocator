@@ -469,7 +469,7 @@ malloc_type_freed(struct malloc_type *mtp, void *addr, unsigned long size)
  *	the allocation fails.
  */
 void *
-contigmalloc(unsigned long size, struct malloc_type *type, int flags,
+contigmallocTest(unsigned long size, struct malloc_type *type, int flags,
     vm_paddr_t low, vm_paddr_t high, unsigned long alignment,
     vm_paddr_t boundary)
 {

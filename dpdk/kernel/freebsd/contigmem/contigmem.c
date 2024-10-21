@@ -37,7 +37,6 @@ __FBSDID("$FreeBSD$");
 #include <sys/cdefs.h>
 // #include "opt_ddb.h"
 // #include "opt_vm.h"
-
 #include <sys/asan.h>
 #include <sys/kdb.h>
 #include <sys/msan.h>
@@ -102,10 +101,31 @@ dtrace_malloc_probe_func_t __read_mostly	dtrace_malloc_probe;
 
 #include <cheri/cheric.h>
 
-#include <vm/vm_object.h>
 #include <vm/vm_radix.h>
 
-// -------------------------------------
+// ------------------------ Inside physical page map
+#include <sys/bitstring.h>
+#include <sys/ktr.h>
+#include <sys/limits.h>
+#include <sys/mman.h>
+#include <sys/msgbuf.h>
+#include <sys/physmem.h>
+#include <sys/sx.h>
+#include <sys/sched.h>
+#include <sys/_unrhdr.h>
+
+#include <vm/vm_extern.h>
+#include <vm/vm_reserv.h>
+#include <vm/vm_dumpset.h>
+#include <vm/uma.h>
+
+#include <machine/asan.h>
+#include <machine/machdep.h>
+#include <machine/md_var.h>
+#include <machine/pcb.h>
+
+
+// #include "pmap.c"
 
 // #define RTE_CONTIGMEM_DEFAULT_BUF_SIZE 1073741824
 
@@ -196,6 +216,320 @@ static struct cdevsw contigmem_ops = {
 	.d_close        = contigmem_close,
 };
 
+// int
+// pmap_enter(pmap_t pmap, vm_offset_t va, vm_page_t m, vm_prot_t prot,
+//     u_int flags, int8_t psind)
+// {
+// 	struct rwlock *lock;
+// 	pd_entry_t *pde;
+// 	pt_entry_t new_l3, orig_l3;
+// 	pt_entry_t *l2, *l3;
+// 	pv_entry_t pv;
+// 	vm_paddr_t opa, pa;
+// 	vm_page_t mpte, om;
+// 	boolean_t nosleep;
+// 	int lvl, rv;
+
+// 	KASSERT(ADDR_IS_CANONICAL(va),
+// 	    ("%s: Address not in canonical form: %lx", __func__, va));
+
+// 	va = trunc_page(va);
+// 	if ((m->oflags & VPO_UNMANAGED) == 0)
+// 		VM_PAGE_OBJECT_BUSY_ASSERT(m);
+// 	pa = VM_PAGE_TO_PHYS(m);
+// 	new_l3 = (pt_entry_t)(PHYS_TO_PTE(pa) | ATTR_DEFAULT | L3_PAGE);
+// 	new_l3 |= pmap_pte_memattr(pmap, m->md.pv_memattr);
+// 	new_l3 |= pmap_pte_prot(pmap, prot, flags, m, va);
+// 	if ((flags & PMAP_ENTER_WIRED) != 0)
+// 		new_l3 |= ATTR_SW_WIRED;
+// 	if (pmap->pm_stage == PM_STAGE1) {
+// 		if (!ADDR_IS_KERNEL(va))
+// 			new_l3 |= ATTR_S1_AP(ATTR_S1_AP_USER) | ATTR_S1_PXN;
+// 		else
+// 			new_l3 |= ATTR_S1_UXN;
+// 		if (pmap != kernel_pmap)
+// 			new_l3 |= ATTR_S1_nG;
+// 	} else {
+// 		/*
+// 		 * Clear the access flag on executable mappings, this will be
+// 		 * set later when the page is accessed. The fault handler is
+// 		 * required to invalidate the I-cache.
+// 		 *
+// 		 * TODO: Switch to the valid flag to allow hardware management
+// 		 * of the access flag. Much of the pmap code assumes the
+// 		 * valid flag is set and fails to destroy the old page tables
+// 		 * correctly if it is clear.
+// 		 */
+// 		if (prot & VM_PROT_EXECUTE)
+// 			new_l3 &= ~ATTR_AF;
+// 	}
+// 	if ((m->oflags & VPO_UNMANAGED) == 0) {
+// 		new_l3 |= ATTR_SW_MANAGED;
+// 		if ((prot & VM_PROT_WRITE) != 0) {
+// 			new_l3 |= ATTR_SW_DBM;
+// 			if ((flags & VM_PROT_WRITE) == 0) {
+// 				if (pmap->pm_stage == PM_STAGE1)
+// 					new_l3 |= ATTR_S1_AP(ATTR_S1_AP_RO);
+// 				else
+// 					new_l3 &=
+// 					    ~ATTR_S2_S2AP(ATTR_S2_S2AP_WRITE);
+// 			}
+// 		}
+// 	}
+
+// 	CTR2(KTR_PMAP, "pmap_enter: %.16lx -> %.16lx", va, pa);
+
+// 	lock = NULL;
+// 	PMAP_LOCK(pmap);
+// 	/* Wait until we lock the pmap to protect the bti rangeset */
+// 	new_l3 |= pmap_pte_bti(pmap, va);
+
+// 	if ((flags & PMAP_ENTER_LARGEPAGE) != 0) {
+// 		KASSERT((m->oflags & VPO_UNMANAGED) != 0,
+// 		    ("managed largepage va %#lx flags %#x", va, flags));
+// 		new_l3 &= ~L3_PAGE;
+// 		if (psind == 2) {
+// 			PMAP_ASSERT_L1_BLOCKS_SUPPORTED;
+// 			new_l3 |= L1_BLOCK;
+// 		} else /* (psind == 1) */
+// 			new_l3 |= L2_BLOCK;
+// 		rv = pmap_enter_largepage(pmap, va, new_l3, flags, psind);
+// 		goto out;
+// 	}
+// 	if (psind == 1) {
+// 		/* Assert the required virtual and physical alignment. */
+// 		KASSERT((va & L2_OFFSET) == 0, ("pmap_enter: va unaligned"));
+// 		KASSERT(m->psind > 0, ("pmap_enter: m->psind < psind"));
+// 		rv = pmap_enter_l2(pmap, va, (new_l3 & ~L3_PAGE) | L2_BLOCK,
+// 		    flags, m, &lock);
+// 		goto out;
+// 	}
+// 	mpte = NULL;
+
+// 	/*
+// 	 * In the case that a page table page is not
+// 	 * resident, we are creating it here.
+// 	 */
+// retry:
+// 	pde = pmap_pde(pmap, va, &lvl);
+// 	if (pde != NULL && lvl == 2) {
+// 		l3 = pmap_l2_to_l3(pde, va);
+// 		if (!ADDR_IS_KERNEL(va) && mpte == NULL) {
+// 			mpte = PHYS_TO_VM_PAGE(PTE_TO_PHYS(pmap_load(pde)));
+// 			mpte->ref_count++;
+// 		}
+// 		goto havel3;
+// 	} else if (pde != NULL && lvl == 1) {
+// 		l2 = pmap_l1_to_l2(pde, va);
+// 		if ((pmap_load(l2) & ATTR_DESCR_MASK) == L2_BLOCK &&
+// 		    (l3 = pmap_demote_l2_locked(pmap, l2, va, &lock)) != NULL) {
+// 			l3 = &l3[pmap_l3_index(va)];
+// 			if (!ADDR_IS_KERNEL(va)) {
+// 				mpte = PHYS_TO_VM_PAGE(
+// 				    PTE_TO_PHYS(pmap_load(l2)));
+// 				mpte->ref_count++;
+// 			}
+// 			goto havel3;
+// 		}
+// 		/* We need to allocate an L3 table. */
+// 	}
+// 	if (!ADDR_IS_KERNEL(va)) {
+// 		nosleep = (flags & PMAP_ENTER_NOSLEEP) != 0;
+
+// 		/*
+// 		 * We use _pmap_alloc_l3() instead of pmap_alloc_l3() in order
+// 		 * to handle the possibility that a superpage mapping for "va"
+// 		 * was created while we slept.
+// 		 */
+// 		mpte = _pmap_alloc_l3(pmap, pmap_l2_pindex(va),
+// 		    nosleep ? NULL : &lock);
+// 		if (mpte == NULL && nosleep) {
+// 			CTR0(KTR_PMAP, "pmap_enter: mpte == NULL");
+// 			rv = KERN_RESOURCE_SHORTAGE;
+// 			goto out;
+// 		}
+// 		goto retry;
+// 	} else
+// 		panic("pmap_enter: missing L3 table for kernel va %#lx", va);
+
+// havel3:
+// 	orig_l3 = pmap_load(l3);
+// 	opa = PTE_TO_PHYS(orig_l3);
+// 	pv = NULL;
+
+// 	/*
+// 	 * Is the specified virtual address already mapped?
+// 	 */
+// 	if (pmap_l3_valid(orig_l3)) {
+// 		/*
+// 		 * Wiring change, just update stats. We don't worry about
+// 		 * wiring PT pages as they remain resident as long as there
+// 		 * are valid mappings in them. Hence, if a user page is wired,
+// 		 * the PT page will be also.
+// 		 */
+// 		if ((flags & PMAP_ENTER_WIRED) != 0 &&
+// 		    (orig_l3 & ATTR_SW_WIRED) == 0)
+// 			pmap->pm_stats.wired_count++;
+// 		else if ((flags & PMAP_ENTER_WIRED) == 0 &&
+// 		    (orig_l3 & ATTR_SW_WIRED) != 0)
+// 			pmap->pm_stats.wired_count--;
+
+// 		/*
+// 		 * Remove the extra PT page reference.
+// 		 */
+// 		if (mpte != NULL) {
+// 			mpte->ref_count--;
+// 			KASSERT(mpte->ref_count > 0,
+// 			    ("pmap_enter: missing reference to page table page,"
+// 			     " va: 0x%lx", va));
+// 		}
+
+// 		/*
+// 		 * Has the physical page changed?
+// 		 */
+// 		if (opa == pa) {
+// 			/*
+// 			 * No, might be a protection or wiring change.
+// 			 */
+// 			if ((orig_l3 & ATTR_SW_MANAGED) != 0 &&
+// 			    (new_l3 & ATTR_SW_DBM) != 0)
+// 				vm_page_aflag_set(m, PGA_WRITEABLE);
+// 			goto validate;
+// 		}
+
+// 		/*
+// 		 * The physical page has changed.  Temporarily invalidate
+// 		 * the mapping.
+// 		 */
+// 		orig_l3 = pmap_load_clear(l3);
+// 		KASSERT(PTE_TO_PHYS(orig_l3) == opa,
+// 		    ("pmap_enter: unexpected pa update for %#lx", va));
+// 		if ((orig_l3 & ATTR_SW_MANAGED) != 0) {
+// 			om = PHYS_TO_VM_PAGE(opa);
+
+// 			/*
+// 			 * The pmap lock is sufficient to synchronize with
+// 			 * concurrent calls to pmap_page_test_mappings() and
+// 			 * pmap_ts_referenced().
+// 			 */
+// 			pmap_page_dirty(pmap, orig_l3, om);
+// 			if ((orig_l3 & ATTR_AF) != 0) {
+// 				pmap_invalidate_page(pmap, va, true);
+// 				vm_page_aflag_set(om, PGA_REFERENCED);
+// 			}
+// 			CHANGE_PV_LIST_LOCK_TO_VM_PAGE(&lock, om);
+// 			pv = pmap_pvh_remove(&om->md, pmap, va);
+// 			if ((m->oflags & VPO_UNMANAGED) != 0)
+// 				free_pv_entry(pmap, pv);
+// 			if ((om->a.flags & PGA_WRITEABLE) != 0 &&
+// 			    TAILQ_EMPTY(&om->md.pv_list) &&
+// 			    ((om->flags & PG_FICTITIOUS) != 0 ||
+// 			    TAILQ_EMPTY(&page_to_pvh(om)->pv_list)))
+// 				vm_page_aflag_clear(om, PGA_WRITEABLE);
+// 		} else {
+// 			KASSERT((orig_l3 & ATTR_AF) != 0,
+// 			    ("pmap_enter: unmanaged mapping lacks ATTR_AF"));
+// 			pmap_invalidate_page(pmap, va, true);
+// 		}
+// 		orig_l3 = 0;
+// 	} else {
+// 		/*
+// 		 * Increment the counters.
+// 		 */
+// 		if ((new_l3 & ATTR_SW_WIRED) != 0)
+// 			pmap->pm_stats.wired_count++;
+// 		pmap_resident_count_inc(pmap, 1);
+// 	}
+// 	/*
+// 	 * Enter on the PV list if part of our managed memory.
+// 	 */
+// 	if ((m->oflags & VPO_UNMANAGED) == 0) {
+// 		if (pv == NULL) {
+// 			pv = get_pv_entry(pmap, &lock);
+// 			pv->pv_va = va;
+// 		}
+// 		CHANGE_PV_LIST_LOCK_TO_VM_PAGE(&lock, m);
+// 		TAILQ_INSERT_TAIL(&m->md.pv_list, pv, pv_next);
+// 		m->md.pv_gen++;
+// 		if ((new_l3 & ATTR_SW_DBM) != 0)
+// 			vm_page_aflag_set(m, PGA_WRITEABLE);
+// 	}
+
+// validate:
+// 	if (pmap->pm_stage == PM_STAGE1) {
+// 		/*
+// 		 * Sync icache if exec permission and attribute
+// 		 * VM_MEMATTR_WRITE_BACK is set. Do it now, before the mapping
+// 		 * is stored and made valid for hardware table walk. If done
+// 		 * later, then other can access this page before caches are
+// 		 * properly synced. Don't do it for kernel memory which is
+// 		 * mapped with exec permission even if the memory isn't going
+// 		 * to hold executable code. The only time when icache sync is
+// 		 * needed is after kernel module is loaded and the relocation
+// 		 * info is processed. And it's done in elf_cpu_load_file().
+// 		*/
+// 		if ((prot & VM_PROT_EXECUTE) &&  pmap != kernel_pmap &&
+// 		    m->md.pv_memattr == VM_MEMATTR_WRITE_BACK &&
+// 		    (opa != pa || (orig_l3 & ATTR_S1_XN))) {
+// 			PMAP_ASSERT_STAGE1(pmap);
+// 			cpu_icache_sync_range(PHYS_TO_DMAP_PAGE(pa), PAGE_SIZE);
+// 		}
+// 	} else {
+// 		cpu_dcache_wb_range(PHYS_TO_DMAP_PAGE(pa), PAGE_SIZE);
+// 	}
+
+// 	/*
+// 	 * Update the L3 entry
+// 	 */
+// 	if (pmap_l3_valid(orig_l3)) {
+// 		KASSERT(opa == pa, ("pmap_enter: invalid update"));
+// 		if ((orig_l3 & ~ATTR_AF) != (new_l3 & ~ATTR_AF)) {
+// 			/* same PA, different attributes */
+// 			orig_l3 = pmap_load_store(l3, new_l3);
+// 			pmap_invalidate_page(pmap, va, true);
+// 			if ((orig_l3 & ATTR_SW_MANAGED) != 0)
+// 				pmap_page_dirty(pmap, orig_l3, m);
+// 		} else {
+// 			/*
+// 			 * orig_l3 == new_l3
+// 			 * This can happens if multiple threads simultaneously
+// 			 * access not yet mapped page. This bad for performance
+// 			 * since this can cause full demotion-NOP-promotion
+// 			 * cycle.
+// 			 * Another possible reasons are:
+// 			 * - VM and pmap memory layout are diverged
+// 			 * - tlb flush is missing somewhere and CPU doesn't see
+// 			 *   actual mapping.
+// 			 */
+// 			CTR4(KTR_PMAP, "%s: already mapped page - "
+// 			    "pmap %p va 0x%#lx pte 0x%lx",
+// 			    __func__, pmap, va, new_l3);
+// 		}
+// 	} else {
+// 		/* New mapping */
+// 		pmap_store(l3, new_l3);
+// 		dsb(ishst);
+// 	}
+
+// #if VM_NRESERVLEVEL > 0
+// 	/*
+// 	 * If both the page table page and the reservation are fully
+// 	 * populated, then attempt promotion.
+// 	 */
+// 	if ((mpte == NULL || mpte->ref_count == NL3PG) &&
+// 	    (m->flags & PG_FICTITIOUS) == 0 &&
+// 	    vm_reserv_level_iffullpop(m) == 0)
+// 		(void)pmap_promote_l2(pmap, pde, va, mpte, &lock);
+// #endif
+
+// 	rv = KERN_SUCCESS;
+// out:
+// 	if (lock != NULL)
+// 		rw_wunlock(lock);
+// 	PMAP_UNLOCK(pmap);
+// 	return (rv);
+// }
+
 static void
 vm_domainset_iter_ignore(struct vm_domainset_iter *di, int domain)
 {
@@ -263,10 +597,13 @@ kmem_alloc_contig_domain(int domain, vm_size_t size, int flags, vm_paddr_t low,
 	int pflags;
 
 #ifdef __CHERI_PURE_CAPABILITY__
+    printf("using CHERI capability");
 	size = CHERI_REPRESENTABLE_LENGTH(size);
 #endif
 	object = kernel_object;
+	printf("=== size[%lu] ==== ", size);
 	asize = round_page(size);
+	printf("=== asize[%lu] ==== ", asize);
 	vmem = vm_dom[domain].vmd_kernel_arena;
 	if (vmem_alloc(vmem, asize, flags | M_BESTFIT, &addr))
 		return (NULL);
@@ -274,8 +611,14 @@ kmem_alloc_contig_domain(int domain, vm_size_t size, int flags, vm_paddr_t low,
 	offset = addr - VM_MIN_KERNEL_ADDRESS;
 	pflags = malloc2vm_flags(flags) | VM_ALLOC_WIRED;
 	npages = atop(asize);
+
+	printf("=== [%lu] ==== ", npages);
 	VM_OBJECT_WLOCK(object);
-	printf("reaches to contig pages");
+	// to trace the issue regarding just using huge pages
+	// directly instead of using THP. 
+	// - Calculate the how the number of pages is calculated.
+	// - Reason why 100000 pages is needed
+
 	m = kmem_alloc_contig_pages(object, atop(offset), domain,
 	    pflags, npages, low, high, alignment, boundary, memattr);
 	if (m == NULL) {
@@ -288,6 +631,11 @@ kmem_alloc_contig_domain(int domain, vm_size_t size, int flags, vm_paddr_t low,
 	    vm_page_domain(m), domain));
 	end_m = m + npages;
 	tmp = addr;
+
+	// Track number of Pmap entries
+	// - To see if the TLB layer reduces the clock cycles (This could in theory this would reduce the number of entries if 
+	// the loop reduced)
+
 	for (; m < end_m; m++) {
 		if ((flags & M_ZERO) && (m->flags & PG_ZERO) == 0)
 			pmap_zero_page(m);
@@ -295,10 +643,14 @@ kmem_alloc_contig_domain(int domain, vm_size_t size, int flags, vm_paddr_t low,
 		VM_OBJECT_ASSERT_CAP(object, VM_PROT_RW_CAP);
 		vm_page_aflag_set(m, PGA_CAPSTORE | PGA_CAPDIRTY);
 		// To modify pmap_enter to use only huge pages
+		// To test if huge pages is used
+		// To port over pmap and to then do a test if there is 
+		// a different run time for different pmap implementations
 		pmap_enter(kernel_pmap, tmp, m, VM_PROT_RW_CAP,
 		    VM_PROT_RW_CAP | PMAP_ENTER_WIRED, 0);
 		tmp += PAGE_SIZE;
 	}
+
 	VM_OBJECT_WUNLOCK(object);
 	kmem_alloc_san(addr, size, asize, flags);
 #ifdef __CHERI_PURE_CAPABILITY__
@@ -354,7 +706,6 @@ contigmalloc(unsigned long size, struct malloc_type *type, int flags,
     vm_paddr_t low, vm_paddr_t high, unsigned long alignment,
     vm_paddr_t boundary)
 {
-    printf("contigmalloc called");
 	void *ret;
 
 	ret = (void *)kmem_alloc_contig(size, flags, low, high, alignment,
@@ -400,6 +751,7 @@ contigmem_load()
 	}
 
 	for (i = 0; i < contigmem_num_buffers; i++) {
+		// madvise(addr, contigmem_buffer_size,, 1)
 		addr = contigmalloc(contigmem_buffer_size, M_CONTIGMEM, M_NOWAIT,
 			0, BUS_SPACE_MAXADDR, contigmem_buffer_size, 0);
 		if (addr == NULL) {
