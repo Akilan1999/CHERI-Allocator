@@ -3,9 +3,7 @@
 #===============================================================================
 
 # Compiler can be set below, or via environment variable
-ifeq ($(CC),)
-CC    = gcc
-endif
+CC    = cc
 OPTIMIZE    = yes
 OPENMP      = no
 DEBUG       = yes
@@ -33,24 +31,10 @@ obj = $(source:.c=.o)
 # Sets Flags
 #===============================================================================
 
-# Make sure we didn't pick up lower case cc
-ifeq (cc,$(CC))
-CC    = clang
-endif
-
 # Standard Flags
-CFLAGS := -std=gnu99 -Wall
 
 # Linker Flags
 LDFLAGS = -lm
-
-# Regular gcc Compiler
-ifneq (,$(findstring gcc,$(CC)))
-  CFLAGS += -flto
-  ifeq ($(OPENMP),yes)
-	CFLAGS += -fopenmp -DOPENMP
-  endif
-endif
 
 # LLVM Compiler
 # ifneq (,$(findstring clang,$(CC)))
@@ -75,31 +59,12 @@ endif
 # endif
 
 # Profiling Flags
-ifeq ($(PROFILE),yes)
-  CFLAGS += -pg
-  LDFLAGS  += -pg
-endif
 
 # Optimization Flags
-ifeq ($(OPTIMIZE),yes)
-  CFLAGS += -o
-endif
-
-# MPI
-ifeq ($(MPI),yes)
-  CC = mpicc
-  CFLAGS += -DMPI
-endif
 
 # AML
-ifeq ($(AML),yes)
-  LDFLAGS += $(shell pkg-config --libs aml)
-  CFLAGS += -DAML $(shell pkg-config --cflags aml)
-endif
 
-
-CFLAGS += -mabi=purecap-benchmark
-CFLAGS += -lpthread
+CFLAGS += -g -Wall -mabi=purecap-benchmark -lpthread
 
 #===============================================================================
 # Targets to Build

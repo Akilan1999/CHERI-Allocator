@@ -1,0 +1,6 @@
+Look into: 
+- https://github.com/daanx/mimalloc-bench/blob/master/bench/glibc-bench/bench-malloc-thread.c
+
+
+
+
