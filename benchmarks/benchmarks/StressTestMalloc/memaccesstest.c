@@ -20,6 +20,9 @@ All rights reserved.
 
 #include "malloc.h"
 
+#define malloc      MALLOCCHERI
+#define free        FREECHERI
+
 
 
 struct l{
@@ -263,6 +266,7 @@ void * walk(void *param)
 
 int main(int argc,char **argv)
 {
+INITREGULARALLOC();
 #ifdef DEBUG
 	printf("DEBUG:sizeof(struct l)=%ld\n",sizeof(struct l));
 #endif
@@ -273,7 +277,7 @@ int main(int argc,char **argv)
 	
 	pthread_t threads[NTHREADS];
 
-	root=calloc(MAX_WSS/sizeof(struct l),sizeof(struct l));	
+	root=malloc(MAX_WSS/sizeof(struct l) * sizeof(struct l));	
 		
 	for(working_set_size=MIN_WSS;working_set_size<MAX_WSS;working_set_size=working_set_size<<1)
 	{

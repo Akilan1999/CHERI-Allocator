@@ -23,6 +23,10 @@
 #include <stdlib.h>
 #include <sys/resource.h>
 #include "malloc.h"
+
+#define malloc      MALLOCCHERI
+#define free        FREECHERI
+
 // #include "bench-timing.h"
 // #include "json-lib.h"
 
@@ -193,6 +197,7 @@ static void usage (const char *name)
 int
 main (int argc, char **argv)
 {
+  INITREGULARALLOC();
   long size = 16;
   if (argc == 2)
     size = strtol (argv[1], NULL, 0);
