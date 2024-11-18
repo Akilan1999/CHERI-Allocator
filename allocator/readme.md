@@ -19,10 +19,10 @@ The interface goes as the following:
 - The linkage of the C program should consist either of a shared object file 
 which is preferred. Or with a header file which can compile the appropriate 
 file at compile. 
-   - [ ] To write a script to compile and link shared object files.
+   - [x] To write a script to compile and link shared object files.
    - [ ] Automate generating header files.
 
-## Automating the extracting of various performance counters.
+## Automating the extracting of various performance counters and Parsing and analyzing the various benchmark metrics extracted.
 The extraction library to generate the decided performance counters is implemented. 
 ARM unclear documentation from the A profile manual gives a unclear picture of 
 exactly what the performance counters do. The script to extract it and to generate graphs

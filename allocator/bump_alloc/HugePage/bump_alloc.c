@@ -46,7 +46,7 @@ void init_alloc(int size_in_bytes)
  * allocate len bytes with bump pointer allocator
  * this is our simplistic `malloc` function
  */
-char *malloc(int len)
+void *malloc(size_t len)
 {
     char *chunk = buffer + count;
     size_t rounded_len; /* for CHERI alignment */

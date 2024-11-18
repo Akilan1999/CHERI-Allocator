@@ -115,7 +115,10 @@ void init_alloc(int num_chunks, int chunk_size)
  * allocate fixed size chunk with bitmap allocator
  * this is our simplistic `malloc` function
  */
-char *malloc()
+// Length is not used but just kept
+// to keep the integrity of the
+// malloc shape. 
+void *malloc(size_t len)
 {
     unsigned char updated_byte = 0;
     int chunk_index = 0;
