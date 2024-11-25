@@ -43,16 +43,76 @@
 
 #define BITS_PER_BYTE 8
 
-char *buffer = NULL;          /* allocation buffer */
-unsigned char *bitmap = NULL; /* bitmap for the buffer */
+void *buffer = NULL;          /* allocation buffer */
+unsigned void *bitmap = NULL; /* bitmap for the buffer */
 
 int buffer_size = 0;     /* size of buffer (in bytes) */
 int bitmap_size = 0;     /* size of bitmap (in bytes) */
 int bytes_per_chunk = 0; /* size of single chunk (in bytes) */
 
-void init_alloc(int num_chunks, int chunk_size)
+void *HugePageAlloc(void) {
+   size_t sz;
+   // Pre Allocate 400 MB 
+   sz = 1073741824;
+
+   int error, fd, pscnt, pn;
+
+   size_t ps[MAXPAGESIZES];
+
+   size_t size[3];
+
+   pn = getpagesizes(size, 3);
+   printf("page size is [%d]", size[2]);
+
+   pscnt = pagesizes(ps);
+
+	fd = shm_create_largepage(SHM_ANON, O_CREAT | O_RDWR, 1, SHM_LARGEPAGE_ALLOC_DEFAULT, 0);
+
+   if (fd < 0 && errno == ENOTTY) {
+      perror("sh_create_largepages");
+      close(fd);
+      exit(EXIT_FAILURE);
+   }
+   // if (fd < 0)
+   //     perror("no large page supported");
+   //     exit(EXIT_FAILURE);
+	// if (fd < 0 && errno == ENOTTY)
+	// 	atf_tc_skip("no large page support");
+	// ATF_REQUIRE_MSG(fd >= 0, "shm_create_largepage failed; errno=%d", errno);
+
+	if (ftruncate(fd, sz) < 0) {
+        perror("ftruncate");
+        close(fd);
+        exit(EXIT_FAILURE);
+    }
+	// if (error != 0 && errno == ENOMEM)
+	// 	/*
+	// 	 * The test system might not have enough memory to accommodate
+	// 	 * the request.
+	// 	 */
+	// 	atf_tc_skip("failed to allocate %zu-byte superpage", sz);
+	// ATF_REQUIRE_MSG(error == 0, "ftruncate failed; errno=%d", errno);
+
+   ptr = mmap(NULL, sz,
+    PROT_READ|PROT_WRITE, MAP_SHARED,fd,0);
+
+   // Added error handling
+    if(ptr == MAP_FAILED)
+    {
+        perror("mmap");
+        exit(EXIT_FAILURE);
+    }
+
+    return ptr;
+}
+
+void init_alloc()
 {
     int i = 0;
+    // Written to be hard-coded. 
+    // To be fine tuned based on the expirement. 
+    int num_chunks = 10;
+    int chunk_size = 30;
 
     /* we need to increase the num_chunks
      * so every bit in bitmap will be used
@@ -76,11 +136,13 @@ void init_alloc(int num_chunks, int chunk_size)
     adjusted_chunk_size = cheri_representable_length(adjusted_chunk_size);
 
     /* request memory for our allocation buffer */
-    char *res = mmap(NULL, adjusted_num_chunks * adjusted_chunk_size, PROT_READ | PROT_WRITE,
-                     MAP_ANON | MAP_PRIVATE, -1, 0);
+    // char *res = mmap(NULL, adjusted_num_chunks * adjusted_chunk_size, PROT_READ | PROT_WRITE,
+    //                  MAP_ANON | MAP_PRIVATE, -1, 0);
+    void *res = HugePageAlloc();
     /* request memory for our bitmap */
-    bitmap = (unsigned char *) mmap(NULL, adjusted_num_chunks / BITS_PER_BYTE,
-                                    PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+    // bitmap = (unsigned char *) mmap(NULL, adjusted_num_chunks / BITS_PER_BYTE,
+    //                                 PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
+    bitmap = HugePageAlloc();
 
     if (res == MAP_FAILED || bitmap == MAP_FAILED)
     {
