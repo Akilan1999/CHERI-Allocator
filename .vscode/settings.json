@@ -43,7 +43,9 @@
         "opt_vm.h": "c",
         "stack": "c",
         "ios": "c",
-        "stdint.h": "c"
+        "stdint.h": "c",
+        "bitmap_alloc.h": "c",
+        "buddy.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

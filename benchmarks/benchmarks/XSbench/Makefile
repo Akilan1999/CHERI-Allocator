@@ -20,7 +20,7 @@ program = XSBench
 source = \
 Main.c \
 io.c \
-Simulation.c \
+Simulations.c \
 GridInit.c \
 XSutils.c \
 Materials.c

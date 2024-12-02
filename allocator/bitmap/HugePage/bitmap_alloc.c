@@ -82,7 +82,7 @@ void *HugePageAlloc(void) {
 
 	if (ftruncate(fd, sz) < 0) {
         perror("ftruncate");
-        close(fd);
+        close(fd);      
         exit(EXIT_FAILURE);
     }
 	// if (error != 0 && errno == ENOMEM)
