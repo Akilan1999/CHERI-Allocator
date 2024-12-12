@@ -39,8 +39,8 @@
 
 #include "coz.h"
 
-#define malloc      MALLOC
-#define free        FREE
+// #define malloc      MALLOCCHERI
+// #define free        FREECHERI
 
 #define DEF_NUM_POINTS 150000
 #define DEF_NUM_MEANS 100
@@ -270,8 +270,8 @@ int main(int argc, char **argv)
    // Extra code snippet added 
    // printf("Initial alloc called\n");
    //INITAlloc();
-   //INITREGULARALLOC();
-   init_malloc();
+   // INITREGULARALLOC();
+   // init_malloc();
    
    int num_procs, curr_point;
    int i;

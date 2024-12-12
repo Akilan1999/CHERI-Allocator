@@ -54,29 +54,29 @@
 #define	MAXPAGESIZES	2
 
 
-init_malloc(void) {
-   // Init malloc implementation
-   //INITREGULARALLOC();
+// init_malloc(void) {
+//    // Init malloc implementation
+//    INITREGULARALLOC();
 
-   // init_alloc(100,100000);
-//    brm_init();
-  alloc_init(104857632);
-}
+//    // init_alloc(100,100000);
+// //    brm_init();
+//   //alloc_init(104857632);
+// }
 
-void* MALLOC(size_t sz) {
-   // malloc implementation
-   //return MALLOCCHERI(sz);
-//    return malloc_buddy(sz);
-   return alloc(sz);
-   // return (void *)alloc_chunk();
-}
+// void* MALLOC(size_t sz) {
+//    // malloc implementation
+//    return MALLOCCHERI(sz);
+// //    return malloc_buddy(sz);
+// //    return alloc(sz);
+//    // return (void *)alloc_chunk();
+// }
 
-void FREE(void *ptr) {
-   // free implementation
-   //FREECHERI(ptr);
-   // free_chunk(ptr);
-   free_mem(ptr);
-}
+// void FREE(void *ptr) {
+//    // free implementation
+//    FREECHERI(ptr);
+//    // free_chunk(ptr);
+//    //free_mem(ptr);
+// }
 
 
 //#define TIMING

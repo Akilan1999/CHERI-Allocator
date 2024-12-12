@@ -15,15 +15,15 @@ FUNCTION(PREPEND var prefix)
    SET(${var} "${listVar}" PARENT_SCOPE)
 ENDFUNCTION(PREPEND)
 
-set(cfrac_sources
-    cfrac.c
-    pops.c pconst.c pio.c   
-    pabs.c pneg.c pcmp.c podd.c phalf.c
-    padd.c psub.c pmul.c pdivmod.c psqrt.c ppowmod.c
-    atop.c ptoa.c itop.c utop.c ptou.c errorp.c
-    pfloat.c pidiv.c pimod.c picmp.c
-    primes.c pcfrac.c pgcd.c)
-PREPEND(cfrac_sources cfrac/ ${cfrac_sources})
+# set(cfrac_sources
+#     cfrac.c
+#     pops.c pconst.c pio.c   
+#     pabs.c pneg.c pcmp.c podd.c phalf.c
+#     padd.c psub.c pmul.c pdivmod.c psqrt.c ppowmod.c
+#     atop.c ptoa.c itop.c utop.c ptou.c errorp.c
+#     pfloat.c pidiv.c pimod.c picmp.c
+#     primes.c pcfrac.c pgcd.c)
+# PREPEND(cfrac_sources cfrac/ ${cfrac_sources})
 
 set(espresso_sources
     cofactor.c cols.c compl.c contain.c cubestr.c cvrin.c cvrm.c cvrmisc.c cvrout.c
@@ -31,11 +31,11 @@ set(espresso_sources
     globals.c hack.c indep.c irred.c main.c map.c matrix.c mincov.c opo.c pair.c part.c
     primes.c reduce.c rows.c set.c setc.c sharp.c sminterf.c solution.c sparse.c unate.c
     utility.c verify.c)
-PREPEND(espresso_sources espresso/ ${espresso_sources})
+PREPEND(espresso_sources . ${espresso_sources})
 
-set(barnes_sources
-    code.c code_io.c load.c grav.c getparam.c util.c)
-PREPEND(barnes_sources barnes/ ${barnes_sources})
+# set(barnes_sources
+#     code.c code_io.c load.c grav.c getparam.c util.c)
+# PREPEND(barnes_sources barnes/ ${barnes_sources})
 
 # turn off warnings..
 message(STATUS "${CMAKE_C_COMPILER_ID}")
@@ -45,10 +45,10 @@ if(CMAKE_C_COMPILER_ID MATCHES "AppleClang|Clang|GNU")
   string(APPEND CMAKE_CXX_FLAGS ${FLAGS})
 endif()
 
-add_executable(cfrac ${cfrac_sources})
-target_compile_options(cfrac PRIVATE $<$<C_COMPILER_ID:GNU>:-std=gnu89>)
-target_compile_definitions(cfrac PRIVATE NOMEMOPT=1)
-target_link_libraries(cfrac m)
+# add_executable(cfrac ${cfrac_sources})
+# target_compile_options(cfrac PRIVATE $<$<C_COMPILER_ID:GNU>:-std=gnu89>)
+# target_compile_definitions(cfrac PRIVATE NOMEMOPT=1)
+# target_link_libraries(cfrac m)
 
 add_executable(espresso ${espresso_sources})
 target_compile_options(espresso PRIVATE $<$<C_COMPILER_ID:GNU>:-std=gnu89>)
@@ -87,8 +87,8 @@ target_link_libraries(espresso m)
 # add_executable(cache-thrash cache-thrash/cache-thrash.cpp)
 # target_link_libraries(cache-thrash pthread)
 
-add_executable(xmalloc-test xmalloc-test/xmalloc-test.c)
-target_link_libraries(xmalloc-test pthread)
+# add_executable(xmalloc-test xmalloc-test/xmalloc-test.c)
+# target_link_libraries(xmalloc-test pthread)
 
 # add_executable(malloc-large-old malloc-large/malloc-large-old.cpp)
 # target_link_libraries(malloc-large-old pthread)

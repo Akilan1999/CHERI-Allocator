@@ -24,8 +24,8 @@
 #include <sys/resource.h>
 #include "malloc.h"
 
-#define malloc      MALLOCCHERI
-#define free        FREECHERI
+// #define malloc      MALLOCCHERI
+// #define free        FREECHERI
 
 // #include "bench-timing.h"
 // #include "json-lib.h"
@@ -197,7 +197,7 @@ static void usage (const char *name)
 int
 main (int argc, char **argv)
 {
-  INITREGULARALLOC();
+  //INITREGULARALLOC();
   long size = 16;
   if (argc == 2)
     size = strtol (argv[1], NULL, 0);
@@ -205,9 +205,12 @@ main (int argc, char **argv)
   if (argc > 2 || size <= 0)
     usage (argv[0]);
 
-  bench (size);
+  // bench (size);
   bench (2*size);
-  bench (4*size);
+  //bench (4*size);
+  //bench (8*size);
+  // bench (16*size);
+  // bench (32*size); 
 
   return 0;
 }

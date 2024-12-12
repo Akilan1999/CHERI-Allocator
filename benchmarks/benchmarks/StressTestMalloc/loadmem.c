@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include "malloc.h"
 
-#define malloc      MALLOCCHERI
-#define free        FREECHERI
+// #define malloc      MALLOCCHERI
+// #define free        FREECHERI
 
 // performing various sizes of mallocs are free
 void
@@ -22,21 +22,25 @@ bench (unsigned long n) {
     for (i = 0; i < n; i++){
         ptr[i] = 1;
     }
-    printf("Sleep 10 seconds......\n");
-    sleep(10);
-    printf("Free memory.\n");
+    // printf("Sleep 10 seconds......\n");
+    // sleep(10);
+    // printf("Free memory.\n");
     free(ptr);
 }
 
 int main(){
 
- INITREGULARALLOC();
- bench(8);
- bench(30);
+//  INITREGULARALLOC();
+//  bench(8);
+//  bench(30);
+//  bench(100);
+//  bench(600);
+// Run one by one
+ bench(10);
  bench(100);
- bench(600);
  bench(1000);
- bench(7000);
+ bench(10000);
+ bench(100000);
 
 //  int *ptr;
 //  unsigned long i,n;

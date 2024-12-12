@@ -20,8 +20,8 @@ All rights reserved.
 
 #include "malloc.h"
 
-#define malloc      MALLOCCHERI
-#define free        FREECHERI
+// #define malloc      MALLOCCHERI
+// #define free        FREECHERI
 
 
 
@@ -266,7 +266,7 @@ void * walk(void *param)
 
 int main(int argc,char **argv)
 {
-INITREGULARALLOC();
+// INITREGULARALLOC();
 #ifdef DEBUG
 	printf("DEBUG:sizeof(struct l)=%ld\n",sizeof(struct l));
 #endif

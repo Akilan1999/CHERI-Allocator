@@ -441,7 +441,8 @@ int main(int argc, char* argv[])
         unsigned long start = microseconds();
         result += inner_loop(inner_iterations);
         unsigned long elapsed = microseconds() - start;
-        printf("Richards: iterations=1 runtime: %lu%s\n", elapsed, "us");
+        // printf("Richards: iterations=1 runtime: %lu%s\n", elapsed, "us");
+        print(elapsed);
         iterations--;
     }
 }
