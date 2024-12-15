@@ -1,5 +1,11 @@
 #include "XSbench_header.h"
 
+
+#include "malloc.h"
+
+#define malloc      my_malloc
+#define free        my_free
+
 #ifdef MPI
 #include<mpi.h>
 #endif

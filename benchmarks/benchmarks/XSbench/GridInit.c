@@ -1,5 +1,11 @@
 #include "XSbench_header.h"
 
+
+#include "malloc.h"
+
+#define malloc      my_malloc
+#define free        my_free
+
 SimulationData grid_init_do_not_profile( Inputs in, int mype )
 {
 	// Structure to hold all allocated simuluation data arrays

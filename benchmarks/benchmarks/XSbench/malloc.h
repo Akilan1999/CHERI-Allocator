@@ -49,7 +49,7 @@
 #include <fcntl.h>
 
 // #include "bitmap.h"
-#include "simple.h"
+// #include "simple.h"
 
 #define	MAXPAGESIZES	2
 
@@ -120,42 +120,42 @@ static inline char *GETENV(char *envstr)
    else return env;
 }
 
-#define GET_TIME(start, end, duration)                                     \
-   duration.tv_sec = (end.tv_sec - start.tv_sec);                         \
-   if (end.tv_nsec >= start.tv_nsec) {                                     \
-      duration.tv_nsec = (end.tv_nsec - start.tv_nsec);                   \
-   }                                                                       \
-   else {                                                                  \
-      duration.tv_nsec = (1000000000L - (start.tv_nsec - end.tv_nsec));   \
-      duration.tv_sec--;                                                   \
-   }                                                                       \
-   if (duration.tv_nsec >= 1000000000L) {                                  \
-      duration.tv_sec++;                                                   \
-      duration.tv_nsec -= 1000000000L;                                     \
-   }
+// #define GET_TIME(start, end, duration)                                     \
+//    duration.tv_sec = (end.tv_sec - start.tv_sec);                         \
+//    if (end.tv_nsec >= start.tv_nsec) {                                     \
+//       duration.tv_nsec = (end.tv_nsec - start.tv_nsec);                   \
+//    }                                                                       \
+//    else {                                                                  \
+//       duration.tv_nsec = (1000000000L - (start.tv_nsec - end.tv_nsec));   \
+//       duration.tv_sec--;                                                   \
+//    }                                                                       \
+//    if (duration.tv_nsec >= 1000000000L) {                                  \
+//       duration.tv_sec++;                                                   \
+//       duration.tv_nsec -= 1000000000L;                                     \
+//    }
 
-static inline unsigned int time_diff (
-    struct timeval *end, struct timeval *begin)
-{
-#ifdef TIMING
-    uint64_t result;
+// static inline unsigned int time_diff (
+//     struct timeval *end, struct timeval *begin)
+// {
+// #ifdef TIMING
+//     uint64_t result;
 
-    result = end->tv_sec - begin->tv_sec;
-    result *= 1000000;     /* usec */
-    result += end->tv_usec - begin->tv_usec;
+//     result = end->tv_sec - begin->tv_sec;
+//     result *= 1000000;     /* usec */
+//     result += end->tv_usec - begin->tv_usec;
 
-    return result;
-#else
-    return 0;
-#endif
-}
+//     return result;
+// #else
+//     return 0;
+// #endif
+// }
 
-static inline void get_time (struct timeval *t)
-{
-#ifdef TIMING
-    gettimeofday (t, NULL);
-#endif
-}
+// static inline void get_time (struct timeval *t)
+// {
+// #ifdef TIMING
+//     gettimeofday (t, NULL);
+// #endif
+// }
 
 // Expirement work
 
@@ -211,10 +211,11 @@ size_t sizeUsed;
 // Quick malloc implementation with mmap
 void* my_malloc(size_t sz)
 {
+   printf("called");
    sz = __builtin_align_up(sz, _Alignof(max_align_t));
 
    // printf("%d \n", sz);
-   // printf("%d Malloc counter\n", MallocCounter);
+   printf("%d Malloc counter\n", MallocCounter);
 
    MallocCounter -= sz;
    void *ptrLink = &ptr[MallocCounter];

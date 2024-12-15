@@ -1,5 +1,11 @@
 #include "XSbench_header.h"
 
+
+#include "malloc.h"
+
+#define malloc      my_malloc
+#define free        my_free
+
 int double_compare(const void * a, const void * b)
 {
 	double A = *((double *) a);

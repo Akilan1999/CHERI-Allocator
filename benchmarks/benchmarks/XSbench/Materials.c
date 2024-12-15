@@ -4,6 +4,12 @@
 
 #include "XSbench_header.h"
 
+
+#include "malloc.h"
+
+#define malloc      my_malloc
+#define free        my_free
+
 // num_nucs represents the number of nuclides that each material contains
 int * load_num_nucs(long n_isotopes)
 {

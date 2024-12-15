@@ -4,8 +4,16 @@
 #include<mpi.h>
 #endif
 
+
+#include "malloc.h"
+
+#define malloc      my_malloc
+#define free        my_free
+
 int main( int argc, char* argv[] )
 {
+	// Init alloc 
+	INITREGULARALLOC();
 	// =====================================================================
 	// Initialization & Command Line Read-In
 	// =====================================================================
