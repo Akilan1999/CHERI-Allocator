@@ -188,15 +188,15 @@ void* MALLOCCHERI(size_t sz)
 {
    sz = __builtin_align_up(sz, _Alignof(max_align_t));
 
-   // printf("%d \n", sz);
-   printf("%d Malloc counter new\n", sz);
-
     if (sz > MallocCounter) {
       printf("%d Threashold exceeded\n", sz);
       INITREGULARALLOC(1);
     }
 
    MallocCounter -= sz;
+
+   // printf("%d \n", sz);
+   printf("%d Malloc counter new\n", MallocCounter);
 
    void *ptrLink = &ptr[MallocCounter];
    ptrLink = cheri_setbounds(ptrLink, sz);
