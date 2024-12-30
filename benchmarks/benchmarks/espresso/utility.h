@@ -5,6 +5,10 @@
 #include <string.h>
 //#include <stdbool.h>
 
+#define malloc      MALLOCCHERI
+#define free        FREECHERI
+
+
 /*
  *  assumes the memory manager is libmm.a
  *	- allows malloc(0) or realloc(obj, 0)

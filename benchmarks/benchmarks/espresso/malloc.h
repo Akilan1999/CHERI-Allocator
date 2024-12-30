@@ -33,7 +33,7 @@
 #include <sys/errno.h>
 #include <stdint.h>
 #include <stdio.h>
-#include	<unistd.h>
+// #include	<unistd.h>
 
 
 #include <stddef.h>
@@ -64,63 +64,63 @@
       assert ((a) == 0);                                     \
    }
 
-static inline void *MALLOC(size_t size)
-{
-   void * temp = malloc(size);
-   assert(temp);
-   return temp;
-}
+// static inline void *MALLOC(size_t size)
+// {
+//    void * temp = malloc(size);
+//    assert(temp);
+//    return temp;
+// }
 
-static inline void *CALLOC(size_t num, size_t size)
-{
-   void * temp = calloc(num, size);
-   assert(temp);
-   return temp;
-}
+// static inline void *CALLOC(size_t num, size_t size)
+// {
+//    void * temp = calloc(num, size);
+//    assert(temp);
+//    return temp;
+// }
 
-static inline void *REALLOC(void *ptr, size_t size)
-{
-   void * temp = realloc(ptr, size);
-   assert(temp);
-   return temp;
-}
+// static inline void *REALLOC(void *ptr, size_t size)
+// {
+//    void * temp = realloc(ptr, size);
+//    assert(temp);
+//    return temp;
+// }
 
-static inline char *GETENV(char *envstr)
-{
-   char *env = getenv(envstr);
-   if (!env) return "0";
-   else return env;
-}
+// static inline char *GETENV(char *envstr)
+// {
+//    char *env = getenv(envstr);
+//    if (!env) return "0";
+//    else return env;
+// }
 
-#define GET_TIME(start, end, duration)                                     \
-   duration.tv_sec = (end.tv_sec - start.tv_sec);                         \
-   if (end.tv_nsec >= start.tv_nsec) {                                     \
-      duration.tv_nsec = (end.tv_nsec - start.tv_nsec);                   \
-   }                                                                       \
-   else {                                                                  \
-      duration.tv_nsec = (1000000000L - (start.tv_nsec - end.tv_nsec));   \
-      duration.tv_sec--;                                                   \
-   }                                                                       \
-   if (duration.tv_nsec >= 1000000000L) {                                  \
-      duration.tv_sec++;                                                   \
-      duration.tv_nsec -= 1000000000L;                                     \
-   }
+// #define GET_TIME(start, end, duration)                                     \
+//    duration.tv_sec = (end.tv_sec - start.tv_sec);                         \
+//    if (end.tv_nsec >= start.tv_nsec) {                                     \
+//       duration.tv_nsec = (end.tv_nsec - start.tv_nsec);                   \
+//    }                                                                       \
+//    else {                                                                  \
+//       duration.tv_nsec = (1000000000L - (start.tv_nsec - end.tv_nsec));   \
+//       duration.tv_sec--;                                                   \
+//    }                                                                       \
+//    if (duration.tv_nsec >= 1000000000L) {                                  \
+//       duration.tv_sec++;                                                   \
+//       duration.tv_nsec -= 1000000000L;                                     \
+//    }
 
-static inline unsigned int time_diff (
-    struct timeval *end, struct timeval *begin)
-{
-#ifdef TIMING
-    uint64_t result;
+// static inline unsigned int time_diff (
+//     struct timeval *end, struct timeval *begin)
+// {
+// #ifdef TIMING
+//     uint64_t result;
 
-    result = end->tv_sec - begin->tv_sec;
-    result *= 1000000;     /* usec */
-    result += end->tv_usec - begin->tv_usec;
+//     result = end->tv_sec - begin->tv_sec;
+//     result *= 1000000;     /* usec */
+//     result += end->tv_usec - begin->tv_usec;
 
-    return result;
-#else
-    return 0;
-#endif
-}
+//     return result;
+// #else
+//     return 0;
+// #endif
+// }
 
 // static inline void get_time (struct timeval *t)
 // {
@@ -137,8 +137,8 @@ static char *heap_start;
 static char *heap;
 static size_t HEAP_SIZE = 1024 * 1024 * 1024;
 
-void *ptr;
-int MallocCounter;
+void *ptrEspresso;
+int MallocCounterEspresso;
 
 size_t sizeUsed;
 
@@ -166,34 +166,40 @@ INITAlloc(void) {
    //  ptr = mmap(NULL, sz,
    //  PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON,-1,0);
 
-    ptr = mmap(NULL, sz,
+    ptrEspresso = mmap(NULL, sz,
     PROT_READ|PROT_WRITE, MAP_SHARED,fd,0);
 
    // Added error handling
-    if(ptr == MAP_FAILED)
+    if(ptrEspresso == MAP_FAILED)
     {
         perror("mmap");
         exit(EXIT_FAILURE);
     }
 
-    MallocCounter = (int)sz;
+    MallocCounterEspresso = (int)sz;
 
-}
+} 
+
+int sizeCounter = 0;
 
 // Quick malloc implementation with mmap
 void* MALLOCCHERI(size_t sz)
 {
    sz = __builtin_align_up(sz, _Alignof(max_align_t));
 
-   // printf("%d \n", sz);
-   // printf("%d Malloc counter\n", MallocCounter);
+//    // printf("%d \n", sz);
 
-   MallocCounter -= sz;
-   void *ptrLink = &ptr[MallocCounter];
+   sizeCounter += sz;
+   printf("%d Malloc counter\n", sizeCounter);
+
+   MallocCounterEspresso -= sz;
+   void *ptrLink = &ptrEspresso[MallocCounterEspresso];
    ptrLink = cheri_setbounds(ptrLink, sz);
 
    return ptrLink;
 
+    // return malloc(sz);
+     
 //   if (heap + sz > heap_start + HEAP_SIZE) return NULL;
 //   heap += sz;
 //   return heap - sz;
@@ -211,7 +217,9 @@ void FREECHERI(void *ptr) {
    // printf("free len %d \n", len);
 
    munmap(ptr, len);
-}
+
+   free(ptr);
+}   
 
 static int
 pagesizes(size_t ps[MAXPAGESIZES])
@@ -273,17 +281,17 @@ INITREGULARALLOC(void) {
 	// 	atf_tc_skip("failed to allocate %zu-byte superpage", sz);
 	// ATF_REQUIRE_MSG(error == 0, "ftruncate failed; errno=%d", errno);
 
-   ptr = mmap(NULL, sz,
+   ptrEspresso = mmap(NULL, sz,
     PROT_READ|PROT_WRITE, MAP_SHARED,fd,0);
 
    // Added error handling
-    if(ptr == MAP_FAILED)
+    if(ptrEspresso == MAP_FAILED)
     {
         perror("mmap");
         exit(EXIT_FAILURE);
     }
 
-    MallocCounter = (int)sz;
+    MallocCounterEspresso = (int)sz;
 }
 // Standard Alloc 
 // void* MALLOCREGULAR(size_t sz) {

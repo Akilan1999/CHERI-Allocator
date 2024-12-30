@@ -7,8 +7,8 @@
 
 #include "malloc.h"
 
-#define malloc      my_malloc
-#define free        my_free
+#define malloc      MALLOCCHERI
+#define free        FREECHERI
 
 int main( int argc, char* argv[] )
 {

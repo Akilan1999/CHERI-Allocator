@@ -77,6 +77,12 @@ Command line options:
 #include <math.h>
 #include <time.h>
 
+// #include "malloc.h"
+
+// #define malloc      MALLOCCHERI
+// #define free        FREECHERI
+
+
 string defv[] = {                 /* DEFAULT PARAMETER VALUES              */
     /* file names for input/output                                         */
     "in=",                        /* snapshot of initial conditions        */
@@ -109,6 +115,9 @@ main(argc, argv)
 int argc;
 string argv[];
 {
+
+   // INITREGULARALLOC();
+
    unsigned ProcessId = 0;
    int c;
   printf("Run this as\n  BARNES < input \n for default values\n");

@@ -14,6 +14,11 @@
 #include "precision.h"
 #include "pfactor.h"
 
+#include "malloc.h"
+
+#define malloc      MALLOCCHERI
+#define free        FREECHERI
+
 #ifdef __STDC__
 extern unsigned *pfactorbase(precision n, unsigned k,
    unsigned *m, unsigned aborts);
@@ -177,6 +182,10 @@ int main(argc, argv)
    int argc;
    char *argv[];
 {
+
+
+   INITREGULARALLOC(0);
+
    unsigned m = 0, k = 0;
    unsigned maxCount = 1<<30, count, maxk = 0;
    int ch;

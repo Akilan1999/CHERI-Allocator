@@ -1,10 +1,10 @@
 #include "XSbench_header.h"
 
 
-#include "malloc.h"
+// #include "malloc.h"
 
-#define malloc      my_malloc
-#define free        my_free
+#define malloc      MALLOCCHERI
+#define free        FREECHERI
 
 #ifdef MPI
 #include<mpi.h>
@@ -267,9 +267,14 @@ Inputs read_CLI( int argc, char * argv[] )
 	
 	// defaults to baseline kernel
 	input.kernel_id = 0;
+
+	printf(" %d ", 6 * sizeof(char));
+
+	INITREGULARALLOC();
 	
 	// defaults to H-M Large benchmark
 	input.HM = (char *) malloc( 6 * sizeof(char) );
+	printf(" Malloc finished \n");
 	input.HM[0] = 'l' ; 
 	input.HM[1] = 'a' ; 
 	input.HM[2] = 'r' ; 

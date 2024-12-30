@@ -6,17 +6,24 @@
 
 #include "espresso.h"
 #include "main.h"		/* table definitions for options */
+#include "malloc.h"
+
+#define malloc      MALLOCCHERI
+#define free        FREECHERI
 
 static FILE *last_fp;
 static int input_type = FD_type;
 
 #include <stdlib.h>
 
+
+
 void gmalloc_exit(void);
 
 static int mainx(int argc, char* argv[]);
 
 int main(int argc, char* argv[]) {
+  INITREGULARALLOC();
   int i;
   extern int optind;
   for(i = 0; i < 20; i++) {  // benchmark N iterations
@@ -720,9 +727,9 @@ int *out_type;
 	}
     }
 
-    if (check_arg(argc, argv, "-fdr")) input_type = FDR_type;
-    if (check_arg(argc, argv, "-fr")) input_type = FR_type;
-    if (check_arg(argc, argv, "-f")) input_type = F_type;
+    // if (check_arg(argc, argv, "-fdr")) input_type = FDR_type;
+    // if (check_arg(argc, argv, "-fr")) input_type = FR_type;
+    // if (check_arg(argc, argv, "-f")) input_type = F_type;
 }
 
 

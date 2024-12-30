@@ -14,6 +14,9 @@
 #endif
 #define uMul(u, v)		((u) * (v))	      /* fast enough */
 
+#define malloc      MALLOCCHERI
+#define free        FREECHERI
+
 /*
  * Optional alternate memory allocator
  */

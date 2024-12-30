@@ -93,29 +93,30 @@ precision palloc(size)
    register precision w;
    register cacheType *kludge = pcache + size;	/* for shitty compilers */
 
-#if !(defined(NOMEMOPT) || defined(BWGC))
-   if (size < CACHESIZE && (w = kludge->next) != pUndef) {
-      kludge->next = ((cacheType *) w)->next;
-      --kludge->count;
-   } else {
-#endif
+// #if !(defined(NOMEMOPT) || defined(BWGC))
+//    if (size < CACHESIZE && (w = kludge->next) != pUndef) {
+//       kludge->next = ((cacheType *) w)->next;
+//       --kludge->count;
+//    } else {
+// #endif
       w = (precision) allocate(PrecisionSize + sizeof(digit) * size);
       if (w == pUndef)  {
 	 w = errorp(PNOMEM, "palloc", "out of memory");
 	 return w;
       }
-#if !(defined(NOMEMOPT) || defined(BWGC))
-   }
-#endif
+// #if !(defined(NOMEMOPT) || defined(BWGC))
+//    }
+// #endif
 #ifndef BWGC
    w->refcount = 1;
 #endif
    w->size     = w->alloc = size;
-#ifdef DEBUGOPS
+// #ifdef DEBUGOPS
    printf("alloc %.8x\n", w); 
-   fflush(stdout);
-#endif
+   // fflush(stdout);
+// #endif
    return w;
+   
 }
 
 /*

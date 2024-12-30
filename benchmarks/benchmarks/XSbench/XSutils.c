@@ -1,10 +1,10 @@
 #include "XSbench_header.h"
 
 
-#include "malloc.h"
+// #include "malloc.h"
 
-#define malloc      my_malloc
-#define free        my_free
+#define malloc      MALLOCCHERI
+#define free        FREECHERI
 
 int double_compare(const void * a, const void * b)
 {

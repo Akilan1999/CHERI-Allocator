@@ -33,7 +33,7 @@
 #include <sys/errno.h>
 #include <stdint.h>
 #include <stdio.h>
-#include	<unistd.h>
+// #include	<unistd.h>
 
 
 #include <stddef.h>
@@ -137,8 +137,8 @@ static char *heap_start;
 static char *heap;
 static size_t HEAP_SIZE = 1024 * 1024 * 1024;
 
-void *ptr;
-int MallocCounter;
+void *ptrEspresso;
+int MallocCounterEspresso;
 
 size_t sizeUsed;
 
@@ -166,19 +166,19 @@ INITAlloc(void) {
    //  ptr = mmap(NULL, sz,
    //  PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON,-1,0);
 
-    ptr = mmap(NULL, sz,
+    ptrEspresso = mmap(NULL, sz,
     PROT_READ|PROT_WRITE, MAP_SHARED,fd,0);
 
    // Added error handling
-    if(ptr == MAP_FAILED)
+    if(ptrEspresso == MAP_FAILED)
     {
         perror("mmap");
         exit(EXIT_FAILURE);
     }
 
-    MallocCounter = (int)sz;
+    MallocCounterEspresso = (int)sz;
 
-}
+} 
 
 // Quick malloc implementation with mmap
 void* MALLOCCHERI(size_t sz)
@@ -186,10 +186,9 @@ void* MALLOCCHERI(size_t sz)
    sz = __builtin_align_up(sz, _Alignof(max_align_t));
 
    // printf("%d \n", sz);
-   // printf("%d Malloc counter\n", MallocCounter);
 
-   MallocCounter -= sz;
-   void *ptrLink = &ptr[MallocCounter];
+   MallocCounterEspresso -= sz;
+   void *ptrLink = &ptrEspresso[MallocCounterEspresso];
    ptrLink = cheri_setbounds(ptrLink, sz);
 
    return ptrLink;
@@ -273,17 +272,17 @@ INITREGULARALLOC(void) {
 	// 	atf_tc_skip("failed to allocate %zu-byte superpage", sz);
 	// ATF_REQUIRE_MSG(error == 0, "ftruncate failed; errno=%d", errno);
 
-   ptr = mmap(NULL, sz,
+   ptrEspresso = mmap(NULL, sz,
     PROT_READ|PROT_WRITE, MAP_SHARED,fd,0);
 
    // Added error handling
-    if(ptr == MAP_FAILED)
+    if(ptrEspresso == MAP_FAILED)
     {
         perror("mmap");
         exit(EXIT_FAILURE);
     }
 
-    MallocCounter = (int)sz;
+    MallocCounterEspresso = (int)sz;
 }
 // Standard Alloc 
 // void* MALLOCREGULAR(size_t sz) {

@@ -1,10 +1,10 @@
 #include "XSbench_header.h"
 
 
-#include "malloc.h"
+// #include "malloc.h"
 
-#define malloc      my_malloc
-#define free        my_free
+#define malloc      MALLOCCHERI
+#define free        FREECHERI
 
 SimulationData grid_init_do_not_profile( Inputs in, int mype )
 {

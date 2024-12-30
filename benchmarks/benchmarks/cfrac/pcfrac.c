@@ -15,6 +15,10 @@
 #include "precision.h"
 #include "pfactor.h"
 
+
+#define malloc      MALLOCCHERI
+#define free        FREECHERI
+
 extern int verbose;
 
 unsigned cfracNabort  = 0;

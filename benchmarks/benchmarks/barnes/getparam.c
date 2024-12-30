@@ -54,7 +54,7 @@ string getparam(name)
    if (i < 0)
       error("getparam: %s unknown\n", name);
    def = extrvalue(defaults[i]);
-   gets(buf);
+   gets_s(buf,100);
    leng = strlen(buf) + 1;
    if (leng > 1) {
       return (strcpy(malloc(leng), buf));

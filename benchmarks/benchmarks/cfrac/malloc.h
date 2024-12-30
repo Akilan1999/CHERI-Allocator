@@ -47,6 +47,7 @@
 
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <stdbool.h>  // For boolean data type (bool, true, false)
 
 #define	MAXPAGESIZES	2
 
@@ -138,6 +139,8 @@ static char *heap;
 static size_t HEAP_SIZE = 1024 * 1024 * 1024;
 
 void *ptr;
+void *ptr1;
+void *ptr2;
 int MallocCounter;
 
 size_t sizeUsed;
@@ -186,9 +189,15 @@ void* MALLOCCHERI(size_t sz)
    sz = __builtin_align_up(sz, _Alignof(max_align_t));
 
    // printf("%d \n", sz);
-   // printf("%d Malloc counter\n", MallocCounter);
+   printf("%d Malloc counter new\n", sz);
+
+    if (sz > MallocCounter) {
+      printf("%d Threashold exceeded\n", sz);
+      INITREGULARALLOC(1);
+    }
 
    MallocCounter -= sz;
+
    void *ptrLink = &ptr[MallocCounter];
    ptrLink = cheri_setbounds(ptrLink, sz);
 
@@ -230,7 +239,7 @@ pagesizes(size_t ps[MAXPAGESIZES])
 	return (pscnt);
 }
 
-INITREGULARALLOC(void) {
+INITREGULARALLOC(int full) {
    size_t sz;
    // Hard-coded for 1GB huge page
    sz = 1073741824;
@@ -241,6 +250,13 @@ INITREGULARALLOC(void) {
 
    size_t size[3];
 
+   // Point to initially to pointer 1 
+   if (full == 1) {
+      ptr = ptr2;
+   } 
+   else {
+      ptr = ptr1;
+   }
    pn = getpagesizes(size, 3);
    printf("page size is [%d]", size[2]);
 
@@ -296,3 +312,5 @@ INITREGULARALLOC(void) {
 // }
 
 #endif // STDDEFINES_H_
+
+

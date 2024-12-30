@@ -46,7 +46,15 @@
         "stdint.h": "c",
         "bitmap_alloc.h": "c",
         "buddy.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "forward_list": "cpp",
+        "memory": "cpp",
+        "__tuple": "cpp",
+        "type_traits": "cpp",
+        "limits": "cpp",
+        "ratio": "cpp",
+        "tuple": "cpp",
+        "variant": "cpp"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
