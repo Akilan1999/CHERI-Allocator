@@ -199,7 +199,7 @@ void* MALLOCCHERI(size_t sz)
    printf("%d Malloc counter new\n", MallocCounter);
 
    void *ptrLink = &ptr[MallocCounter];
-   ptrLink = cheri_setbounds(ptrLink, sz);
+   ptrLink = cheri_bounds_set(ptrLink, sz);
 
    return ptrLink;
 
