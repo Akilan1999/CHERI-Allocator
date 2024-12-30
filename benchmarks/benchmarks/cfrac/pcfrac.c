@@ -337,8 +337,11 @@ uvec pfactorbase(n, k, m, aborts)
     */
 #ifdef BWGC 		 
    res = (uvec) gc_malloc(count * sizeof (unsigned));
-#else		 
+#else		
+   printf("reaches here"); 
+   printf("reaches here new"); 
    res = (uvec) malloc(count * sizeof (unsigned));
+   printf("malloc allocated"); 
 #endif
    if (res == (uvec) 0) goto doneMk;
 
