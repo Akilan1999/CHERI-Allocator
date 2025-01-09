@@ -10,10 +10,10 @@
 #define malloc      MALLOCCHERI
 #define free        FREECHERI
 
-int main( int argc, char* argv[] )
+int main(int argc, char* argv[] )
 {
 	// Init alloc 
-	INITREGULARALLOC();
+	// INITREGULARALLOC(0);
 	// =====================================================================
 	// Initialization & Command Line Read-In
 	// =====================================================================

@@ -1,0 +1,31 @@
+* Evaluation section planning
+This will consist of a paragraph of the following structure:
+- 2 senteces on the expirement setup.
+- 2 sentences of ther Micro benchmarks.
+- 2 sentences on the Macro benchmarks.
+- Quick overview of the upcoming sections
+
+** Expirement setup
+- Mentions about the CHERI board used.
+- specs of the board
+- mentions about the compiled flag called benchmark ABI.
+- mentions how the various bechmark are compared and breifly
+  mentions about the ARM performance counters.
+
+** Performance counters used
+- Mentions about the performance counters used.
+  In a Tabular strucuture.
+
+** Lists of the type of benchmarks ran with the descriptions on the side
+This is more in a bulletin point manner.
+
+** Graphs listed
+- Talks about each of the benchmark patterns indenpendently (Bulletin points elaborated).
+- Builds up on those with multiple runs.
+
+** Usability:
+Talk about the ease of running the new allocator.
+- Limitaion why certain benchmarks did not work.
+- The eager Huge page design while designed for fragmentation can still incur fragmentation at
+  a user level.
+- How was the memory allocator swapped.

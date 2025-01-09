@@ -184,7 +184,7 @@ int main(argc, argv)
 {
 
 
-   INITREGULARALLOC(0);
+   // INITREGULARALLOC(0);
 
    unsigned m = 0, k = 0;
    unsigned maxCount = 1<<30, count, maxk = 0;

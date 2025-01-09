@@ -270,7 +270,7 @@ Inputs read_CLI( int argc, char * argv[] )
 
 	printf(" %d ", 6 * sizeof(char));
 
-	INITREGULARALLOC();
+	// INITREGULARALLOC();
 	
 	// defaults to H-M Large benchmark
 	input.HM = (char *) malloc( 6 * sizeof(char) );

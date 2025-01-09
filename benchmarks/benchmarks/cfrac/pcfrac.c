@@ -338,15 +338,18 @@ uvec pfactorbase(n, k, m, aborts)
 #ifdef BWGC 		 
    res = (uvec) gc_malloc(count * sizeof (unsigned));
 #else		
-   printf("reaches here"); 
-   printf("reaches here new"); 
+   // printf("reaches here\n"); 
    res = (uvec) malloc(count * sizeof (unsigned));
-   printf("malloc allocated"); 
-#endif
+   // printf("malloc allocated\n"); 
+#endif 
+   // printf("called after end if \n");
    if (res == (uvec) 0) goto doneMk;
-
+   
+   // printf("setting res to pm \n");
    pm    = res;
+   // printf("setting res is set \n");
    *pm++ = (unsigned) *primePtr++;		/* two is first element */
+   //  printf("prime number increment \n");
    count = 1;
    if (count != *m) do {
       if (picmp(plegendre(nk, utop((unsigned) *primePtr)), 1) <= 0) { /* 0,1 */
@@ -359,7 +362,10 @@ uvec pfactorbase(n, k, m, aborts)
    } while (*primePtr != 1);
    *m = count;
 
+   // printf("end of function\n"); 
+
 doneMk:
+   // printf("calling destroy \n"); 
    pdestroy(nk);
    pdestroy(n);
    return res;

@@ -77,10 +77,10 @@ Command line options:
 #include <math.h>
 #include <time.h>
 
-// #include "malloc.h"
+#include "malloc.h"
 
-// #define malloc      MALLOCCHERI
-// #define free        FREECHERI
+#define malloc      MALLOCCHERI
+#define free        FREECHERI
 
 
 string defv[] = {                 /* DEFAULT PARAMETER VALUES              */
@@ -116,7 +116,7 @@ int argc;
 string argv[];
 {
 
-   // INITREGULARALLOC();
+   INITREGULARALLOC(0);
 
    unsigned ProcessId = 0;
    int c;

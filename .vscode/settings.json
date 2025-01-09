@@ -54,7 +54,8 @@
         "limits": "cpp",
         "ratio": "cpp",
         "tuple": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "stddef.h": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }

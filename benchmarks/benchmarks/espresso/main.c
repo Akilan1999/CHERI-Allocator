@@ -23,7 +23,7 @@ void gmalloc_exit(void);
 static int mainx(int argc, char* argv[]);
 
 int main(int argc, char* argv[]) {
-  INITREGULARALLOC();
+  INITREGULARALLOC(0);
   int i;
   extern int optind;
   for(i = 0; i < 20; i++) {  // benchmark N iterations

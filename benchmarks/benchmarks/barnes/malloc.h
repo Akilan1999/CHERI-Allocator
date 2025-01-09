@@ -33,7 +33,7 @@
 #include <sys/errno.h>
 #include <stdint.h>
 #include <stdio.h>
-// #include	<unistd.h>
+#include	<unistd.h>
 
 
 #include <stddef.h>
@@ -47,6 +47,7 @@
 
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <stdbool.h>  // For boolean data type (bool, true, false)
 
 #define	MAXPAGESIZES	2
 
@@ -137,8 +138,10 @@ static char *heap_start;
 static char *heap;
 static size_t HEAP_SIZE = 1024 * 1024 * 1024;
 
-void *ptrEspresso;
-int MallocCounterEspresso;
+void *ptr;
+void *ptr1;
+void *ptr2;
+int MallocCounter;
 
 size_t sizeUsed;
 
@@ -166,30 +169,42 @@ INITAlloc(void) {
    //  ptr = mmap(NULL, sz,
    //  PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANON,-1,0);
 
-    ptrEspresso = mmap(NULL, sz,
+    ptr = mmap(NULL, sz,
     PROT_READ|PROT_WRITE, MAP_SHARED,fd,0);
 
    // Added error handling
-    if(ptrEspresso == MAP_FAILED)
+    if(ptr == MAP_FAILED)
     {
         perror("mmap");
         exit(EXIT_FAILURE);
     }
 
-    MallocCounterEspresso = (int)sz;
+    MallocCounter = (int)sz;
 
-} 
+}
 
 // Quick malloc implementation with mmap
-void* MALLOCCHERI(size_t sz)
+void* MALLOCCHERI(size_t Size)
 {
-   sz = __builtin_align_up(sz, _Alignof(max_align_t));
+    size_t sz = __builtin_align_up(Size, _Alignof(max_align_t));
+
+    MallocCounter -= sz;
+
+    if (sz > MallocCounter) {
+      // printf("%d Threashold exceeded\n", sz);
+      INITREGULARALLOC(1);
+    }
+
+   
 
    // printf("%d \n", sz);
+   // printf("%d Malloc counter new\n", MallocCounter);
 
-   MallocCounterEspresso -= sz;
-   void *ptrLink = &ptrEspresso[MallocCounterEspresso];
-   ptrLink = cheri_setbounds(ptrLink, sz);
+   void *ptrLink = &ptr[MallocCounter];
+   // To investigate bounds set 
+   ptrLink = cheri_bounds_set(ptrLink, sz);
+      
+   // printf("%d Malloc counter assigned\n", MallocCounter);
 
    return ptrLink;
 
@@ -229,7 +244,7 @@ pagesizes(size_t ps[MAXPAGESIZES])
 	return (pscnt);
 }
 
-INITREGULARALLOC(void) {
+INITREGULARALLOC(int full) {
    size_t sz;
    // Hard-coded for 1GB huge page
    sz = 1073741824;
@@ -240,6 +255,13 @@ INITREGULARALLOC(void) {
 
    size_t size[3];
 
+   // Point to initially to pointer 1 
+   if (full == 1) {
+      ptr = ptr2;
+   } 
+   else {
+      ptr = ptr1;
+   }
    pn = getpagesizes(size, 3);
    printf("page size is [%d]", size[2]);
 
@@ -272,17 +294,17 @@ INITREGULARALLOC(void) {
 	// 	atf_tc_skip("failed to allocate %zu-byte superpage", sz);
 	// ATF_REQUIRE_MSG(error == 0, "ftruncate failed; errno=%d", errno);
 
-   ptrEspresso = mmap(NULL, sz,
+   ptr = mmap(NULL, sz,
     PROT_READ|PROT_WRITE, MAP_SHARED,fd,0);
 
    // Added error handling
-    if(ptrEspresso == MAP_FAILED)
+    if(ptr == MAP_FAILED)
     {
         perror("mmap");
         exit(EXIT_FAILURE);
     }
 
-    MallocCounterEspresso = (int)sz;
+    MallocCounter = (int)sz;
 }
 // Standard Alloc 
 // void* MALLOCREGULAR(size_t sz) {
@@ -295,3 +317,5 @@ INITREGULARALLOC(void) {
 // }
 
 #endif // STDDEFINES_H_
+
+
