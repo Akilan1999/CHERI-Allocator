@@ -8,8 +8,8 @@ This will consist of a paragraph of the following structure:
 ** Expirement setup
 - Mentions about the CHERI board used.
 - specs of the board
-- mentions about the compiled flag called benchmark ABI.(https://ctsrd-cheri.github.io/morello-early-performance-results/performance-methodology/abis-code-generation-and-compilation.html)
-- mentions how the various benchmark are compared and breifly
+- mentions about the compiled flag called benchmark ABI.
+- mentions how the various bechmark are compared and breifly
   mentions about the ARM performance counters.
 
 ** Performance counters used
@@ -20,7 +20,8 @@ This will consist of a paragraph of the following structure:
 This is more in a bulletin point manner.
 
 ** Graphs listed
-- Talks about each of the benchmark patterns indenpendently (Bulletin points elaborated).
+- Talks about each of the benchmark patterns indenpendently
+  (Bulletin points elaborated).
 - Builds up on those with multiple runs.
 
 ** Usability:

@@ -20,7 +20,8 @@ This will consist of a paragraph of the following structure:
 This is more in a bulletin point manner.
 
 ** Graphs listed
-- Talks about each of the benchmark patterns indenpendently (Bulletin points elaborated).
+- Talks about each of the benchmark patterns indenpendently
+  (Bulletin points elaborated).
 - Builds up on those with multiple runs.
 
 ** Usability:

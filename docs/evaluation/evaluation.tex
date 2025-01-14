@@ -1,4 +1,4 @@
-% Created 2025-01-09 Thu 22:53
+% Created 2025-01-14 Tue 14:03
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -27,7 +27,7 @@
 \tableofcontents
 
 \section{Evaluation}
-\label{sec:org02aba25}
+\label{sec:orgbbe52ec}
 
 We conducted tests of the FAT Pointer-based range addresses against Jemalloc, 
 the default memory allocator for CHERIBSD(, ), to assess the performance improvements 
@@ -68,7 +68,7 @@ gains were marginal or where it introduced additional complexity in memory manag
 limitations provide a roadmap for future optimizations and refinements of the allocator design.
 
 \subsection{Expirement setup}
-\label{sec:org9bf5b27}
+\label{sec:org0672379}
 
 The CHERI Morello board was used to evaluate the proposed memory allocator. 
 Morello implements the ARM A76 with enhanced server-class memory, featuring a 
@@ -99,7 +99,7 @@ us to compare the performance of the two allocators and assess the impact of
 the proposed changes.
 
 \subsubsection{Performance counters used}
-\label{sec:org294979c}
+\label{sec:org9f2d2f7}
 
 \begin{center}
 \begin{tabular}{|l|l|}
@@ -142,12 +142,12 @@ Wall clock & The actual time taken from the start of a \\
 \end{center}
 
 \subsubsection{Benchmarks}
-\label{sec:orgddacffd}
+\label{sec:org91388b2}
 The benchmarks are classified into 2 classes:
 
 \begin{enumerate}
 \item Micro benchmark
-\label{sec:orgb329a4e}
+\label{sec:orgf10bbbd}
 \begin{itemize}
 \item GLIBC: The Glibc benchmark evaluates the performance of
 malloc and free functions in single-threaded, multi-threaded,
@@ -164,7 +164,7 @@ doubles the working set size to analyze memory hierarchy behavior.
 \end{itemize}
 
 \item Macro runs
-\label{sec:orga786fd0}
+\label{sec:orgc073fbd}
 \begin{itemize}
 \item Kmeans: Kmeans implements a parallelized K-means clustering algorithm that
 assigns data points to clusters based on proximity to centroids,
@@ -183,19 +183,86 @@ timing help measure system performance and ensure correctness.
 \end{enumerate}
 
 \subsection{Results}
-\label{sec:org4bdc0d9}
+\label{sec:org306bf15}
 \begin{center}
 \includegraphics[width=.9\linewidth]{./diagrams/allbenchmarks.png}
 \end{center}
+
+
+The graph above highlights the performance comparison between the modified memory allocator and 
+Jemalloc, the default memory allocator. The FAT pointer memory allocator, specifically optimized 
+for use with huge pages, demonstrates a clear advantage in scenarios where memory allocation 
+patterns benefit from its design. The results align with expectations, showcasing the impact 
+of its capability to handle memory more efficiently by leveraging huge pages.
+
+A particularly striking observation is the significant reduction in data TLB walks, 
+L2 data TLB reads, and TLB refills—consistently showing a 90\% decrease across all 
+benchmarks compared to Jemalloc. This improvement is due to the modified allocator's 
+use of a single huge page entry at the L1 TLB layer. By enabling most address translations 
+to be resolved directly at the L1 TLB, the need to walk through the deeper TLB hierarchy is 
+largely eliminated. This reduction in translation overhead is a key factor in the allocator's 
+superior performance for certain types of workloads.
+
+The micro benchmarks, which are crafted to emphasize memory read operations, highlight the 
+allocator's strengths. These tests simulate frequent and intensive memory access patterns, 
+where the reduction in TLB misses directly translates into measurable performance gains. 
+On average, the FAT pointer allocator achieves a 50\% reduction in wall clock runtimes for 
+these workloads, underscoring its ability to optimize high-throughput memory operations.
+
+On the other hand, macro benchmarks, which represent larger and more complex real-world applications, 
+exhibit minimal differences in wall clock runtimes when using the FAT pointer allocator. 
+This outcome is expected, as macro benchmarks typically involve a broader range of operations 
+beyond memory allocation, diluting the impact of the allocator's optimizations. Additionally, 
+the benefits of huge pages may be less pronounced for these workloads, as they are often 
+bottlenecked by factors such as computation or I/O rather than memory translation overhead.
 
 \begin{center}
 \includegraphics[width=.9\linewidth]{./diagrams/kmeans.png}
 \end{center}
 
-\begin{center}
-\includegraphics[width=.9\linewidth]{./diagrams/glibc.png}
-\end{center}
+The K-means algorithm was executed with varying cluster sizes to evaluate the performance difference 
+between the FAT pointer allocator and the baseline allocator as the workload scales. This analysis 
+aimed to understand how the allocator's optimizations, particularly its ability to manage memory 
+more efficiently with huge pages, impact performance under different workload conditions.
 
+For most cluster sizes tested, the percentage difference in performance remained relatively 
+consistent. This indicates that the allocator's efficiency scales predictably with increasing 
+workload sizes, suggesting a stable and uniform benefit across different configurations. The 
+consistent performance gain is likely due to the allocator's ability to minimize TLB misses 
+and efficiently manage memory allocations for the centroid and data point structures used in 
+the K-means algorithm.
+
+However, an anomaly was observed at a cluster size of 2000, where the percentage difference 
+deviated significantly from the trend. This irregularity could be attributed to several factors. 
+At this cluster size, the memory access patterns and allocation behavior may align in a way that 
+temporarily offsets the advantages of the FAT pointer allocator. For example, the memory layout 
+might interact with system-level caching mechanisms or TLB behavior differently, leading to an 
+unexpected change in performance. Additionally, the increased complexity of managing a higher 
+number of clusters might introduce computational overhead that overshadows the memory allocator's 
+optimizations.
+
+This observation highlights the importance of testing across a range of workload sizes and 
+configurations to uncover edge cases or specific scenarios where performance deviates from the 
+expected pattern. Understanding these anomalies can provide insights into the allocator's 
+behavior and guide future improvements to address such outliers. Despite the deviation at a 
+cluster size of 2000, the overall results reaffirm the allocator's capability to maintain 
+consistent performance benefits across most scenarios.
 \subsection{Usability}
-\label{sec:org3b91bbd}
+\label{sec:orgb4de289}
+The FAT pointer memory allocator demonstrates significant potential for enhancing 
+memory management in systems that benefit from huge page optimizations. Its design 
+effectively reduces TLB misses, achieving up to 90\% fewer data TLB walks, L2 TLB reads, 
+and TLB refills compared to Jemalloc. These improvements lead to noticeable performance 
+gains, especially in micro benchmarks, where the allocator reduces wall clock runtimes 
+by an average of 50\%.
+
+The allocator integrates seamlessly into memory-intensive workloads, as evidenced by its 
+consistent performance across varying cluster sizes in the K-means benchmark, with only 
+minor anomalies observed under specific conditions. These outliers provide valuable 
+insights into the allocator's interaction with system-level caching and memory translation mechanisms.
+
+While the allocator excels in scenarios emphasizing high memory throughput, its impact on 
+macro benchmarks is less pronounced. This suggests that its benefits are most relevant for 
+applications with frequent and intensive memory operations rather than those constrained by 
+computation or I/O bottlenecks.
 \end{document}
