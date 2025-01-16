@@ -1,4 +1,4 @@
-% Created 2025-01-14 Tue 14:03
+% Created 2025-01-16 Thu 15:20
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -27,10 +27,10 @@
 \tableofcontents
 
 \section{Evaluation}
-\label{sec:orgbbe52ec}
+\label{sec:orgdc1fb32}
 
-We conducted tests of the FAT Pointer-based range addresses against Jemalloc, 
-the default memory allocator for CHERIBSD(, ), to assess the performance improvements 
+We conducted tests of the FAT Pointer-based range addresses against Jemalloc\cite{jemalloc}, 
+the default memory allocator for CHERIBSD\cite{cheribsd}, to assess the performance improvements 
 enabled by a CHERI-based huge page-aware allocator. Specifically, we evaluated 
 the reduction in TLB misses and its impact on overall 
 performance metrics, such as wall clock runtime.
@@ -42,7 +42,7 @@ detailed aspects of the allocator's behavior. Macro benchmarks, on the other han
 encompass larger, real-world C programs, allowing us to assess the allocator's 
 performance in more practical, real-world scenarios.
 
-The experiment setup details the software stack used for evaluation. It includes 
+The experiment setup section details the software stack used for evaluation. It includes 
 the specific configurations, compiler options, and system environment tailored 
 to benchmark the proposed allocator. This ensures consistency and repeatability 
 in our results, providing a solid foundation for meaningful comparisons.
@@ -68,9 +68,9 @@ gains were marginal or where it introduced additional complexity in memory manag
 limitations provide a roadmap for future optimizations and refinements of the allocator design.
 
 \subsection{Expirement setup}
-\label{sec:org0672379}
+\label{sec:org1821dc1}
 
-The CHERI Morello board was used to evaluate the proposed memory allocator. 
+The CHERI Morello\cite{Morello} board was used to evaluate the proposed memory allocator. 
 Morello implements the ARM A76 with enhanced server-class memory, featuring a 
 quad-core ARM CPU with capability extensions. The L1 and L2 caches were modified 
 to proliferate the capability bit, ensuring compatibility with CHERI's capability-based 
@@ -78,7 +78,7 @@ memory model. When compiling the C programs for benchmarking, the Benchmark ABI 
 used as recommended by the CHERI community. This compilation mode was enabled using 
 the Clang compiler.
 
-The Benchmark ABI was specifically designed because the Morello branch predictor 
+The Benchmark ABI\cite{BenchmarkABI} was specifically designed because the Morello branch predictor 
 was not expanded to predict bounds. Consequently, a capability-based jump introduces 
 stalls in later PCC-dependent instructions until bounds are established. This issue 
 is particularly significant during dynamically linked calls and returns between 
@@ -93,15 +93,14 @@ failing to overwrite the C program at runtime with the intended malloc functions
 The second allocator was the standard OS memory allocator, which, in the case of
 CHERIBSD, is Jemalloc.
 
-Performance measurements were carried out using ARM performance counters to 
+Performance measurements were carried out using ARM performance counters\cite{PerformanceCounter} to 
 ensure accurate evaluation. These counters provided detailed metrics, allowing 
 us to compare the performance of the two allocators and assess the impact of 
 the proposed changes.
 
-\subsubsection{Performance counters used}
-\label{sec:org9f2d2f7}
-
-\begin{center}
+\begin{table}[htbp]
+\caption{\label{tab:orgba41311}ARM performance counters}
+\centering
 \begin{tabular}{|l|l|}
 \hline
 Performance counter & Description \\
@@ -139,15 +138,15 @@ Wall clock & The actual time taken from the start of a \\
  & during a memory read operation.) \\
 \hline
 \end{tabular}
-\end{center}
+\end{table}
 
 \subsubsection{Benchmarks}
-\label{sec:org91388b2}
-The benchmarks are classified into 2 classes:
+\label{sec:org76c5486}
+The benchmarks\cite{Benchmark} are classified into 2 classes:
 
 \begin{enumerate}
 \item Micro benchmark
-\label{sec:orgf10bbbd}
+\label{sec:org2f3b3d3}
 \begin{itemize}
 \item GLIBC: The Glibc benchmark evaluates the performance of
 malloc and free functions in single-threaded, multi-threaded,
@@ -164,7 +163,7 @@ doubles the working set size to analyze memory hierarchy behavior.
 \end{itemize}
 
 \item Macro runs
-\label{sec:orgc073fbd}
+\label{sec:org1d39860}
 \begin{itemize}
 \item Kmeans: Kmeans implements a parallelized K-means clustering algorithm that
 assigns data points to clusters based on proximity to centroids,
@@ -183,13 +182,15 @@ timing help measure system performance and ensure correctness.
 \end{enumerate}
 
 \subsection{Results}
-\label{sec:org306bf15}
-\begin{center}
-\includegraphics[width=.9\linewidth]{./diagrams/allbenchmarks.png}
-\end{center}
+\label{sec:orgf4cf5db}
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=.9\linewidth]{./diagrams/bargraph.png}
+\caption{\label{fig:org876b3c0}Percentage difference between the modified memory allocator against the default system memory allocator}
+\end{figure}
 
 
-The graph above highlights the performance comparison between the modified memory allocator and 
+The graph[\ref{fig:org876b3c0}] highlights the performance comparison between the modified memory allocator and 
 Jemalloc, the default memory allocator. The FAT pointer memory allocator, specifically optimized 
 for use with huge pages, demonstrates a clear advantage in scenarios where memory allocation 
 patterns benefit from its design. The results align with expectations, showcasing the impact 
@@ -216,9 +217,11 @@ beyond memory allocation, diluting the impact of the allocator's optimizations. 
 the benefits of huge pages may be less pronounced for these workloads, as they are often 
 bottlenecked by factors such as computation or I/O rather than memory translation overhead.
 
-\begin{center}
+\begin{figure}[htbp]
+\centering
 \includegraphics[width=.9\linewidth]{./diagrams/kmeans.png}
-\end{center}
+\caption{\label{fig:org5dab5a3}Kmeans COZ benchmark executed against various cluster sizes}
+\end{figure}
 
 The K-means algorithm was executed with varying cluster sizes to evaluate the performance difference 
 between the FAT pointer allocator and the baseline allocator as the workload scales. This analysis 
@@ -248,7 +251,7 @@ behavior and guide future improvements to address such outliers. Despite the dev
 cluster size of 2000, the overall results reaffirm the allocator's capability to maintain 
 consistent performance benefits across most scenarios.
 \subsection{Usability}
-\label{sec:orgb4de289}
+\label{sec:orgb046e55}
 The FAT pointer memory allocator demonstrates significant potential for enhancing 
 memory management in systems that benefit from huge page optimizations. Its design 
 effectively reduces TLB misses, achieving up to 90\% fewer data TLB walks, L2 TLB reads, 
@@ -265,4 +268,7 @@ While the allocator excels in scenarios emphasizing high memory throughput, its 
 macro benchmarks is less pronounced. This suggests that its benefits are most relevant for 
 applications with frequent and intensive memory operations rather than those constrained by 
 computation or I/O bottlenecks.
+
+\bibliographystyle{IEEEtran}
+\bibliography{evaluation.bib}
 \end{document}

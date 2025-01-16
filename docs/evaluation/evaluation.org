@@ -1,7 +1,5 @@
 * Evaluation
 
-#+bibliography: evaluation.bib
-
 #+BEGIN_COMMENT
 We tested the FAT Pointer based range addresses
 against Jemalloc the default memory allocator
@@ -29,8 +27,8 @@ into the following:
   on the evaluated results and limitations identified.
 #+END_COMMENT
 
-We conducted tests of the FAT Pointer-based range addresses against Jemalloc, 
-the default memory allocator for CHERIBSD[cite:@cheribsd], to assess the performance improvements 
+We conducted tests of the FAT Pointer-based range addresses against Jemalloc\cite{jemalloc}, 
+the default memory allocator for CHERIBSD\cite{cheribsd}, to assess the performance improvements 
 enabled by a CHERI-based huge page-aware allocator. Specifically, we evaluated 
 the reduction in TLB misses and its impact on overall 
 performance metrics, such as wall clock runtime.
@@ -42,7 +40,7 @@ detailed aspects of the allocator's behavior. Macro benchmarks, on the other han
 encompass larger, real-world C programs, allowing us to assess the allocator's 
 performance in more practical, real-world scenarios.
 
-The experiment setup details the software stack used for evaluation. It includes 
+The experiment setup section details the software stack used for evaluation. It includes 
 the specific configurations, compiler options, and system environment tailored 
 to benchmark the proposed allocator. This ensures consistency and repeatability 
 in our results, providing a solid foundation for meaningful comparisons.
@@ -70,11 +68,11 @@ limitations provide a roadmap for future optimizations and refinements of the al
 ** Expirement setup
 
 #+BEGIN_COMMENT
-The CHERI morello board was used to evaluate tehe proposed memory allocator.
+The CHERI morello board\cite{Morello} was used to evaluate tehe proposed memory allocator.
 Morello implements the ARM A76 with enhanced server class memory. The speciafication
 includes a quad core ARM CPU with capabilties. The L1 and L2 cache was modified to
 proliferate the capability bit. When compiling the C program for benchmarking
-the Benchmark ABI was used as recommended by the CHERI community as a compliation
+the Benchmark ABI\cite{BenchmarkABI} was used as recommended by the CHERI community as a compliation
 mode with the Clang compilier.
 
 The benchmark ABI was designed because the Morello
@@ -93,7 +91,7 @@ is Jemalloc. The measurements are done using the ARM performance counters as men
 in the following section. 
 #+END_COMMENT
 
-The CHERI Morello board was used to evaluate the proposed memory allocator. 
+The CHERI Morello\cite{Morello} board was used to evaluate the proposed memory allocator. 
 Morello implements the ARM A76 with enhanced server-class memory, featuring a 
 quad-core ARM CPU with capability extensions. The L1 and L2 caches were modified 
 to proliferate the capability bit, ensuring compatibility with CHERI's capability-based 
@@ -101,7 +99,7 @@ memory model. When compiling the C programs for benchmarking, the Benchmark ABI 
 used as recommended by the CHERI community. This compilation mode was enabled using 
 the Clang compiler.
 
-The Benchmark ABI was specifically designed because the Morello branch predictor 
+The Benchmark ABI\cite{BenchmarkABI} was specifically designed because the Morello branch predictor 
 was not expanded to predict bounds. Consequently, a capability-based jump introduces 
 stalls in later PCC-dependent instructions until bounds are established. This issue 
 is particularly significant during dynamically linked calls and returns between 
@@ -116,13 +114,13 @@ failing to overwrite the C program at runtime with the intended malloc functions
 The second allocator was the standard OS memory allocator, which, in the case of
 CHERIBSD, is Jemalloc.
 
-Performance measurements were carried out using ARM performance counters to 
+Performance measurements were carried out using ARM performance counters\cite{PerformanceCounter} to 
 ensure accurate evaluation. These counters provided detailed metrics, allowing 
 us to compare the performance of the two allocators and assess the impact of 
 the proposed changes.
 
-*** Performance counters used
-                                           
+#+CAPTION: ARM performance counters
+#+NAME: fig:ARMPerformaneCounter
 +--------------------------------------------------+--------------------------------------------+
 | Performance counter                              | Description                                |
 +--------------------------------------------------+--------------------------------------------+
@@ -160,7 +158,7 @@ the proposed changes.
 +--------------------------------------------------+--------------------------------------------+
 
 *** Benchmarks
-The benchmarks are classified into 2 classes:
+The benchmarks\cite{Benchmark} are classified into 2 classes:
 
 **** Micro benchmark
 - GLIBC: The Glibc benchmark evaluates the performance of
@@ -194,7 +192,9 @@ The benchmarks are classified into 2 classes:
 ** Results
 #+ATTR_HTML: :align right
 #+ATTR_ORG: :align center
-[[./diagrams/allbenchmarks.png]]
+#+CAPTION: Percentage difference between the modified memory allocator against the default system memory allocator
+#+NAME: fig:bargraph
+[[./diagrams/bargraph.png]]
 
 #+BEGIN_COMMENT
 The graph above refers to the precentage difference between the modified
@@ -218,7 +218,7 @@ clock run times.
 #+END_COMMENT
 
 
-The graph above highlights the performance comparison between the modified memory allocator and 
+The graph[[[fig:bargraph]]] highlights the performance comparison between the modified memory allocator and 
 Jemalloc, the default memory allocator. The FAT pointer memory allocator, specifically optimized 
 for use with huge pages, demonstrates a clear advantage in scenarios where memory allocation 
 patterns benefit from its design. The results align with expectations, showcasing the impact 
@@ -247,6 +247,8 @@ bottlenecked by factors such as computation or I/O rather than memory translatio
 
 #+ATTR_HTML: :align right
 #+ATTR_ORG: :align center
+#+CAPTION: Kmeans COZ benchmark executed against various cluster sizes
+#+NAME: fig:Kmeans
 [[./diagrams/kmeans.png]]
 
 #+BEGIN_COMMENT
@@ -306,3 +308,6 @@ While the allocator excels in scenarios emphasizing high memory throughput, its 
 macro benchmarks is less pronounced. This suggests that its benefits are most relevant for 
 applications with frequent and intensive memory operations rather than those constrained by 
 computation or I/O bottlenecks.
+
+\bibliographystyle{IEEEtran}
+\bibliography{evaluation.bib}
