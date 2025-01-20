@@ -31,26 +31,26 @@ __FBSDID("$FreeBSD$");
 #include <vm/vm_pager.h>
 #include <vm/vm_phys.h>
 
-#include <cheriintrin.h>
+// #include <cheriintrin.h>
 #include <cheri/cheric.h>
 
 #include <sys/mman.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <fcntl.h>
+// #include <fcntl.h>
 
-#include <assert.h>
-#include <stdlib.h>
+// #include <assert.h>
+// #include <stdlib.h>
 #include <sys/time.h>
 #include <sys/errno.h>
-#include <stdint.h>
-#include <stdio.h>
-#include 	<unistd.h>
+// #include <stdint.h>
+// #include <stdio.h>
+// #include 	<unistd.h>
 
 
-#include <stddef.h>
-#include <stdlib.h>
-#include <string.h>
+// #include <stddef.h>
+// #include <stdlib.h>
+// #include <string.h>
 
 // added to print uint 
 // 64
@@ -185,7 +185,7 @@ contigmem_load()
 	fd = shm_create_largepage(SHM_ANON, O_CREAT | O_RDWR, 1, SHM_LARGEPAGE_ALLOC_DEFAULT, 0);
 
    if (fd < 0 && errno == ENOTTY) {
-      perror("sh_create_largepages");
+    //   perror("sh_create_largepages");
       close(fd);
    }
    // if (fd < 0)
@@ -196,7 +196,7 @@ contigmem_load()
 	// ATF_REQUIRE_MSG(fd >= 0, "shm_create_largepage failed; errno=%d", errno);
 
 	if (ftruncate(fd, sz) < 0) {
-        perror("ftruncate");
+        // perror("ftruncate");
         close(fd);
     }
 	// if (error != 0 && errno == ENOMEM)
@@ -213,7 +213,7 @@ contigmem_load()
    // Added error handling
     if(ptr == MAP_FAILED)
     {
-        perror("mmap");
+        // perror("mmap");
         exit(EXIT_FAILURE);
     }
 
@@ -225,24 +225,35 @@ contigmem_load()
 static int
 contigmem_unload()
 {
-	int i;
+	// int i;
 
-	if (contigmem_refcnt > 0)
-		return EBUSY;
+	// if (contigmem_refcnt > 0)
+	// 	return EBUSY;
 
-	if (contigmem_cdev != NULL)
-		destroy_dev(contigmem_cdev);
+	// if (contigmem_cdev != NULL)
+	// 	destroy_dev(contigmem_cdev);
 
-	if (contigmem_eh_tag != NULL)
-		EVENTHANDLER_DEREGISTER(process_exit, contigmem_eh_tag);
+	// if (contigmem_eh_tag != NULL)
+	// 	EVENTHANDLER_DEREGISTER(process_exit, contigmem_eh_tag);
 
-	for (i = 0; i < RTE_CONTIGMEM_MAX_NUM_BUFS; i++) {
-		if (contigmem_buffers[i].addr != NULL)
-			contigfree(contigmem_buffers[i].addr,
-				contigmem_buffer_size, M_CONTIGMEM);
-		if (mtx_initialized(&contigmem_buffers[i].mtx))
-			mtx_destroy(&contigmem_buffers[i].mtx);
-	}
+	// for (i = 0; i < RTE_CONTIGMEM_MAX_NUM_BUFS; i++) {
+	// 	if (contigmem_buffers[i].addr != NULL)
+	// 		contigfree(contigmem_buffers[i].addr,
+	// 			contigmem_buffer_size, M_CONTIGMEM);
+	// 	if (mtx_initialized(&contigmem_buffers[i].mtx))
+	// 		mtx_destroy(&contigmem_buffers[i].mtx);
+	// }
+
+	  // printf("free called \n");
+
+   // get bounds from
+   
+   // printf("free len %d \n", len);
+
+   // Free the entire huge page
+
+   munmap(ptr, 1073741824);
+
 
 	return 0;
 }

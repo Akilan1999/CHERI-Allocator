@@ -2,7 +2,7 @@
 #SPDX-License-Identifier: BSD-3-Clause
 # Copyright(c) 2018 Intel Corporation
 
-kmods = ['contigmem', 'nic_uio']
+kmods = ['Hugepage', 'nic_uio']
 
 # for building kernel modules, we use kernel build system using make, as
 # with Linux. We have a skeleton BSDmakefile, which pulls many of its

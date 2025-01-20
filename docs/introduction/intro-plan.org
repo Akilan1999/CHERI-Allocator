@@ -1,0 +1,45 @@
+
+* Introduction plan
+- First paragraph looks good to me.
+- 2nd paragrah also looks fine.
+- 3rd paragraph needs work
+    - [ ] Rewrite to mention 
+
+
+* Literature review plan
+
+
+** Robs feedback
+
+"In the dynamic landscape of computing, the pursuit of optimal performance is a constant endeavor" - this is far too wordy and 
+grandiose. Reviewers of scientific paper do no like phrases like "landscape of computing"  or "constant endeavour". Also "utilization 
+of resources is paramount" - there are smaller words than "paramount", you should stick to small words.
+
+I suggest you just stick a clear message in the introduction: (1) state the problem, (2) summarise existing approaches for this 
+problem (with citations), (3) summarise the limitations of those problems (with citations of papers that demonstrate those limitations), 
+(4) "We propose <NAME>, which <DESCRIBE>.", (5) "It overcomes these problems by <EXPLAIN>.". (6) "It performs <STATE RESULTS>.". 
+(7) "The contributions of this paper are...".
+
+"leading to increased TLB misses and subsequent performance bottlenecks" - this would be better if you could quantify this 
+and cite a paper that reports this number. "E.g. 40% increased TLB misses resulting in 25% slowdowns [CITE]".
+
+General comment: the "WHY?" you are doing this question is unclear from the introduction. And you need to get to the 
+"WHY?" question much earlier, i.e. there is too much verbose discussion huge pages and TLB and CHERI.
+
+The *key* "WHY?" paraphrase you've written is:
+
+"In this context, the integration of huge pages into memory management strategies alongside capability-based 
+addressing in architectures like CHERI offers a compelling synergy. By optimizing TLB utilization through the 
+utilization of huge pages and leveraging the security features of capability-based addressing, significant 
+performance improvements can be realized."
+
+But there are several important problems with this paragraph:
+
+1) It comes too late in the introduction, it should be stated much earlier.
+
+2) Avoid wordy phrases like "compelling synergy" and long words like "leveraging".
+
+3) "significant performance improvements can be realized" is far too non-committal! If the "WHY?" is "performance", 
+then this needs to be really (really) clear: state how existing huge pages + TLB approach suffer performance issues; 
+state why exactly your technique will outperform existing huge pages + TLB approaches; state what performance metric 
+you are referring to; state; then state that they "*are* realised" and give the performance numbers to back up this claim.

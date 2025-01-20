@@ -1,0 +1,62 @@
+* Introduction
+In computing, achieving high performance is an ongoing challenge, especially as 
+applications handle increasingly complex workloads. Memory management is a key factor 
+in performance, where efficient use of resources is essential. Translation Lookaside 
+Buffers (TLBs) are crucial in this context, speeding up memory access by caching recent 
+memory address translations. A TLB, a specialised cache in the memory management unit (MMU), 
+reduces the time required to convert virtual addresses to physical ones. When a program accesses 
+data in memory, the MMU first checks the TLB for a matching entry, avoiding the slower process of 
+consulting page tables. However, as applications grow larger and more complex, the fixed size of 
+TLBs often cannot keep up, leading to more TLB misses and performance slowdowns\cite{mittal_survey_2017}. 
+To tackle this issue, researchers have explored new solutions, including the use of 
+huge pages\cite{panwar_hawkeye_2019}.
+
+Huge pages, also known as large pages, allow for the allocation of memory in significantly larger chunks 
+compared to traditional small pages. By reducing the number of TLB entries needed to access a given amount 
+of memory, Huge pages offer a potential avenue for optimising TLB utilisation by reducing the number 
+of entries needed to map large memory regions. This not only decreases the frequency of 
+TLB misses but also lowers the overhead associated with address translation. By minimising 
+these bottlenecks, huge pages can improve system performance in several ways, such as speeding 
+up memory-intensive applications, reducing latency in data access, and enhancing throughput for 
+workloads that rely heavily on large datasets. 
+
+Simultaneously, advancements in hardware-level security, such as the Capability Hardware Enhanced RISC Instructions (CHERI) 
+architecture, present additional opportunities for performance enhancement. CHERI's capability-based addressing approach not 
+only strengthens system security by tightly controlling memory access but also opens avenues for optimising memory management 
+operations. By integrating CHERI’s compressed encoded bounds with the use of huge pages, it becomes possible to track and manage 
+large, physically contiguous memory blocks more efficiently. This combination reduces TLB pressure by minimising the number of 
+entries required to map extensive memory regions, thereby decreasing TLB misses and improving address translation performance. 
+Furthermore, it accelerates memory-intensive tasks by reducing the overhead associated with managing fragmented or non-contiguous 
+memory allocations. The contributions for the following paper are as follows:
+
+- **Fat-pointer Based Range Addresses**: Introduces fat-pointers that include memory bounds, allowing 
+  efficient tracking and management of physically contiguous memory regions.
+
+- **Custom Memory Allocation with Huge Pages**: Proposes a custom `mmap` function and 
+  kernel module for allocating huge pages of physically contiguous memory, reducing the need for traditional 
+  TLB entries and improving efficiency.
+
+- **Novel Memory Allocation Algorithms**: Provides new algorithms for allocating and freeing 
+  physically contiguous memory, integrating huge pages with CHERI’s capability-based bounds for enhanced memory management.
+
+- **CHERI’s Capability-based Optimization**: Demonstrates how CHERI's architecture can be 
+  used to optimize memory allocation by encoding memory bounds directly within pointers, reducing TLB reliance.
+
+Through comprehensive evaluation, including micro and macro benchmarks, we demonstrate the allocator’s ability 
+to reduce TLB misses by up to 90%, yielding significant improvements in wall clock runtimes for memory-intensive 
+applications. While its impact on larger, computation-heavy workloads is less pronounced, 
+the proposed allocator shows strong potential for advancing memory management in scenarios requiring 
+high memory throughput and low translation overhead. The following below are research questions 
+we are addressing:
+
+1. How does the utilization of bounds for tracking memory allocations, in addition to security purposes, affect the 
+   run times and Translation Lookaside Buffer (TLB) miss rates in modern computing systems?
+
+2. How does the implementation of bounds for seeking through physically contiguous memory influence the complexity and 
+   efficiency of standard memory allocators, particularly those with advanced features such as transparent 
+   huge pages, and what are the implications for system performance in terms of execution speed, memory access 
+   latency, and resource utilization?
+
+\bibliographystyle{IEEEtran}
+\bibliography{introduction.bib}
+
