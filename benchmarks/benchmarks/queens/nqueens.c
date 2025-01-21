@@ -1,10 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include "stddefines.h"
 
 #define bool char
 #define TRUE 1
 #define FALSE 0
+
+#define malloc      my_malloc
+#define free        my_free
 
 typedef struct board {
     int n;
@@ -149,6 +153,7 @@ void queens(int n) {
 }
 
 int main(int argc, char const *argv[]) {
+    INITREGULARALLOC();
     system("clear");
     int i;
     int n = 0;

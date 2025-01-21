@@ -1,6 +1,6 @@
 CC = cc
 BINARY = ./nqueens
-CFLAGS += -Wall -mabi=purecap-benchmark
+CFLAGS += -Wall -g -mabi=purecap-benchmark
 
 all: clean compile clear run
 
@@ -15,8 +15,8 @@ clear:
 	clear
 
 compile: nqueens.o
-	$(CC) $(CFLAGS) -pg -o $(BINARY) nqueens.o
+	$(CC) $(CFLAGS) -o $(BINARY) nqueens.o
 
 nqueens.o:
 	# Ultra fast compilation
-	$(CC) -c -pg -O3 ./nqueens.c
+	$(CC) $(CFLAGS) -c -O3 ./nqueens.c

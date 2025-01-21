@@ -1,5 +1,14 @@
 * Tasks
 - [ ] Run 2 macro benchmarks
+   - [ ] Nqueens
+      - [x] Executes on the regular allocator
+	    on the Morello.
+      - [x] Executes on the Huge page aware
+	    allocator.
+      - [ ] Log results.
+   - [ ] Larison
+      - [x] Execute on the regular allocator
+      - [x] Execute on the Morello
 - [ ] Log results and draw graphs
 - [ ] Show in meeting notes
 

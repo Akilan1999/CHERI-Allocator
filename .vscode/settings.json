@@ -57,7 +57,11 @@
         "variant": "cpp",
         "stddef.h": "c",
         "stdlib.h": "c",
-        "errno.h": "c"
+        "errno.h": "c",
+        "cstdio": "c",
+        "cstdlib": "c",
+        "cwchar": "c",
+        "new": "c"
     },
     "C_Cpp.errorSquiggles": "disabled"
 }
