@@ -1,0 +1,20 @@
+* Tasks
+- [ ] Run 2 macro benchmarks
+- [ ] Log results and draw graphs
+- [ ] Show in meeting notes
+
+(Attempt to compelte by 20:00)
+
+* Meeting notes template
+- Chapters sent for review.
+- Chapter pending to be written.
+- Graphs added and ready for discussion.
+- Highlight plan for next week.
+
+** Real PhD agenda
+  - Start tracing work for FGPAs (Get a
+    grip of the Toooba implementation
+    and TLB implementation used).
+  - Design and implement kernel to
+    work under mmap to ensure this
+    behavoir can be embedded on 
