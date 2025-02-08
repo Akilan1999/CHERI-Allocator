@@ -1,4 +1,4 @@
-% Created 2025-02-04 Tue 16:04
+% Created 2025-02-05 Wed 17:11
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -32,7 +32,7 @@
 
 
 \section{Fat-pointer Address Translations}
-\label{sec:orgda6e9a4}
+\label{sec:org98b9cf6}
 
 Fat-pointer Address Translations, combined with the capabilities of the CHERI (Capability Hardware Enhanced RISC Instructions) 
 architecture, introduce robust memory safety and security features by incorporating additional metadata 
@@ -46,8 +46,8 @@ control over memory regions.
 
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=.9\linewidth]{diagram/HighOverviewArchitecture24.png}
-\caption{\label{fig:orgcc16dce}High overview architecture}
+\includegraphics[width=.9\linewidth]{diagram/HighOverviewArchitecture.drawio.png}
+\caption{\label{fig:orgf77b5d6}High overview architecture}
 \end{figure}
 
 Figure \ref{fig:HighOverviewArchitecture} illustrates
@@ -73,11 +73,11 @@ The functionality of ranges encompasses
 several key aspects:
 
 \subsection{Encoding Ranges as Bounds to the Pointer}
-\label{sec:org35c3d2b}
+\label{sec:org333c91d}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=.9\linewidth]{diagram/AllocationOverview24.png}
-\caption{\label{fig:org4c237f8}Range of memory}
+\caption{\label{fig:org7770b41}Range of memory}
 \end{figure}
 
 Integrating range bounds directly into FAT-pointers enables the architecture 
@@ -95,11 +95,11 @@ management of the allocated memory regions. By using the FAT-pointer bounds, thi
 integrity and contiguity of the allocated blocks within the huge page.
 
 \subsection{Instrumenting Block-Based Allocators with Physically Contiguous Memory}
-\label{sec:org56b5427}
+\label{sec:orgc5f7075}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=.9\linewidth]{diagram/hugepages.drawio.png}
-\caption{\label{fig:org538adae}Fat-pointer Address Translations using huge pages}
+\caption{\label{fig:org0063361}Fat-pointer Address Translations using huge pages}
 \end{figure}
 
 hierarchical structures, to translate virtual addresses to physical addresses. This approach requires multiple entries to handle various
@@ -119,7 +119,7 @@ access. This approach allows for precise and efficient memory management within 
 \end{itemize}
 
 \subsection{Implementation}
-\label{sec:orgf762315}
+\label{sec:orgea27970}
 The software stack is based on CHERIBSD, selected because ARM officially supports Morello's performance 
 counters on this operating system. The setup includes a C program that 
 is linked to the prototype memory allocator or to various memory allocators being benchmarked. This linkage can occur in two ways: either as a shared object file during compile time 
@@ -135,7 +135,7 @@ crucial for the high-performance needs of the application.
 \item[{$\square$}] Requires rewrite
 \end{itemize}
 \subsubsection{kernel module}
-\label{sec:org94a3383}
+\label{sec:org1d0969e}
 The custom mmap function is tailored to ensure physically contiguous memory is allocated. This allocation is a key component 
 of this system. The custom mmap function is interfaced to the contigmem driver, which has been modified from the DPDK library 
 . The contigmem driver is essential for managing large contiguous 

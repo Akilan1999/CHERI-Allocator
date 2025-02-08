@@ -17,7 +17,7 @@ control over memory regions.
 
 #+CAPTION: High overview architecture
 #+NAME: fig:HighOverviewArchitecture
-[[file:diagram/HighOverviewArchitecture24.png]]
+[[file:diagram/HighOverviewArchitecture.drawio.png]]
 
 Figure \ref{fig:HighOverviewArchitecture} illustrates
 the methodology employed to leverage the CHERI 

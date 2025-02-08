@@ -1,0 +1,41 @@
+\documentclass{article}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{amsmath}
+
+\begin{document}
+
+\begin{algorithm}
+\caption{Sample Memory Allocator Implementation}
+\begin{algorithmic}[1]
+\Function{malloc}{sz}
+    \State $sz \gets \text{ALIGN\_UP}(sz, \text{MAX\_ALIGNMENT})$ \Comment{Align size to max alignment}
+    \State $\text{MallocCounter} \gets \text{MallocCounter} - sz$ \Comment{Update remaining memory}
+    \State $\text{ptrLink} \gets \&\text{ptr}[\text{MallocCounter}]$ \Comment{Calculate pointer address}
+    \State $\text{ptrLink} \gets \text{SET\_BOUNDS}(\text{ptrLink}, sz)$ \Comment{Set bounds for memory safety and to track the length of the pointer}
+    \State \Return $\text{ptrLink}$ \Comment{Return allocated memory pointer}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\begin{algorithmic}[1]
+\Function{free}{ptr}
+    \State $\text{len} \gets \text{GET\_LENGTH}(\text{ptr})$ \Comment{Get length of memory block from the defined bounds}
+    \State $\text{UNMAP}(\text{ptr}, \text{len})$ \Comment{Release memory block}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\begin{algorithmic}[1]
+\Function{Init\_alloc}{}
+    \State $\text{sz} \gets 1\ \text{GB}$ \Comment{Define pre-allocated memory size}
+    \State $\text{fd} \gets \text{CREATE\_LARGE\_PAGE\_MEMORY}(\text{sz})$ \Comment{Create shared memory}
+    \State $\text{ptr} \gets \text{MAP\_MEMORY}(\text{sz})$ \Comment{Map memory region}
+    \State $\text{MallocCounter} \gets \text{sz}$ \Comment{Initialize memory counter}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\end{document}
