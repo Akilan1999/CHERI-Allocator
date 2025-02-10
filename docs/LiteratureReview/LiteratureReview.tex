@@ -1,4 +1,4 @@
-% Created 2025-01-20 Mon 15:17
+% Created 2025-02-04 Tue 16:03
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -27,10 +27,10 @@
 \tableofcontents
 
 \section{Literature Review}
-\label{sec:org3735e9d}
+\label{sec:org0e192da}
 
 \subsection{Huge Pages}
-\label{sec:orgac849a1}
+\label{sec:org880f002}
 Increasing TLB reach can be achieved by using larger page sizes, such as huge pages\cite{panwar_hawkeye_2019}, which are common in modern computer systems. 
 The x86-64 architecture supports huge pages of 2 MB and 1 GB, backed by OS mechanisms like Transparent Huge Pages (THP)\cite{THP} 
 and HugeTLBFS in Linux. However, available page sizes in x86-64 are limited, leading to internal fragmentation issues. 
@@ -45,7 +45,7 @@ TLB coverage. However, this approach requires all memory traffic to be translate
 resulting in additional latency for memory accesses.
 
 \subsection{Direct Segment}
-\label{sec:org4ee3203}
+\label{sec:orgea5d98c}
 Early processors often used segments to manage virtual memory, where a segment\cite{DirectSegment} essentially mapped contiguous 
 virtual memory to contiguous physical memory. Unlike pages, which are relatively small, segments can be much 
 larger, offering the potential for more efficient memory management in certain scenarios. 
@@ -62,7 +62,7 @@ process for large memory areas but requires significant modifications to the
 source code of applications.
 
 \subsection{Range Memory Mapping (RMM)}
-\label{sec:orgd19b3b4}
+\label{sec:org5468886}
 Redundant Memory Mappings (RMM)\cite{karakostas_redundant_2015} enhance memory management by introducing an additional range table 
 that pre-allocates contiguous physical pages for large memory allocations, creating ranges that 
 are both virtually and physically contiguous. This approach simplifies address translation 
@@ -87,7 +87,7 @@ that most last level TLB misses are handled efficiently by range mapping,
 reducing the need for costly page table walks.
 
 \subsection{CHERI}
-\label{sec:org2a48228}
+\label{sec:orgbf2eaac}
 CHERI (Capability Hardware Enhanced RISC Instructions) extends conventional processor
 Instruction-Set Architectures (ISAs) with architectural capabilities to enable fine-grained
 memory protection and highly scalable software compartmentalization. CHERI is a hybrid 

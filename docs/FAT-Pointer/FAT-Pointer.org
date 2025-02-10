@@ -19,7 +19,7 @@ control over memory regions.
 #+NAME: fig:HighOverviewArchitecture
 [[file:diagram/HighOverviewArchitecture.drawio.png]]
 
-Figure \ref{fig:HighOverviewArchitecture} illustrates
+Figure [[fig:HighOverviewArchitecture]] illustrates
 the methodology employed to leverage the CHERI 
 128-bit FAT-pointer scheme for facilitating
 block-based memory management on physically
@@ -28,7 +28,7 @@ right side of the figure.
 This technique contrasts with the
 conventional mmap approach.
 
-In figure \ref{fig:HighOverviewArchitecture}, the green-highlighted
+In figure [[fig:HighOverviewArchitecture]], the green-highlighted
 section marks the unused space between the 48th and 64th bits
 within the FAT-pointer. This area of unused bits
 presents an opportunity to store additional metadata,
@@ -52,7 +52,7 @@ tracking of memory ranges on a pointer level. In this implementation, memory ran
 bounds encoded within the FAT-pointer, adhering to the CHERI
 128-bit bounds compression scheme\cite{woodruff_cheri_2019}.
 
-Figure \ref{fig:RangeOfMemory} illustrates a straightforward use-case in which the dark pink line represents a single, 
+Figure [[fig:RangeOfMemory]] illustrates a straightforward use-case in which the dark pink line represents a single, 
 large contiguous memory area, or huge page. Within this huge page, the orange and blue lines indicate 
 two separate memory allocations equivalent to invoking malloc twice to allocate memory in distinct regions. 
 This scenario simulates a block-based memory allocator operating within the confines of the huge page. 
@@ -77,7 +77,7 @@ with managing numerous TLB entries and leverages the bounds
 encoded within the FAT-pointer for efficient memory tracking and
 access. This approach allows for precise and efficient memory management within the allocated huge page.
 
-- [ ]: Figure \ref{fig:HugePages} illustrates a use case of a huge page to ensure that the
+- [ ]: Figure [[fig:HugePages]] illustrates a use case of a huge page to ensure that the
 
 ** Implementation
 The software stack is based on CHERIBSD, selected because ARM officially supports Morello's performance 
@@ -99,7 +99,46 @@ of this system. The custom mmap function is interfaced to the contigmem driver, 
 memory blocks and is loaded during the system boot process. It reserves a huge page of arbitrary size, with the 
 size parameter set based on the requirements of the conducted experiments.
 
+#+begin_export latex
+\begin{algorithm}
+\caption{Sample Memory Allocator Implementation}
+\begin{algorithmic}[1]
+\Function{malloc}{sz}
+    \State $sz \gets \text{ALIGN\_UP}(sz, \text{MAX\_ALIGNMENT})$ \Comment{Align size to max alignment}
+    \State $\text{MallocCounter} \gets \text{MallocCounter} - sz$ \Comment{Update remaining memory}
+    \State $\text{ptrLink} \gets \&\text{ptr}[\text{MallocCounter}]$ \Comment{Calculate pointer address}
+    \State $\text{ptrLink} \gets \text{SET\_BOUNDS}(\text{ptrLink}, sz)$ \Comment{Set bounds for memory safety and to track the length of the pointer}
+    \State \Return $\text{ptrLink}$ \Comment{Return allocated memory pointer}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+#+end_export
+
+#+begin_export latex
+\begin{algorithm}
+\begin{algorithmic}[1]
+\Function{free}{ptr}
+    \State $\text{len} \gets \text{GET\_LENGTH}(\text{ptr})$ \Comment{Get length of memory block from the defined bounds}
+    \State $\text{UNMAP}(\text{ptr}, \text{len})$ \Comment{Release memory block}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+#+end_export
+
+#+begin_export latex
+\begin{algorithm}
+\begin{algorithmic}[1]
+\Function{Init\_alloc}{}
+    \State $\text{sz} \gets 1\ \text{GB}$ \Comment{Define pre-allocated memory size}
+    \State $\text{fd} \gets \text{CREATE\_LARGE\_PAGE\_MEMORY}(\text{sz})$ \Comment{Create shared memory}
+    \State $\text{ptr} \gets \text{MAP\_MEMORY}(\text{sz})$ \Comment{Map memory region}
+    \State $\text{MallocCounter} \gets \text{sz}$ \Comment{Initialize memory counter}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+#+end_export
+
 \bibliographystyle{IEEEtran}
-\bibliography{FATPointer.bib}
+\bibliography{FAT-Pointer.bib}
 
 

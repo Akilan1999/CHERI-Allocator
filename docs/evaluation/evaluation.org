@@ -218,7 +218,7 @@ clock run times.
 #+END_COMMENT
 
 
-The graph[[[fig:bargraph]]] highlights the performance comparison between the modified memory allocator and 
+The graph[[fig:bargraph]] highlights the performance comparison between the modified memory allocator and 
 Jemalloc, the default memory allocator. The FAT pointer memory allocator, specifically optimized 
 for use with huge pages, demonstrates a clear advantage in scenarios where memory allocation 
 patterns benefit from its design. The results align with expectations, showcasing the impact 

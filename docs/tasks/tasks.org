@@ -1,18 +1,31 @@
 * Tasks
-- [ ] Run 2 macro benchmarks
-   - [ ] Nqueens
+** Benchmarks related
+- [x] Run 2 macro benchmarks
+   - [x] Nqueens
       - [x] Executes on the regular allocator
 	    on the Morello.
       - [x] Executes on the Huge page aware
 	    allocator.
-      - [ ] Log results.
-   - [ ] Larison
+      - [x] Log results.
+   - [x] Larison
       - [x] Execute on the regular allocator
       - [x] Execute on the Morello
-- [ ] Log results and draw graphs
+- [x] Log results and draw graphs
 - [ ] Show in meeting notes
 
-(Attempt to compelte by 20:00)
+** Memory allocator design related
+- [ ] (2 hours) Run through source code Mesh allocator.
+        - [ ] Document findings (Fragmentation related) 
+- [ ] (1 hour) Porting effort to Morello.
+
+** Plan FAT pointer section changes (2 hours)
+- [ ] Describe high overview structure. 
+- [ ] Changes to be done.
+
+
+
+
+
 
 * Meeting notes template
 - Chapters sent for review.

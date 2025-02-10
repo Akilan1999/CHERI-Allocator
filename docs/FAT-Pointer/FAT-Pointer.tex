@@ -1,4 +1,4 @@
-% Created 2025-02-05 Wed 17:11
+% Created 2025-02-10 Mon 13:11
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -32,7 +32,7 @@
 
 
 \section{Fat-pointer Address Translations}
-\label{sec:org98b9cf6}
+\label{sec:org81645fa}
 
 Fat-pointer Address Translations, combined with the capabilities of the CHERI (Capability Hardware Enhanced RISC Instructions) 
 architecture, introduce robust memory safety and security features by incorporating additional metadata 
@@ -47,10 +47,10 @@ control over memory regions.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=.9\linewidth]{diagram/HighOverviewArchitecture.drawio.png}
-\caption{\label{fig:orgf77b5d6}High overview architecture}
+\caption{\label{fig:org3f8fa4f}High overview architecture}
 \end{figure}
 
-Figure \ref{fig:HighOverviewArchitecture} illustrates
+Figure \ref{fig:org3f8fa4f} illustrates
 the methodology employed to leverage the CHERI 
 128-bit FAT-pointer scheme for facilitating
 block-based memory management on physically
@@ -59,7 +59,7 @@ right side of the figure.
 This technique contrasts with the
 conventional mmap approach.
 
-In figure \ref{fig:HighOverviewArchitecture}, the green-highlighted
+In figure \ref{fig:org3f8fa4f}, the green-highlighted
 section marks the unused space between the 48th and 64th bits
 within the FAT-pointer. This area of unused bits
 presents an opportunity to store additional metadata,
@@ -73,11 +73,11 @@ The functionality of ranges encompasses
 several key aspects:
 
 \subsection{Encoding Ranges as Bounds to the Pointer}
-\label{sec:org333c91d}
+\label{sec:orgd9309d3}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=.9\linewidth]{diagram/AllocationOverview24.png}
-\caption{\label{fig:org7770b41}Range of memory}
+\caption{\label{fig:org1826519}Range of memory}
 \end{figure}
 
 Integrating range bounds directly into FAT-pointers enables the architecture 
@@ -86,7 +86,7 @@ tracking of memory ranges on a pointer level. In this implementation, memory ran
 bounds encoded within the FAT-pointer, adhering to the CHERI
 128-bit bounds compression scheme\cite{woodruff_cheri_2019}.
 
-Figure \ref{fig:RangeOfMemory} illustrates a straightforward use-case in which the dark pink line represents a single, 
+Figure \ref{fig:org1826519} illustrates a straightforward use-case in which the dark pink line represents a single, 
 large contiguous memory area, or huge page. Within this huge page, the orange and blue lines indicate 
 two separate memory allocations equivalent to invoking malloc twice to allocate memory in distinct regions. 
 This scenario simulates a block-based memory allocator operating within the confines of the huge page. 
@@ -95,11 +95,11 @@ management of the allocated memory regions. By using the FAT-pointer bounds, thi
 integrity and contiguity of the allocated blocks within the huge page.
 
 \subsection{Instrumenting Block-Based Allocators with Physically Contiguous Memory}
-\label{sec:orgc5f7075}
+\label{sec:org33dc8de}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=.9\linewidth]{diagram/hugepages.drawio.png}
-\caption{\label{fig:org0063361}Fat-pointer Address Translations using huge pages}
+\caption{\label{fig:org26a2828}Fat-pointer Address Translations using huge pages}
 \end{figure}
 
 hierarchical structures, to translate virtual addresses to physical addresses. This approach requires multiple entries to handle various
@@ -115,11 +115,11 @@ encoded within the FAT-pointer for efficient memory tracking and
 access. This approach allows for precise and efficient memory management within the allocated huge page.
 
 \begin{itemize}
-\item\relax [ ]: Figure \ref{fig:HugePages} illustrates a use case of a huge page to ensure that the
+\item\relax [ ]: Figure \ref{fig:org26a2828} illustrates a use case of a huge page to ensure that the
 \end{itemize}
 
 \subsection{Implementation}
-\label{sec:orgea27970}
+\label{sec:org6da1716}
 The software stack is based on CHERIBSD, selected because ARM officially supports Morello's performance 
 counters on this operating system. The setup includes a C program that 
 is linked to the prototype memory allocator or to various memory allocators being benchmarked. This linkage can occur in two ways: either as a shared object file during compile time 
@@ -135,13 +135,46 @@ crucial for the high-performance needs of the application.
 \item[{$\square$}] Requires rewrite
 \end{itemize}
 \subsubsection{kernel module}
-\label{sec:org1d0969e}
+\label{sec:org37f0f43}
 The custom mmap function is tailored to ensure physically contiguous memory is allocated. This allocation is a key component 
 of this system. The custom mmap function is interfaced to the contigmem driver, which has been modified from the DPDK library 
 . The contigmem driver is essential for managing large contiguous 
 memory blocks and is loaded during the system boot process. It reserves a huge page of arbitrary size, with the 
 size parameter set based on the requirements of the conducted experiments.
 
+\begin{algorithm}
+\caption{Sample Memory Allocator Implementation}
+\begin{algorithmic}[1]
+\Function{malloc}{sz}
+    \State $sz \gets \text{ALIGN\_UP}(sz, \text{MAX\_ALIGNMENT})$ \Comment{Align size to max alignment}
+    \State $\text{MallocCounter} \gets \text{MallocCounter} - sz$ \Comment{Update remaining memory}
+    \State $\text{ptrLink} \gets \&\text{ptr}[\text{MallocCounter}]$ \Comment{Calculate pointer address}
+    \State $\text{ptrLink} \gets \text{SET\_BOUNDS}(\text{ptrLink}, sz)$ \Comment{Set bounds for memory safety and to track the length of the pointer}
+    \State \Return $\text{ptrLink}$ \Comment{Return allocated memory pointer}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\begin{algorithmic}[1]
+\Function{free}{ptr}
+    \State $\text{len} \gets \text{GET\_LENGTH}(\text{ptr})$ \Comment{Get length of memory block from the defined bounds}
+    \State $\text{UNMAP}(\text{ptr}, \text{len})$ \Comment{Release memory block}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}
+\begin{algorithmic}[1]
+\Function{Init\_alloc}{}
+    \State $\text{sz} \gets 1\ \text{GB}$ \Comment{Define pre-allocated memory size}
+    \State $\text{fd} \gets \text{CREATE\_LARGE\_PAGE\_MEMORY}(\text{sz})$ \Comment{Create shared memory}
+    \State $\text{ptr} \gets \text{MAP\_MEMORY}(\text{sz})$ \Comment{Map memory region}
+    \State $\text{MallocCounter} \gets \text{sz}$ \Comment{Initialize memory counter}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
 \bibliographystyle{IEEEtran}
-\bibliography{FATPointer.bib}
+\bibliography{FAT-Pointer.bib}
 \end{document}
