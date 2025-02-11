@@ -1,4 +1,4 @@
-% Created 2025-02-10 Mon 13:11
+% Created 2025-02-11 Tue 13:01
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -32,7 +32,7 @@
 
 
 \section{Fat-pointer Address Translations}
-\label{sec:org81645fa}
+\label{sec:orgefab03e}
 
 Fat-pointer Address Translations, combined with the capabilities of the CHERI (Capability Hardware Enhanced RISC Instructions) 
 architecture, introduce robust memory safety and security features by incorporating additional metadata 
@@ -47,10 +47,10 @@ control over memory regions.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=.9\linewidth]{diagram/HighOverviewArchitecture.drawio.png}
-\caption{\label{fig:org3f8fa4f}High overview architecture}
+\caption{\label{fig:org26571f3}High overview architecture}
 \end{figure}
 
-Figure \ref{fig:org3f8fa4f} illustrates
+Figure \ref{fig:org26571f3} illustrates
 the methodology employed to leverage the CHERI 
 128-bit FAT-pointer scheme for facilitating
 block-based memory management on physically
@@ -59,25 +59,25 @@ right side of the figure.
 This technique contrasts with the
 conventional mmap approach.
 
-In figure \ref{fig:org3f8fa4f}, the green-highlighted
+In figure \ref{fig:org26571f3}, the green-highlighted
 section marks the unused space between the 48th and 64th bits
 within the FAT-pointer. This area of unused bits
 presents an opportunity to store additional metadata,
 potentially enhancing the capabilities of the
 memory management system. 
-Here we explore how this additional
-metadata storage could be used to further
-optimize memory allocation.
+Here we explore how using Huge pages
+with CHERI bounds can reduce the
+number of TLB entries required. 
 
 The functionality of ranges encompasses
 several key aspects:
 
 \subsection{Encoding Ranges as Bounds to the Pointer}
-\label{sec:orgd9309d3}
+\label{sec:org2d3f5e4}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=.9\linewidth]{diagram/AllocationOverview24.png}
-\caption{\label{fig:org1826519}Range of memory}
+\caption{\label{fig:orgd163080}Range of memory}
 \end{figure}
 
 Integrating range bounds directly into FAT-pointers enables the architecture 
@@ -86,7 +86,7 @@ tracking of memory ranges on a pointer level. In this implementation, memory ran
 bounds encoded within the FAT-pointer, adhering to the CHERI
 128-bit bounds compression scheme\cite{woodruff_cheri_2019}.
 
-Figure \ref{fig:org1826519} illustrates a straightforward use-case in which the dark pink line represents a single, 
+Figure \ref{fig:orgd163080} illustrates a straightforward use-case in which the dark pink line represents a single, 
 large contiguous memory area, or huge page. Within this huge page, the orange and blue lines indicate 
 two separate memory allocations equivalent to invoking malloc twice to allocate memory in distinct regions. 
 This scenario simulates a block-based memory allocator operating within the confines of the huge page. 
@@ -95,11 +95,11 @@ management of the allocated memory regions. By using the FAT-pointer bounds, thi
 integrity and contiguity of the allocated blocks within the huge page.
 
 \subsection{Instrumenting Block-Based Allocators with Physically Contiguous Memory}
-\label{sec:org33dc8de}
+\label{sec:org52e34a5}
 \begin{figure}[htbp]
 \centering
-\includegraphics[width=.9\linewidth]{diagram/hugepages.drawio.png}
-\caption{\label{fig:org26a2828}Fat-pointer Address Translations using huge pages}
+\includegraphics[width=.9\linewidth]{diagram/TLBAccess.drawio.png}
+\caption{\label{fig:org5c993a2}Fat-pointer Address Translations using huge pages}
 \end{figure}
 
 hierarchical structures, to translate virtual addresses to physical addresses. This approach requires multiple entries to handle various
@@ -114,36 +114,52 @@ with managing numerous TLB entries and leverages the bounds
 encoded within the FAT-pointer for efficient memory tracking and
 access. This approach allows for precise and efficient memory management within the allocated huge page.
 
-\begin{itemize}
-\item\relax [ ]: Figure \ref{fig:org26a2828} illustrates a use case of a huge page to ensure that the
-\end{itemize}
+Figure \ref{fig:org5c993a2} illustrates a use-case of huge pages where the green
+line represents a sample access to read within a contigous
+space of physical memory. The dotted lines represents the
+bounds for that particular pointer access. Using bounds
+stored on the pointer a block based pattern can be reprecated
+on physically contigous memory. 
 
-\subsection{Implementation}
-\label{sec:org6da1716}
-The software stack is based on CHERIBSD, selected because ARM officially supports Morello's performance 
-counters on this operating system. The setup includes a C program that 
-is linked to the prototype memory allocator or to various memory allocators being benchmarked. This linkage can occur in two ways: either as a shared object file during compile time 
-for larger allocators, or as a header file for smaller allocators, ensuring flexibility 
-in memory management.
+\subsection{Sample memory allocator Implementation}
+\label{sec:org61472fd}
+This section presents a straightforward memory allocator designed and implemented based on the 
+principles outlined in our approach. The allocator consists of three core functions: InitAlloc, 
+malloc, and free. The InitAlloc function initializes the memory pool, setting up the necessary 
+data structures and metadata required for efficient memory management. The malloc function is 
+responsible for allocating a contiguous block of memory of a specified size, while the free 
+function deallocates the memory, returning it to the pool for future use.
 
-This integration ensures that the memory allocation process is optimized for performance, leveraging the contiguity 
-of memory blocks and the capabilities provided by the CHERI architecture and the Morello platform. By using the 
-contigmem driver and the custom mmap function, the system achieves efficient memory allocation and tracking, 
-crucial for the high-performance needs of the application.
-
-\begin{itemize}
-\item[{$\square$}] Requires rewrite
-\end{itemize}
-\subsubsection{kernel module}
-\label{sec:org37f0f43}
-The custom mmap function is tailored to ensure physically contiguous memory is allocated. This allocation is a key component 
-of this system. The custom mmap function is interfaced to the contigmem driver, which has been modified from the DPDK library 
-. The contigmem driver is essential for managing large contiguous 
-memory blocks and is loaded during the system boot process. It reserves a huge page of arbitrary size, with the 
-size parameter set based on the requirements of the conducted experiments.
+A notable feature of this malloc implementation is its compatibility with kernel modules, 
+where it can be integrated as an alternative to the mmap system call. This integration 
+ensures that memory allocations are physically contiguous, a critical requirement for 
+certain low-level operations and hardware interactions. By providing physically contiguous 
+memory blocks, this allocator can serve as a foundational layer for standard block-based allocators, 
+such as Jemalloc, enabling them to operate efficiently in environments where physical memory 
+contiguity is essential.
 
 \begin{algorithm}
-\caption{Sample Memory Allocator Implementation}
+\caption{Sample init alloc function to create a initial 1 GB huge page}
+\begin{algorithmic}[1]
+\Function{Init\_alloc}{}
+    \State $\text{sz} \gets 1\ \text{GB}$ \Comment{Define pre-allocated memory size}
+    \State $\text{fd} \gets \text{CREATE\_LARGE\_PAGE\_MEMORY}(\text{sz})$ \Comment{Create shared memory}
+    \State $\text{ptr} \gets \text{MAP\_MEMORY}(\text{sz})$ \Comment{Map memory region}
+    \State $\text{MallocCounter} \gets \text{sz}$ \Comment{Initialize memory counter}
+\EndFunction
+\end{algorithmic}
+\end{algorithm}
+
+Algorithm 1 describes the initialization of physically contiguous memory through the use of huge pages,
+a mechanism supported by modern architectures to optimize memory management. The algorithm begins by 
+allocating a fixed block of 1 GB of physically contiguous memory. This decision is driven by the 
+architectural constraints of contemporary systems, particularly ARM-based CPUs, where 1 GB represents 
+the largest supported page size. By leveraging huge pages, the algorithm reduces the overhead associated 
+with page table management and enhances memory access efficiency, which is critical for performance-sensitive
+applications and kernel-level operations.
+
+\begin{algorithm}
+\caption{Sample malloc implementation}
 \begin{algorithmic}[1]
 \Function{malloc}{sz}
     \State $sz \gets \text{ALIGN\_UP}(sz, \text{MAX\_ALIGNMENT})$ \Comment{Align size to max alignment}
@@ -154,8 +170,22 @@ size parameter set based on the requirements of the conducted experiments.
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
+When the malloc function is invoked, the algorithm employs an eager allocation strategy for physical memory. 
+This is achieved through the use of the SetBounds mechanism, which constructs a FAT-pointer—a specialized 
+pointer that encodes both the start and end addresses of the allocated memory region within the pointer 
+itself. The start and end addresses correspond to the size of the memory block requested by malloc. This 
+approach introduces a novel method of memory tracking, where the bounds of the allocated region are 
+explicitly encoded in the address, enabling efficient monitoring and management of memory usage.
+
+Furthermore, this design leverages shared huge page TLB (Translation Lookaside Buffer) entries to map 
+and track memory addresses. By encoding bounds directly into the address, the algorithm ensures that memory 
+accesses remain within the allocated region, thereby enhancing safety and reducing the risk of out-of-bounds 
+errors. This innovative use of FAT-pointers and shared TLB entries not only aligns with the principles of 
+efficient memory management but also demonstrates a practical application of huge pages in modern 
+architectures, offering a robust solution for physically contiguous memory allocation.
 
 \begin{algorithm}
+\caption{Sample free implementation}
 \begin{algorithmic}[1]
 \Function{free}{ptr}
     \State $\text{len} \gets \text{GET\_LENGTH}(\text{ptr})$ \Comment{Get length of memory block from the defined bounds}
@@ -164,16 +194,16 @@ size parameter set based on the requirements of the conducted experiments.
 \end{algorithmic}
 \end{algorithm}
 
-\begin{algorithm}
-\begin{algorithmic}[1]
-\Function{Init\_alloc}{}
-    \State $\text{sz} \gets 1\ \text{GB}$ \Comment{Define pre-allocated memory size}
-    \State $\text{fd} \gets \text{CREATE\_LARGE\_PAGE\_MEMORY}(\text{sz})$ \Comment{Create shared memory}
-    \State $\text{ptr} \gets \text{MAP\_MEMORY}(\text{sz})$ \Comment{Map memory region}
-    \State $\text{MallocCounter} \gets \text{sz}$ \Comment{Initialize memory counter}
-\EndFunction
-\end{algorithmic}
-\end{algorithm}
+The memory deallocation mechanism in the proposed allocator is facilitated by the FAT-pointer structure 
+introduced in the malloc algorithm. When the free function is invoked, it utilizes the metadata 
+embedded within the FAT-pointer to determine the range and size of the allocated memory region. 
+Specifically, the start and end addresses encoded in the FAT-pointer provide the necessary information 
+to identify the exact memory block to be deallocated. This allows the allocator to precisely unmapped 
+the corresponding memory region from the address space, ensuring efficient and accurate memory management.
+
+By extracting the bounds and size directly from the FAT-pointer, the free function eliminates the need 
+for additional metadata lookups or complex data structures, streamlining the deallocation process. 
+This approach not only enhances performance but also reduces the risk of memory leaks or fragmentation.
 
 \bibliographystyle{IEEEtran}
 \bibliography{FAT-Pointer.bib}
