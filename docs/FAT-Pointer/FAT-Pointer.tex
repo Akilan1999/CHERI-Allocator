@@ -1,4 +1,4 @@
-% Created 2025-02-11 Tue 13:01
+% Created 2025-02-13 Thu 11:32
 % Intended LaTeX compiler: pdflatex
 \documentclass[11pt]{article}
 \usepackage[utf8]{inputenc}
@@ -32,7 +32,7 @@
 
 
 \section{Fat-pointer Address Translations}
-\label{sec:orgefab03e}
+\label{sec:org9194085}
 
 Fat-pointer Address Translations, combined with the capabilities of the CHERI (Capability Hardware Enhanced RISC Instructions) 
 architecture, introduce robust memory safety and security features by incorporating additional metadata 
@@ -47,25 +47,19 @@ control over memory regions.
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=.9\linewidth]{diagram/HighOverviewArchitecture.drawio.png}
-\caption{\label{fig:org26571f3}High overview architecture}
+\caption{\label{fig:orgcb94e61}High overview architecture}
 \end{figure}
 
-Figure \ref{fig:org26571f3} illustrates
+Figure \ref{fig:orgcb94e61} illustrates
 the methodology employed to leverage the CHERI 
 128-bit FAT-pointer scheme for facilitating
 block-based memory management on physically
 contiguous memory,which is depicted on the
 right side of the figure. 
 This technique contrasts with the
-conventional mmap approach.
+conventional approach.
 
-In figure \ref{fig:org26571f3}, the green-highlighted
-section marks the unused space between the 48th and 64th bits
-within the FAT-pointer. This area of unused bits
-presents an opportunity to store additional metadata,
-potentially enhancing the capabilities of the
-memory management system. 
-Here we explore how using Huge pages
+We explore how using Huge pages
 with CHERI bounds can reduce the
 number of TLB entries required. 
 
@@ -73,11 +67,11 @@ The functionality of ranges encompasses
 several key aspects:
 
 \subsection{Encoding Ranges as Bounds to the Pointer}
-\label{sec:org2d3f5e4}
+\label{sec:org312bc7d}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=.9\linewidth]{diagram/AllocationOverview24.png}
-\caption{\label{fig:orgd163080}Range of memory}
+\caption{\label{fig:org18f47e9}Range of memory}
 \end{figure}
 
 Integrating range bounds directly into FAT-pointers enables the architecture 
@@ -86,7 +80,7 @@ tracking of memory ranges on a pointer level. In this implementation, memory ran
 bounds encoded within the FAT-pointer, adhering to the CHERI
 128-bit bounds compression scheme\cite{woodruff_cheri_2019}.
 
-Figure \ref{fig:orgd163080} illustrates a straightforward use-case in which the dark pink line represents a single, 
+Figure \ref{fig:org18f47e9} illustrates a straightforward use-case in which the dark pink line represents a single, 
 large contiguous memory area, or huge page. Within this huge page, the orange and blue lines indicate 
 two separate memory allocations equivalent to invoking malloc twice to allocate memory in distinct regions. 
 This scenario simulates a block-based memory allocator operating within the confines of the huge page. 
@@ -95,26 +89,33 @@ management of the allocated memory regions. By using the FAT-pointer bounds, thi
 integrity and contiguity of the allocated blocks within the huge page.
 
 \subsection{Instrumenting Block-Based Allocators with Physically Contiguous Memory}
-\label{sec:org52e34a5}
+\label{sec:orgd7c897c}
 \begin{figure}[htbp]
 \centering
 \includegraphics[width=.9\linewidth]{diagram/TLBAccess.drawio.png}
-\caption{\label{fig:org5c993a2}Fat-pointer Address Translations using huge pages}
+\caption{\label{fig:org710cee0}Fat-pointer Address Translations using huge pages}
 \end{figure}
 
-hierarchical structures, to translate virtual addresses to physical addresses. This approach requires multiple entries to handle various
-memory segments, leading to increased overhead and complexity
-in address translation. Conversely, the current approach stream-
-lines this process by using a single TLB entry to translate multiple
-addresses within a contiguous memory range. This reduces the
-number of required TLB entries, simplifying the translation process
-and improving efficiency. By consolidating address translations into
-a single TLB entry, this method minimizes the overhead associated
-with managing numerous TLB entries and leverages the bounds
-encoded within the FAT-pointer for efficient memory tracking and
-access. This approach allows for precise and efficient memory management within the allocated huge page.
+Traditional address translation methods rely on hierarchical
+structures to map virtual addresses to physical addresses.
+This often requires multiple entries to handle different
+memory segments, which increases overhead and adds complexity
+to the translation process. In contrast, the current approach
+simplifies this by using a single TLB (Translation Lookaside Buffer)
+entry to translate multiple addresses within a contiguous memory
+range. This reduces the number of TLB entries needed, making the
+translation process more efficient and less complex.
 
-Figure \ref{fig:org5c993a2} illustrates a use-case of huge pages where the green
+By consolidating address translations into a single TLB entry,
+this method cuts down on the overhead of managing many entries.
+It also takes advantage of the bounds encoded within fat-pointers
+to track and access memory more efficiently. This streamlined
+approach allows for precise and effective memory management,
+especially within large, contiguous memory regions like huge pages.
+Overall, it simplifies memory operations while improving performance
+and reduces TLB overhead by reducing TLB walks.
+
+Figure \ref{fig:org710cee0} illustrates a use-case of huge pages where the green
 line represents a sample access to read within a contigous
 space of physical memory. The dotted lines represents the
 bounds for that particular pointer access. Using bounds
@@ -122,7 +123,7 @@ stored on the pointer a block based pattern can be reprecated
 on physically contigous memory. 
 
 \subsection{Sample memory allocator Implementation}
-\label{sec:org61472fd}
+\label{sec:org99d3fdd}
 This section presents a straightforward memory allocator designed and implemented based on the 
 principles outlined in our approach. The allocator consists of three core functions: InitAlloc, 
 malloc, and free. The InitAlloc function initializes the memory pool, setting up the necessary 
@@ -140,6 +141,7 @@ contiguity is essential.
 
 \begin{algorithm}
 \caption{Sample init alloc function to create a initial 1 GB huge page}
+\label{alg:initAlloc}
 \begin{algorithmic}[1]
 \Function{Init\_alloc}{}
     \State $\text{sz} \gets 1\ \text{GB}$ \Comment{Define pre-allocated memory size}
@@ -150,7 +152,7 @@ contiguity is essential.
 \end{algorithmic}
 \end{algorithm}
 
-Algorithm 1 describes the initialization of physically contiguous memory through the use of huge pages,
+Algorithm \ref{alg:initAlloc} describes the initialization of physically contiguous memory through the use of huge pages,
 a mechanism supported by modern architectures to optimize memory management. The algorithm begins by 
 allocating a fixed block of 1 GB of physically contiguous memory. This decision is driven by the 
 architectural constraints of contemporary systems, particularly ARM-based CPUs, where 1 GB represents 
@@ -160,6 +162,7 @@ applications and kernel-level operations.
 
 \begin{algorithm}
 \caption{Sample malloc implementation}
+\label{alg:malloc}
 \begin{algorithmic}[1]
 \Function{malloc}{sz}
     \State $sz \gets \text{ALIGN\_UP}(sz, \text{MAX\_ALIGNMENT})$ \Comment{Align size to max alignment}
@@ -170,22 +173,22 @@ applications and kernel-level operations.
 \EndFunction
 \end{algorithmic}
 \end{algorithm}
-When the malloc function is invoked, the algorithm employs an eager allocation strategy for physical memory. 
+When the malloc function \ref{alg:malloc} is invoked, the algorithm employs an eager allocation strategy for physical memory. 
 This is achieved through the use of the SetBounds mechanism, which constructs a FAT-pointer—a specialized 
 pointer that encodes both the start and end addresses of the allocated memory region within the pointer 
 itself. The start and end addresses correspond to the size of the memory block requested by malloc. This 
-approach introduces a novel method of memory tracking, where the bounds of the allocated region are 
+approach introduces a method of memory tracking, where the bounds of the allocated region are 
 explicitly encoded in the address, enabling efficient monitoring and management of memory usage.
 
 Furthermore, this design leverages shared huge page TLB (Translation Lookaside Buffer) entries to map 
 and track memory addresses. By encoding bounds directly into the address, the algorithm ensures that memory 
 accesses remain within the allocated region, thereby enhancing safety and reducing the risk of out-of-bounds 
-errors. This innovative use of FAT-pointers and shared TLB entries not only aligns with the principles of 
-efficient memory management but also demonstrates a practical application of huge pages in modern 
-architectures, offering a robust solution for physically contiguous memory allocation.
+errors. This use of FAT-pointers and shared TLB entries not only aligns with the principles of 
+efficient memory management but also demonstrates a practical usecase of huge pages in CHERI.
 
 \begin{algorithm}
 \caption{Sample free implementation}
+\label{alg:free}
 \begin{algorithmic}[1]
 \Function{free}{ptr}
     \State $\text{len} \gets \text{GET\_LENGTH}(\text{ptr})$ \Comment{Get length of memory block from the defined bounds}
@@ -194,7 +197,7 @@ architectures, offering a robust solution for physically contiguous memory alloc
 \end{algorithmic}
 \end{algorithm}
 
-The memory deallocation mechanism in the proposed allocator is facilitated by the FAT-pointer structure 
+The memory deallocation \ref{alg:free} mechanism in the proposed allocator is facilitated by the FAT-pointer structure 
 introduced in the malloc algorithm. When the free function is invoked, it utilizes the metadata 
 embedded within the FAT-pointer to determine the range and size of the allocated memory region. 
 Specifically, the start and end addresses encoded in the FAT-pointer provide the necessary information 

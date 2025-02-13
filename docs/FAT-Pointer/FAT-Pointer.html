@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-02-10 Mon 17:17 -->
+<!-- 2025-02-13 Thu 11:16 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>&lrm;</title>
@@ -232,23 +232,19 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org09fc007">1. Fat-pointer Address Translations</a>
+<li><a href="#org2c44245">1. Fat-pointer Address Translations</a>
 <ul>
-<li><a href="#orgc31066e">1.1. Encoding Ranges as Bounds to the Pointer</a></li>
-<li><a href="#org3bc5d8c">1.2. Instrumenting Block-Based Allocators with Physically Contiguous Memory</a></li>
-<li><a href="#org148206b">1.3. Implementation</a>
-<ul>
-<li><a href="#orge1c93e6">1.3.1. kernel module</a></li>
-</ul>
-</li>
+<li><a href="#orge791f4e">1.1. Encoding Ranges as Bounds to the Pointer</a></li>
+<li><a href="#org4a57a8a">1.2. Instrumenting Block-Based Allocators with Physically Contiguous Memory</a></li>
+<li><a href="#org63c7417">1.3. Sample memory allocator Implementation</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org09fc007" class="outline-2">
-<h2 id="org09fc007"><span class="section-number-2">1.</span> Fat-pointer Address Translations</h2>
+<div id="outline-container-org2c44245" class="outline-2">
+<h2 id="org2c44245"><span class="section-number-2">1.</span> Fat-pointer Address Translations</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Fat-pointer Address Translations, combined with the capabilities of the CHERI (Capability Hardware Enhanced RISC Instructions) 
@@ -265,31 +261,25 @@ control over memory regions.
 </p>
 
 
-<div id="org86ae870" class="figure">
+<div id="org37578e7" class="figure">
 <p><img src="diagram/HighOverviewArchitecture.drawio.png" alt="HighOverviewArchitecture.drawio.png" />
 </p>
 <p><span class="figure-number">Figure 1: </span>High overview architecture</p>
 </div>
 
 <p>
-Figure <a href="#org86ae870">1</a> illustrates
+Figure <a href="#org37578e7">1</a> illustrates
 the methodology employed to leverage the CHERI 
 128-bit FAT-pointer scheme for facilitating
 block-based memory management on physically
 contiguous memory,which is depicted on the
 right side of the figure. 
 This technique contrasts with the
-conventional mmap approach.
+conventional approach.
 </p>
 
 <p>
-In figure <a href="#org86ae870">1</a>, the green-highlighted
-section marks the unused space between the 48th and 64th bits
-within the FAT-pointer. This area of unused bits
-presents an opportunity to store additional metadata,
-potentially enhancing the capabilities of the
-memory management system. 
-Here we explore how using Huge pages
+We explore how using Huge pages
 with CHERI bounds can reduce the
 number of TLB entries required. 
 </p>
@@ -300,11 +290,11 @@ several key aspects:
 </p>
 </div>
 
-<div id="outline-container-orgc31066e" class="outline-3">
-<h3 id="orgc31066e"><span class="section-number-3">1.1.</span> Encoding Ranges as Bounds to the Pointer</h3>
+<div id="outline-container-orge791f4e" class="outline-3">
+<h3 id="orge791f4e"><span class="section-number-3">1.1.</span> Encoding Ranges as Bounds to the Pointer</h3>
 <div class="outline-text-3" id="text-1-1">
 
-<div id="orgd6304de" class="figure">
+<div id="orgc38e57b" class="figure">
 <p><img src="diagram/AllocationOverview24.png" alt="AllocationOverview24.png" />
 </p>
 <p><span class="figure-number">Figure 2: </span>Range of memory</p>
@@ -319,7 +309,7 @@ bounds encoded within the FAT-pointer, adhering to the CHERI
 </p>
 
 <p>
-Figure <a href="#orgd6304de">2</a> illustrates a straightforward use-case in which the dark pink line represents a single, 
+Figure <a href="#orgc38e57b">2</a> illustrates a straightforward use-case in which the dark pink line represents a single, 
 large contiguous memory area, or huge page. Within this huge page, the orange and blue lines indicate 
 two separate memory allocations equivalent to invoking malloc twice to allocate memory in distinct regions. 
 This scenario simulates a block-based memory allocator operating within the confines of the huge page. 
@@ -330,32 +320,41 @@ integrity and contiguity of the allocated blocks within the huge page.
 </div>
 </div>
 
-<div id="outline-container-org3bc5d8c" class="outline-3">
-<h3 id="org3bc5d8c"><span class="section-number-3">1.2.</span> Instrumenting Block-Based Allocators with Physically Contiguous Memory</h3>
+<div id="outline-container-org4a57a8a" class="outline-3">
+<h3 id="org4a57a8a"><span class="section-number-3">1.2.</span> Instrumenting Block-Based Allocators with Physically Contiguous Memory</h3>
 <div class="outline-text-3" id="text-1-2">
 
-<div id="org29ea26c" class="figure">
-<p><img src="diagram/hugepages.drawio.png" alt="hugepages.drawio.png" />
+<div id="org2ea620c" class="figure">
+<p><img src="diagram/TLBAccess.drawio.png" alt="TLBAccess.drawio.png" />
 </p>
 <p><span class="figure-number">Figure 3: </span>Fat-pointer Address Translations using huge pages</p>
 </div>
 
 <p>
-hierarchical structures, to translate virtual addresses to physical addresses. This approach requires multiple entries to handle various
-memory segments, leading to increased overhead and complexity
-in address translation. Conversely, the current approach stream-
-lines this process by using a single TLB entry to translate multiple
-addresses within a contiguous memory range. This reduces the
-number of required TLB entries, simplifying the translation process
-and improving efficiency. By consolidating address translations into
-a single TLB entry, this method minimizes the overhead associated
-with managing numerous TLB entries and leverages the bounds
-encoded within the FAT-pointer for efficient memory tracking and
-access. This approach allows for precise and efficient memory management within the allocated huge page.
+Traditional address translation methods rely on hierarchical
+structures to map virtual addresses to physical addresses.
+This often requires multiple entries to handle different
+memory segments, which increases overhead and adds complexity
+to the translation process. In contrast, the current approach
+simplifies this by using a single TLB (Translation Lookaside Buffer)
+entry to translate multiple addresses within a contiguous memory
+range. This reduces the number of TLB entries needed, making the
+translation process more efficient and less complex.
 </p>
 
 <p>
-Figure <a href="#org29ea26c">3</a> illustrates a use-case of huge pages where the green
+By consolidating address translations into a single TLB entry,
+this method cuts down on the overhead of managing many entries.
+It also takes advantage of the bounds encoded within fat-pointers
+to track and access memory more efficiently. This streamlined
+approach allows for precise and effective memory management,
+especially within large, contiguous memory regions like huge pages.
+Overall, it simplifies memory operations while improving performance
+and reduces TLB overhead by reducing TLB walks.
+</p>
+
+<p>
+Figure <a href="#org2ea620c">3</a> illustrates a use-case of huge pages where the green
 line represents a sample access to read within a contigous
 space of physical memory. The dotted lines represents the
 bounds for that particular pointer access. Using bounds
@@ -365,39 +364,68 @@ on physically contigous memory.
 </div>
 </div>
 
-<div id="outline-container-org148206b" class="outline-3">
-<h3 id="org148206b"><span class="section-number-3">1.3.</span> Implementation</h3>
+<div id="outline-container-org63c7417" class="outline-3">
+<h3 id="org63c7417"><span class="section-number-3">1.3.</span> Sample memory allocator Implementation</h3>
 <div class="outline-text-3" id="text-1-3">
 <p>
-#+BEGIN<sub>COMMENT</sub>
-The software stack is based on CHERIBSD, selected because ARM officially supports Morello's performance 
-counters on this operating system. The setup includes a C program that 
-is linked to the prototype memory allocator or to various memory allocators being benchmarked. This linkage can occur in two ways: either as a shared object file during compile time 
-for larger allocators, or as a header file for smaller allocators, ensuring flexibility 
-in memory management.
+This section presents a straightforward memory allocator designed and implemented based on the 
+principles outlined in our approach. The allocator consists of three core functions: InitAlloc, 
+malloc, and free. The InitAlloc function initializes the memory pool, setting up the necessary 
+data structures and metadata required for efficient memory management. The malloc function is 
+responsible for allocating a contiguous block of memory of a specified size, while the free 
+function deallocates the memory, returning it to the pool for future use.
 </p>
 
 <p>
-This integration ensures that the memory allocation process is optimized for performance, leveraging the contiguity 
-of memory blocks and the capabilities provided by the CHERI architecture and the Morello platform. By using the 
-contigmem driver and the custom mmap function, the system achieves efficient memory allocation and tracking, 
-crucial for the high-performance needs of the application.
+A notable feature of this malloc implementation is its compatibility with kernel modules, 
+where it can be integrated as an alternative to the mmap system call. This integration 
+ensures that memory allocations are physically contiguous, a critical requirement for 
+certain low-level operations and hardware interactions. By providing physically contiguous 
+memory blocks, this allocator can serve as a foundational layer for standard block-based allocators, 
+such as Jemalloc, enabling them to operate efficiently in environments where physical memory 
+contiguity is essential.
 </p>
 
-<ul class="org-ul">
-<li class="off"><code>[&#xa0;]</code> Requires rewrite</li>
-</ul>
-</div>
-<div id="outline-container-orge1c93e6" class="outline-4">
-<h4 id="orge1c93e6"><span class="section-number-4">1.3.1.</span> kernel module</h4>
-<div class="outline-text-4" id="text-1-3-1">
 <p>
-The custom mmap function is tailored to ensure physically contiguous memory is allocated. This allocation is a key component 
-of this system. The custom mmap function is interfaced to the contigmem driver, which has been modified from the DPDK library 
-. The contigmem driver is essential for managing large contiguous 
-memory blocks and is loaded during the system boot process. It reserves a huge page of arbitrary size, with the 
-size parameter set based on the requirements of the conducted experiments.
-#+END<sub>COMMENT</sub>
+Algorithm 1 describes the initialization of physically contiguous memory through the use of huge pages,
+a mechanism supported by modern architectures to optimize memory management. The algorithm begins by 
+allocating a fixed block of 1 GB of physically contiguous memory. This decision is driven by the 
+architectural constraints of contemporary systems, particularly ARM-based CPUs, where 1 GB represents 
+the largest supported page size. By leveraging huge pages, the algorithm reduces the overhead associated 
+with page table management and enhances memory access efficiency, which is critical for performance-sensitive
+applications and kernel-level operations.
+</p>
+
+<p>
+When the malloc function is invoked, the algorithm employs an eager allocation strategy for physical memory. 
+This is achieved through the use of the SetBounds mechanism, which constructs a FAT-pointer—a specialized 
+pointer that encodes both the start and end addresses of the allocated memory region within the pointer 
+itself. The start and end addresses correspond to the size of the memory block requested by malloc. This 
+approach introduces a method of memory tracking, where the bounds of the allocated region are 
+explicitly encoded in the address, enabling efficient monitoring and management of memory usage.
+</p>
+
+<p>
+Furthermore, this design leverages shared huge page TLB (Translation Lookaside Buffer) entries to map 
+and track memory addresses. By encoding bounds directly into the address, the algorithm ensures that memory 
+accesses remain within the allocated region, thereby enhancing safety and reducing the risk of out-of-bounds 
+errors. This use of FAT-pointers and shared TLB entries not only aligns with the principles of 
+efficient memory management but also demonstrates a practical usecase of huge pages in CHERI.
+</p>
+
+<p>
+The memory deallocation mechanism in the proposed allocator is facilitated by the FAT-pointer structure 
+introduced in the malloc algorithm. When the free function is invoked, it utilizes the metadata 
+embedded within the FAT-pointer to determine the range and size of the allocated memory region. 
+Specifically, the start and end addresses encoded in the FAT-pointer provide the necessary information 
+to identify the exact memory block to be deallocated. This allows the allocator to precisely unmapped 
+the corresponding memory region from the address space, ensuring efficient and accurate memory management.
+</p>
+
+<p>
+By extracting the bounds and size directly from the FAT-pointer, the free function eliminates the need 
+for additional metadata lookups or complex data structures, streamlining the deallocation process. 
+This approach not only enhances performance but also reduces the risk of memory leaks or fragmentation.
 </p>
 
 <p>
@@ -408,10 +436,9 @@ size parameter set based on the requirements of the conducted experiments.
 </div>
 </div>
 </div>
-</div>
 <div id="postamble" class="status">
 <p class="author">Author: Akilan</p>
-<p class="date">Created: 2025-02-10 Mon 17:17</p>
+<p class="date">Created: 2025-02-13 Thu 11:16</p>
 <p class="validation"><a href="https://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

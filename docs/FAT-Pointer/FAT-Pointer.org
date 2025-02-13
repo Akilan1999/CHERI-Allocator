@@ -26,15 +26,9 @@ block-based memory management on physically
 contiguous memory,which is depicted on the
 right side of the figure. 
 This technique contrasts with the
-conventional mmap approach.
+conventional approach.
 
-In figure [[fig:HighOverviewArchitecture]], the green-highlighted
-section marks the unused space between the 48th and 64th bits
-within the FAT-pointer. This area of unused bits
-presents an opportunity to store additional metadata,
-potentially enhancing the capabilities of the
-memory management system. 
-Here we explore how using Huge pages
+We explore how using Huge pages
 with CHERI bounds can reduce the
 number of TLB entries required. 
 
@@ -64,8 +58,8 @@ integrity and contiguity of the allocated blocks within the huge page.
 #+CAPTION: Fat-pointer Address Translations using huge pages
 #+NAME: fig:HugePages
 [[file:diagram/TLBAccess.drawio.png]]
-
-hierarchical structures, to translate virtual addresses to physical addresses. This approach requires multiple entries to handle various
+#+BEGIN_COMMENT
+Hierarchical structures, to translate virtual addresses to physical addresses. This approach requires multiple entries to handle various
 memory segments, leading to increased overhead and complexity
 in address translation. Conversely, the current approach stream-
 lines this process by using a single TLB entry to translate multiple
@@ -76,6 +70,26 @@ a single TLB entry, this method minimizes the overhead associated
 with managing numerous TLB entries and leverages the bounds
 encoded within the FAT-pointer for efficient memory tracking and
 access. This approach allows for precise and efficient memory management within the allocated huge page.
+#+END_COMMENT
+
+Traditional address translation methods rely on hierarchical
+structures to map virtual addresses to physical addresses.
+This often requires multiple entries to handle different
+memory segments, which increases overhead and adds complexity
+to the translation process. In contrast, the current approach
+simplifies this by using a single TLB (Translation Lookaside Buffer)
+entry to translate multiple addresses within a contiguous memory
+range. This reduces the number of TLB entries needed, making the
+translation process more efficient and less complex.
+
+By consolidating address translations into a single TLB entry,
+this method cuts down on the overhead of managing many entries.
+It also takes advantage of the bounds encoded within fat-pointers
+to track and access memory more efficiently. This streamlined
+approach allows for precise and effective memory management,
+especially within large, contiguous memory regions like huge pages.
+Overall, it simplifies memory operations while improving performance
+and reduces TLB overhead by reducing TLB walks.
 
 Figure [[fig:HugePages]] illustrates a use-case of huge pages where the green
 line represents a sample access to read within a contigous
@@ -124,6 +138,7 @@ contiguity is essential.
 #+begin_export latex
 \begin{algorithm}
 \caption{Sample init alloc function to create a initial 1 GB huge page}
+\label{alg:initAlloc}
 \begin{algorithmic}[1]
 \Function{Init\_alloc}{}
     \State $\text{sz} \gets 1\ \text{GB}$ \Comment{Define pre-allocated memory size}
@@ -135,7 +150,7 @@ contiguity is essential.
 \end{algorithm}
 #+end_export
 
-Algorithm 1 describes the initialization of physically contiguous memory through the use of huge pages,
+Algorithm \ref{alg:initAlloc} describes the initialization of physically contiguous memory through the use of huge pages,
 a mechanism supported by modern architectures to optimize memory management. The algorithm begins by 
 allocating a fixed block of 1 GB of physically contiguous memory. This decision is driven by the 
 architectural constraints of contemporary systems, particularly ARM-based CPUs, where 1 GB represents 
@@ -146,6 +161,7 @@ applications and kernel-level operations.
 #+begin_export latex
 \begin{algorithm}
 \caption{Sample malloc implementation}
+\label{alg:malloc}
 \begin{algorithmic}[1]
 \Function{malloc}{sz}
     \State $sz \gets \text{ALIGN\_UP}(sz, \text{MAX\_ALIGNMENT})$ \Comment{Align size to max alignment}
@@ -157,23 +173,23 @@ applications and kernel-level operations.
 \end{algorithmic}
 \end{algorithm}
 #+end_export
-When the malloc function is invoked, the algorithm employs an eager allocation strategy for physical memory. 
+When the malloc function \ref{alg:malloc} is invoked, the algorithm employs an eager allocation strategy for physical memory. 
 This is achieved through the use of the SetBounds mechanism, which constructs a FAT-pointer—a specialized 
 pointer that encodes both the start and end addresses of the allocated memory region within the pointer 
 itself. The start and end addresses correspond to the size of the memory block requested by malloc. This 
-approach introduces a novel method of memory tracking, where the bounds of the allocated region are 
+approach introduces a method of memory tracking, where the bounds of the allocated region are 
 explicitly encoded in the address, enabling efficient monitoring and management of memory usage.
 
 Furthermore, this design leverages shared huge page TLB (Translation Lookaside Buffer) entries to map 
 and track memory addresses. By encoding bounds directly into the address, the algorithm ensures that memory 
 accesses remain within the allocated region, thereby enhancing safety and reducing the risk of out-of-bounds 
-errors. This innovative use of FAT-pointers and shared TLB entries not only aligns with the principles of 
-efficient memory management but also demonstrates a practical application of huge pages in modern 
-architectures, offering a robust solution for physically contiguous memory allocation.
+errors. This use of FAT-pointers and shared TLB entries not only aligns with the principles of 
+efficient memory management but also demonstrates a practical usecase of huge pages in CHERI.
 
 #+begin_export latex
 \begin{algorithm}
 \caption{Sample free implementation}
+\label{alg:free}
 \begin{algorithmic}[1]
 \Function{free}{ptr}
     \State $\text{len} \gets \text{GET\_LENGTH}(\text{ptr})$ \Comment{Get length of memory block from the defined bounds}
@@ -183,7 +199,7 @@ architectures, offering a robust solution for physically contiguous memory alloc
 \end{algorithm}
 #+end_export
 
-The memory deallocation mechanism in the proposed allocator is facilitated by the FAT-pointer structure 
+The memory deallocation \ref{alg:free} mechanism in the proposed allocator is facilitated by the FAT-pointer structure 
 introduced in the malloc algorithm. When the free function is invoked, it utilizes the metadata 
 embedded within the FAT-pointer to determine the range and size of the allocated memory region. 
 Specifically, the start and end addresses encoded in the FAT-pointer provide the necessary information 
@@ -196,6 +212,3 @@ This approach not only enhances performance but also reduces the risk of memory 
 
 \bibliographystyle{IEEEtran}
 \bibliography{FAT-Pointer.bib}
-
-
-   
