@@ -7,8 +7,8 @@
 #define TRUE 1
 #define FALSE 0
 
-#define malloc      my_malloc
-#define free        my_free
+// #define malloc      my_malloc
+// #define free        my_free
 
 typedef struct board {
     int n;
@@ -149,11 +149,11 @@ void queens(int n) {
     }
     free(b->matrix);
     b->matrix = NULL;
-    free(b);
+    free(   b);
 }
 
 int main(int argc, char const *argv[]) {
-    INITREGULARALLOC();
+    // INITREGULARALLOC();
     system("clear");
     int i;
     int n = 0;

@@ -34,6 +34,11 @@
 #define malloc      my_malloc
 #define free        my_free
 
+// #ifndef CUSTOM_MALLOC
+#define CUSTOM_MALLOC malloc
+#define CUSTOM_FREE   free
+// #endif
+
 typedef void * LPVOID;
 typedef long long LONGLONG;
 typedef long DWORD;
@@ -152,11 +157,6 @@ void operator delete[](void *pUserData )
 }
 #endif
 
-#ifndef CUSTOM_MALLOC
-#define CUSTOM_MALLOC malloc
-#define CUSTOM_FREE   free
-#endif
-
 
 /* Test driver for memory allocators           */
 /* Author: Paul Larson, palarson@microsoft.com */
@@ -227,8 +227,9 @@ extern "C" {
 #endif
 
 int main (int argc, char *argv[])
-{
+{   
 
+  printf("here");
   INITREGULARALLOC();
 
 #if defined(USE_LFH) && defined(_WIN32)
@@ -285,30 +286,30 @@ int main (int argc, char *argv[])
 #else
   printf( "\nSingle-threaded test driver \n") ;
 #endif
-#ifdef CPP
-#if defined(SIZED)
-  printf("C++ version (new and sized delete)\n") ;
-#else
-  printf("C++ version (new and delete)\n") ;
-#endif
-#else
-  printf("C version (malloc and free)\n") ;
-#endif
-  printf("runtime (sec): ") ;
-  scanf ("%ld", &sleep_cnt);
+// #ifdef CPP
+// #if defined(SIZED)
+//   printf("C++ version (new and sized delete)\n") ;
+// #else
+//   printf("C++ version (new and delete)\n") ;
+// #endif
+// #else
+//   printf("C version (malloc and free)\n") ;
+// #endif
+//   printf("runtime (sec): ") ;
+//   scanf ("%ld", &sleep_cnt);
 
-  printf("chunk size (min,max): ") ;
-  scanf("%d %d", &min_size, &max_size ) ;
-#if defined(_MT) || defined(_REENTRANT)
-  //#ifdef _MT
-  printf("threads (min, max):   ") ;
-  scanf("%d %d", &min_threads, &max_threads) ;
-  printf("chunks/thread:  ") ; scanf("%d", &chperthread ) ;
-  printf("no of rounds:   ") ; scanf("%d", &num_rounds ) ;
-  num_chunks = max_threads*chperthread ;
-#else
+//   printf("chunk size (min,max): ") ;
+//   scanf("%d %d", &min_size, &max_size ) ;
+// #if defined(_MT) || defined(_REENTRANT)
+//   //#ifdef _MT
+//   printf("threads (min, max):   ") ;
+//   scanf("%d %d", &min_threads, &max_threads) ;
+//   printf("chunks/thread:  ") ; scanf("%d", &chperthread ) ;
+//   printf("no of rounds:   ") ; scanf("%d", &num_rounds ) ;
+//   num_chunks = max_threads*chperthread ;
+// #else
   printf("no of chunks:  ") ; scanf("%d", &num_chunks ) ;
-#endif
+// #endif
   printf("random seed:    ") ; scanf("%d", &seed) ;
 
  DoneWithInput:
@@ -327,12 +328,13 @@ int main (int argc, char *argv[])
   lran2_init(&rgen, seed) ;
   // init_space = CountReservedSpace() ;
 
-#if defined(_MT) || defined(_REENTRANT)
-  //#ifdef _MT
-  runthreads(sleep_cnt, min_threads, max_threads, chperthread, num_rounds) ;
-#else
+// #if defined(_MT) || defined(_REENTRANT)
+//   printf("running threads");
+//   //#ifdef _MT
+//   runthreads(sleep_cnt, min_threads, max_threads, chperthread, num_rounds) ;
+// #else
   runloops(sleep_cnt, num_chunks ) ;
-#endif
+//#endif
 
 #ifdef _DEBUG
   //_cputs("Hit any key to exit...") ;	(void)_getch() ;
@@ -354,6 +356,8 @@ int main (int argc, char *argv[])
    }
  }
 #endif
+
+  printf("gets to the end");
 
   return(0) ;
 
@@ -385,11 +389,11 @@ void runloops(long sleep_cnt, int num_chunks )
     } else {
       blk_size = min_size+lran2(&rgen)%(max_size - min_size) ;
     }
-#ifdef CPP
-    blkp[cblks] = new char[blk_size] ;
-#else
+// #ifdef CPP
+//     blkp[cblks] = new char[blk_size] ;
+// #else
     blkp[cblks] = (char *) CUSTOM_MALLOC(blk_size) ;
-#endif
+// #endif
     blksize[cblks] = blk_size ;
     assert(blkp[cblks] != NULL) ;
   }
@@ -397,26 +401,26 @@ void runloops(long sleep_cnt, int num_chunks )
   while(TRUE){
     for( cblks=0; cblks<num_chunks; cblks++){
       victim = lran2(&rgen)%num_chunks ;
-#if defined(CPP)
-#if defined(SIZED)
-    operator delete[] (blkp[victim], blksize[victim]);
-#else
-    delete[] blkp[victim] ;
-#endif
-#else
+// #if defined(CPP)
+// #if defined(SIZED)
+//     operator delete[] (blkp[victim], blksize[victim]);
+// #else
+//     delete[] blkp[victim] ;
+// #endif
+// #else
     CUSTOM_FREE(blkp[victim]) ;
-#endif
+//#endif
 
       if (max_size == min_size) {
 	blk_size = min_size;
       } else {
 	blk_size = min_size+lran2(&rgen)%(max_size - min_size) ;
       }
-#if defined(CPP)
-      blkp[victim] = new char[blk_size];
-#else
+// #if defined(CPP)
+      // blkp[victim] = new char[blk_size];
+// #else
       blkp[victim] = (char *) CUSTOM_MALLOC(blk_size) ;
-#endif
+// #endif
       blksize[victim] = blk_size ;
       assert(blkp[victim] != NULL) ;
     }
@@ -561,6 +565,8 @@ void runthreads(long sleep_cnt, int min_threads, int max_threads, int chperthrea
       // used_space = CountReservedSpace() - init_space;
       used_space = 0;
 
+      printf("Reaching here");
+
       double throughput = (double)sum_allocs/duration;
       double rtime      = 1.0e9 / throughput;
       printf ("Throughput = %8.0f operations per second, relative time: %.3fs.\n", throughput, rtime);
@@ -603,15 +609,15 @@ static void * exercise_heap( void *pinput)
   /* allocate NumBlocks chunks of random size */
   for( cblks=0; cblks<pdea->NumBlocks; cblks++){
     victim = lran2(&pdea->rgen)%pdea->asize ;
-#ifdef CPP
-#if defined(SIZED)
-    operator delete[] (pdea->array[victim], pdea->blksize[victim]);
-#else
-    delete[] pdea->array[victim] ;
-#endif
-#else
+// #ifdef CPP
+// #if defined(SIZED)
+//     operator delete[] (pdea->array[victim], pdea->blksize[victim]);
+// #else
+//     delete[] pdea->array[victim] ;
+// #endif
+// #else
     CUSTOM_FREE(pdea->array[victim]) ;
-#endif
+// #endif
     pdea->cFrees++ ;
 
     if (range == 0) {
@@ -619,11 +625,11 @@ static void * exercise_heap( void *pinput)
     } else {
       blk_size = pdea->min_size+lran2(&pdea->rgen)%range ;
     }
-#ifdef CPP
-    pdea->array[victim] = new char[blk_size] ;
-#else
+// #ifdef CPP
+//     pdea->array[victim] = new char[blk_size] ;
+// #else
     pdea->array[victim] = (char *) CUSTOM_MALLOC(blk_size) ;
-#endif
+// #endif
 
     pdea->blksize[victim] = blk_size ;
     assert(pdea->array[victim] != NULL) ;
@@ -679,11 +685,11 @@ static void warmup(char **blkp, int num_chunks )
     } else {
       blk_size = min_size+lran2(&rgen)%(max_size-min_size) ;
     }
-#ifdef CPP
-    blkp[cblks] = new char[blk_size] ;
-#else
+// #ifdef CPP
+//     blkp[cblks] = new char[blk_size] ;
+// #else
     blkp[cblks] = (char *) CUSTOM_MALLOC(blk_size) ;
-#endif
+// #endif
     blksize[cblks] = blk_size ;
     assert(blkp[cblks] != NULL) ;
   }
@@ -701,26 +707,26 @@ static void warmup(char **blkp, int num_chunks )
 
   for( cblks=0; cblks<4*num_chunks; cblks++){
     victim = lran2(&rgen)%num_chunks ;
-#ifdef CPP
-#if defined(SIZED)
-    operator delete[] (blkp[victim], blksize[victim]);
-#else
-    delete[] blkp[victim] ;
-#endif
-#else
+// #ifdef CPP
+// #if defined(SIZED)
+//     operator delete[] (blkp[victim], blksize[victim]);
+// #else
+//     delete[] blkp[victim] ;
+// #endif
+// #else
     CUSTOM_FREE(blkp[victim]) ;
-#endif
+// #endif
 
     if (max_size == min_size) {
       blk_size = min_size;
     } else {
       blk_size = min_size+lran2(&rgen)%(max_size - min_size) ;
     }
-#ifdef CPP
-    blkp[victim] = new char[blk_size] ;
-#else
+// #ifdef CPP
+//     blkp[victim] = new char[blk_size] ;
+// #else
     blkp[victim] = (char *) CUSTOM_MALLOC(blk_size) ;
-#endif
+// #endif
     blksize[victim] = blk_size ;
     assert(blkp[victim] != NULL) ;
   }

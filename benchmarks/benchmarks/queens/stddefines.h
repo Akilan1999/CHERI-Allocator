@@ -210,6 +210,7 @@ size_t sizeUsed;
 // Quick malloc implementation with mmap
 void* my_malloc(size_t sz)
 {
+//    printf("malloc called");
    sz = __builtin_align_up(sz, _Alignof(max_align_t));
 
    // printf("%d \n", sz);
